@@ -27,7 +27,7 @@ class Markov {
   }
 
   // Add a single state or states
-  addStates (state) {
+  addStates(state) {
     if (Array.isArray(state)) {
       this.states = Array.from(state)
     } else {
@@ -253,7 +253,7 @@ function markovIt() {
   markov.addStates(words);
   markov.train();
   
-  createP(result(markov.generate(500)))
+  createP(markov.generateRandom(15))
   
 };
 

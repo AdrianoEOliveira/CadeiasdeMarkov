@@ -1,5 +1,5 @@
 let names;
-let order = 2;
+let order = 3;
 let ngrams = {};
 let beginnings = [];
 let button;
