@@ -1,27 +1,23 @@
-class Markov 
+export default class Markov 
 {
   
-  constructor(canvas, assets,input,mapa)
+  constructor()
   {
-      this.canvas = canvas;
-      this.ctx = canvas.getContext("2d");
-      this.assets = assets;
       this.tiles = []
       this.possibilidades = []
-      this.mapa = mapa
+      this.mapa = []
  
   }
-    getRandomItem(arr) 
+  RandomIndex(arr) 
+  {
+  let randomIndex = Math.floor(Math.random() * arr.length);
+  if(arr[randomIndex]>0)
     {
-    const random = Math.random(0,1)
-    const randomIndex = Math.floor(Math.random() * arr.length);
-    if(random>=arr[randomIndex])
-      {
     return randomIndex;
     }
     else
     {
-      return this.getRandomItem(arr)
+      return this.RandomIndex(arr)
     }
   }
     GenerateRandomMap(primeiroTile)
@@ -29,11 +25,12 @@ class Markov
       let anterior =primeiroTile
       for (let l = 0; l < 15; l++) 
       {
+        this.mapa [l] = []
           for (let c = 0; c < 15; c++) 
           {
-          aux = []
-          a = a.concat(this.possibilidades[anterior])
-          anterior = randomIndex(a);
+          let aux = []
+          aux = aux.concat(this.possibilidades[anterior])
+          anterior = this.RandomIndex(aux);
           this.mapa[l][c] = this.tiles[anterior];
           }
       
@@ -43,6 +40,7 @@ class Markov
 
   // Add a single state or states
   addStates(tile) {
+
     this.tiles.push(tile)
     }
   setPosssibilidades(possibilite)
@@ -54,7 +52,7 @@ class Markov
   {
     return this.GenerateRandomMap
   }
-  }
+}
 
 
 
