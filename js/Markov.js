@@ -75,11 +75,11 @@ export default class Markov {
         //const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
         if(data[0]==0 && data[1] == 0 && data[2]==0)
         {
-          this.possibilidades[ant][0]++
+          this.possibilidades[ant][0] = this.possibilidades[ant][0] +1
         }
         else
         {
-          this.possibilidades[ant][1]++
+          this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1
         }
         cont++
         //console.log(rgba)
