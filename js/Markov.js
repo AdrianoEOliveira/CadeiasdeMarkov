@@ -78,11 +78,12 @@ export default class Markov {
         //cont = cont + 1
       let ant = 0
       let cont = 0
+      // i = 16 pixel medio do quadrado de 32
       for(let i = 16 ; i<1920/2 ; i = i + 32)
       {
         for(let j = 16; j<1920/2; j = j + 32 )
         {
-          let pixel = this.ctx.getImageData(i, j, 1, 1);
+          let pixel = this.ctx.getImageData(j, i, 1, 1);
           let data = pixel.data;
         //const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
         //console.log(data)
