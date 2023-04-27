@@ -20,12 +20,10 @@ assets.adicionaAudio("hurt","assets/hurt.wav")
 
 const input = new inputManager();
 
-const markov1 = new Markov(assets,canvas);
-const markov2 = new Markov(assets,canvas)
 
 const canvas = document.querySelector("canvas");
-canvas.width = 15*32;
-canvas.height = 15*32;
+canvas.width = 1920;
+canvas.height = 1920;
 input.configurarTeclado(
     {"ArrowLeft":"MOVE_ESQUERDA",
      "ArrowRight" : "MOVE_DIREITA",
@@ -36,12 +34,15 @@ input.configurarTeclado(
     }
 );
 
-const game = new Game(canvas,assets,input);
+const markov1 = new Markov(assets,canvas);
+const markov2 = new Markov(assets,canvas);
+
+const game = new Game(canvas,assets,input,markov1);
 
 const cena1= new CenaJogo(canvas,assets,input,1,markov1);
 const cena2= new CenaJogo(canvas,assets,input,2,markov2);
 
-const carregando= new CenaCarregando(canvas,assets,input);
+const carregando= new CenaCarregando(canvas,assets,input,markov1);
 
 const fim= new CenaFim(canvas,assets,input);
 

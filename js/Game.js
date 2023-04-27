@@ -1,5 +1,5 @@
 export default class Game{
-    constructor(canvas, assets,input)
+    constructor(canvas, assets,input,markov)
     {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
@@ -11,6 +11,8 @@ export default class Game{
         this.chests = 0;
         this.stars = 0;
         this.eliminacoes = 0;
+        this.markov = markov;
+        
     }
     adicionarCena(chave,cena)
     {

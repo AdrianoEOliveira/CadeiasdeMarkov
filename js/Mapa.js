@@ -2,7 +2,7 @@ import Markov from "./Markov.js";
 
 export default class Mapa
 {
-    constructor(linhas=15,colunas = 15 ,tamanho=32,markov)
+    constructor(linhas=60,colunas = 60 ,tamanho=32,markov)
     {
         this.LINHAS = linhas;
         this.COLUNAS= colunas;
@@ -68,29 +68,14 @@ export default class Mapa
     }
     carregaMapa()
     {
-        this.LINHAS= 15;
-        this.COLUNAS =15;
 
         
 
         this.markov.addStates(1)
         this.markov.addStates(2)
-        this.markov.addStates(3)
-        this.markov.addStates(4)
-        this.markov.addStates(5)
-        let possibilites = []
 
-        for (let l = 0; l < 5; l++) 
-        {
-            possibilites[l] = []
-            for (let c = 0; c < 5; c++) 
-            {
-                possibilites[l][c] = Math.random(0,1)
-                if(c==4)
-                possibilites[l][c] = 0.1
-            }
-        }
-        this.markov.setPosssibilidades(possibilites)
+        this.markov.treino()
+
         this.tiles = this.markov.GenerateRandomMap(0)
     }
 }
