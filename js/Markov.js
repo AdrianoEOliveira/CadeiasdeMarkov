@@ -70,8 +70,8 @@ export default class Markov {
       {
       for(let j = 16; j<1920; j = j + 32 )
       {
-        const pixel = this.ctx.getImageData(i, j, 1, 1);
-        const data = pixel.data;
+        let pixel = this.ctx.getImageData(i, j, 1, 1);
+        let data = pixel.data;
         //const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
         if(data[0]==0 && data[1] == 0 && data[2]==0)
         {
