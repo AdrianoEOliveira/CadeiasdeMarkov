@@ -25,6 +25,11 @@ export default class CenaCarregando extends Cena
 
         if(this.assets.acabou())
         {
+            if(this.input.comandos.get("MARKOV"))
+            {
+                this.markov.treino()
+                return;
+            }
             if(this.input.comandos.get("PROXIMA_CENA"))
             {
                 this.game.selecionaCena("jogo");

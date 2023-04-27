@@ -14,13 +14,14 @@ assets.adicionaImagem("terreno","assets/terrain_atlas.png")
 assets.adicionaImagem("chest","assets/Chest.png")
 assets.adicionaImagem("coin","assets/coin.jpg")
 assets.adicionaImagem("ship","assets/ship.png")
+assets.adicionaImagem("Treino","assets/Treino.png")
 assets.adicionaAudio("boom","assets/boom.wav")
 assets.adicionaAudio("hurt","assets/hurt.wav")
 
 const input = new inputManager();
 
-const markov1 = new Markov();
-const markov2 = new Markov()
+const markov1 = new Markov(assets,canvas);
+const markov2 = new Markov(assets,canvas)
 
 const canvas = document.querySelector("canvas");
 canvas.width = 15*32;
