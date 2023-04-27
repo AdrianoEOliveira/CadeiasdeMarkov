@@ -35,9 +35,9 @@ export default class CenaJogo extends Cena
     preparar()
     {
         super.preparar();
-        const mapa1 = new Mapa(15,15,32,this.markov);
+        let mapa1 = new Mapa(30,30,32,this.markov);
 
-        mapa1.carregaMapa(modeloMapa1);
+        mapa1.carregaMapa();
 
         this.configuraMapa(mapa1);
         const cena = this;

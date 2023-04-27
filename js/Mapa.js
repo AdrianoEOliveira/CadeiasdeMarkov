@@ -2,7 +2,7 @@ import Markov from "./Markov.js";
 
 export default class Mapa
 {
-    constructor(linhas=60,colunas = 60 ,tamanho=32,markov)
+    constructor(linhas=30,colunas = 30 ,tamanho=32,markov)
     {
         this.LINHAS = linhas;
         this.COLUNAS= colunas;
@@ -69,13 +69,13 @@ export default class Mapa
     carregaMapa()
     {
 
-        
-
         this.markov.addStates(1)
-        this.markov.addStates(2)
+        this.markov.addStates(0)
 
-        this.markov.treino()
+        this.tiles = this.markov.iniciar()
+        this.markov.limpa()
 
-        this.tiles = this.markov.GenerateRandomMap(0)
+        //this.desenhar()
+
     }
 }

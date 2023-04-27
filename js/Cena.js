@@ -7,8 +7,6 @@ export default class Cena
     constructor(canvas,assets,input,modelo,markov){
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        this.markov = markov;
-        this.preparar();
         this.assets = assets;
         this.mapa=null;
         this.game=null;
@@ -16,6 +14,8 @@ export default class Cena
         this.input = input;
         this.pontuacao = 0;
         this.modelo=modelo;
+        this.markov = markov;
+        //this.preparar();
     }
     desenhar()
     {

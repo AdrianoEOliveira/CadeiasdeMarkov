@@ -22,8 +22,8 @@ const input = new inputManager();
 
 
 const canvas = document.querySelector("canvas");
-canvas.width = 1920;
-canvas.height = 1920;
+canvas.width = 1920/2;
+canvas.height = 1920/2;
 input.configurarTeclado(
     {"ArrowLeft":"MOVE_ESQUERDA",
      "ArrowRight" : "MOVE_DIREITA",

@@ -25,10 +25,11 @@ export default class CenaCarregando extends Cena
 
         if(this.assets.acabou())
         {
-            if(this.input.comandos.get("MARKOV"))
+            if(this.input.comandos.get("Markov"))
             {
-                this.game.markov.treino()
-                return;
+            let img =new Image();
+            img = this.assets.Img("Treino");
+            this.ctx.drawImage(img, 0, 0);
             }
             if(this.input.comandos.get("PROXIMA_CENA"))
             {
