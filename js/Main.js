@@ -14,7 +14,7 @@ assets.adicionaImagem("terreno","assets/terrain_atlas.png")
 assets.adicionaImagem("chest","assets/Chest.png")
 assets.adicionaImagem("coin","assets/coin.jpg")
 assets.adicionaImagem("ship","assets/ship.png")
-assets.adicionaImagem("Treino","assets/Treino.png")
+assets.adicionaImagem("Treino100","assets/Treino.png")
 assets.adicionaAudio("boom","assets/boom.wav")
 assets.adicionaAudio("hurt","assets/hurt.wav")
 
@@ -22,8 +22,8 @@ const input = new inputManager();
 
 
 const canvas = document.querySelector("canvas");
-canvas.width = 1920/2;
-canvas.height = 1920/2;
+canvas.width = 320;
+canvas.height = 320;
 input.configurarTeclado(
     {"ArrowLeft":"MOVE_ESQUERDA",
      "ArrowRight" : "MOVE_DIREITA",
