@@ -54,7 +54,7 @@ export default class Markov {
     let img = new Image();
     img = this.assets.Img("Treino100");
     this.ctx.drawImage(img, 0, 0);
-    img.style.display = "none";
+    //img.style.display = "none";
 
 
     let ant = 0;
@@ -67,7 +67,7 @@ export default class Markov {
           let pixel = this.ctx.getImageData(i, j, 1, 1);
           let data = pixel.data;
           //const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
-          console.log(data)
+          //console.log(data)
           if (data[0] == 0 && data[1] == 0 && data[2] == 0) {
             this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             ant = 0;
