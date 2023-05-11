@@ -86,6 +86,14 @@ export default class Markov {
             //ant = 1;
             auxTile[1] = auxTile[1] + 1
            }
+           if(data[0]== 32 && data[1] == 32 && data[2] ==32)
+           {
+              //tijolo
+           }
+           if(data[0]== 255 && data[1] == 255 && data[2] ==0)
+           {
+              //bau
+           }
             else
             {
               //this.possibilidades[ant][2] = this.possibilidades[ant][2] + 1;
