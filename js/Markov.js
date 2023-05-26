@@ -47,11 +47,21 @@ export default class Markov {
     let auxTile = [];
     for (let i = 0; i < this.tiles.length; i++) {
       this.possibilidades[i] = [];
-      auxTile[i] = 0
     }
     for (let i = 0; i < this.tiles.length; i++) {
       for (let j = 0; j < this.tiles.length; j++) {
         this.possibilidades[i][j] = 0;
+        
+      }
+    }
+    for(let i = 0 ;i< 5;i++)
+    {
+      auxTile[i] = []
+    }
+
+        for (let i = 0; i < this.tiles.length; i++) {
+      for (let j = 0; j < this.tiles.length; j++) {
+         auxTile[i][j] = -1
         
       }
     }
@@ -63,9 +73,10 @@ export default class Markov {
 
     let ant = 0;
     let cont = 0;
-    for (let gi = 0; gi<20;gi++)
+    for (let gi = 0; gi<5;gi++)
     {
-      for (let gj = 0; gj<20;gj++){
+      for (let gj = 0; gj<5;gj++){
+
         for (let i = gi*5; i < gi*5 + 5; i++) 
         {
           for (let j = gj*5; j < gj*5+ 5; j++) {
@@ -76,7 +87,7 @@ export default class Markov {
           if (data[0] == 0 && data[1] == 0 && data[2] == 0) {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //ant = 0;
-            auxTile[0] = auxTile[0] + 1
+            auxTile[i%5][j%5] = 0
           } 
           else 
           {
@@ -84,14 +95,15 @@ export default class Markov {
             {
             //this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1;
             //ant = 1;
-            auxTile[1] = auxTile[1] + 1
            }
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
+              auxTile[i%5][j%5] = 1
               //tijolo
            }
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
            {
+              auxTile[i%5][j%5] = 2
               //bau
            }
             else
@@ -105,12 +117,21 @@ export default class Markov {
         //console.log(rgba)
         }
       }
-      let maior = 0
-      for(let jj = 1 ; jj<3; jj++)
+      for(let ii = 0 ; ii<5; ii++)
       {
-        if(auxTile[maior]<auxTile[jj])
+        for(let jj = 0 ; jj<5 ; jj)
         {
-          maior = jj
+          if(ii == 0 && jj == 0)
+          {
+            if(auxTile[ii][jj] == -1)
+            {
+              //tratamento
+            }
+            else
+            {
+              
+            }
+          }
         }
       }
       auxTile[0] = 0
