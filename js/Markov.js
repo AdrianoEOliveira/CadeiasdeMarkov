@@ -1,7 +1,8 @@
 export default class Markov {
   constructor(assets, canvas) {
     this.tiles = [];
-    this.possibilidades = [];
+    this.possibilidadesX = [];
+    this.possibilidadesY = [];
     this.mapa = [];
     this.assets = assets;
     this.canvas = canvas;
@@ -16,17 +17,27 @@ export default class Markov {
       return this.RandomIndex(arr);
     }
   }
+
+  RandomIndexXY(anteriorX,anteriorY) {
+    let auxX = [];
+    auxX = auxX.concat(this.possibilidadesX[anteriorX]);
+    let xx , yy;
+    xx = this.RandomIndex(auxX);
+    let auxY = [];
+    auxX = auxY.concat(this.possibilidadesY[anteriorY]);
+    yy = this.RandomIndex(auxY);
+    if(xx == yy)
+    return xx;
+    else
+    return this.RandomIndexXY(anteriorX,anteriorY)
+  }
   GenerateRandomMap(primeiroTile) {
-    let anterior = primeiroTile;
+    let anteriorX = primeiroTile;
     for (let l = 0; l < 10; l++) {
       this.mapa[l] = [];
       for (let c = 0; c < 10; c++) {
-        if (l == 0 && c == 0) {
-          this.mapa[l][c] = this.tiles[anterior];
-        } else {
-          let aux = [];
-          aux = aux.concat(this.possibilidades[anterior]);
-          anterior = this.RandomIndex(aux);
+        
+          anteriorX = this.RandomIndexXY(anteriorX,anteriorY);
           this.mapa[l][c] = this.tiles[anterior];
         }
       }
@@ -46,11 +57,13 @@ export default class Markov {
 
     let auxTile = [];
     for (let i = 0; i < this.tiles.length; i++) {
-      this.possibilidades[i] = [];
+      this.possibilidadesX[i] = [];
+      this.possibilidadesY[i] = [];
     }
     for (let i = 0; i < this.tiles.length; i++) {
       for (let j = 0; j < this.tiles.length; j++) {
-        this.possibilidades[i][j] = 0;
+        this.possibilidadesX[i][j] = 0;
+        this.possibilidadesY[i][j] = 0;
         
       }
     }
@@ -72,7 +85,8 @@ export default class Markov {
     auxTile[this.tiles.length]
 
     let ant = 0;
-    let cont = 0;
+    let contX = 0;
+    let contY = 0
     for (let gi = 0; gi<5;gi++)
     {
       for (let gj = 0; gj<5;gj++){
@@ -95,6 +109,7 @@ export default class Markov {
             {
             //this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1;
             //ant = 1;
+            auxTile[i][j] = -1
            }
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
@@ -117,6 +132,8 @@ export default class Markov {
         //console.log(rgba)
         }
       }
+      let antX = -1;
+      let antY = -1;
       for(let ii = 0 ; ii<5; ii++)
       {
         for(let jj = 0 ; jj<5 ; jj)
@@ -129,10 +146,121 @@ export default class Markov {
             }
             else
             {
-              
+              antX = auxTile[ii][jj];
+              this.possibilidadesX[antX][antX] =  this.possibilidadesX[antX][antX] + 1
+              this.possibilidadesY[antY][antY] =  this.possibilidadesY[antY][antY] + 1
+              contX = contX +1
+              contY = contY +1
+            }
+          }
+          else{
+            if(ii==0)
+            {
+              if(auxTile[ii][jj] == -1)
+              {
+                antX =-1
+              }
+              else
+              {
+                if(antX ==-1)
+                {
+                antX = auxTile[ii][jj];
+                this.possibilidadesX[antX][antX] =  this.possibilidadesX[antX][antX] + 1
+                this.possibilidadesY[antX][antX] =  this.possibilidadesY[antX][antX] + 1
+                }
+                else
+                {
+                  let xx = auxTile[ii][jj];
+                this.possibilidadesX[antX][xx] =  this.possibilidadesX[antX][antX] + 1
+                this.possibilidadesY[antX][xx] =  this.possibilidadesY[antX][xx] + 1
+                antX = auxTile[ii][jj];
+                }
+                contX = contX +1
+                contY = contY +1
+              }
+            }
+            else
+            {
+              if(jj==0)
+              {
+                if(auxTile[ii][jj]>=0)
+                {
+                  antY = auxTile[ii-1][jj]
+                  if(antY>=0)
+                  {
+                  let xx = auxTile[ii][jj]
+                  this.possibilidadesX[antY][xx] =  this.possibilidadesX[antY][xx] + 1
+                  this.possibilidadesY[antY][xx] =  this.possibilidadesY[antY][xx] + 1
+                  antX =xx
+                  }
+                  else
+                  {
+                  let xx = auxTile[ii][jj]
+                  this.possibilidadesX[xx][xx] =  this.possibilidadesX[xx][xx] + 1
+                  this.possibilidadesY[xx][xx] =  this.possibilidadesY[xx][xx] + 1
+                  antX =xx
+                  }
+                  contX = contX +1
+                  contY = contY +1
+                }
+                else
+                {
+                  antX =-1
+                }
+              }
+              else
+              {
+                if(auxTile[ii][jj]>=0)
+                {
+                  if(antX>=0)
+                  {
+                  let xx = auxTile[ii][jj]
+                  this.possibilidadesX[antX][xx] =  this.possibilidadesX[antX][xx] + 1
+                  antX =xx
+                  }
+                  antY = auxTile[ii-1][jj]
+                  if(antY==-1)
+                  {
+                    antY = auxTile[ii][jj];
+                  }
+                  let xx = auxTile[ii][jj]
+                  this.possibilidadesY[antY][xx] =  this.possibilidadesY[antY][xx] + 1
+                  antX =xx
+                  contX = contX +1
+                  contY = contY +1
+                }
+              }
+
+            if(auxTile[ii][jj] >=0)
+            {
+              if(antX ==-1)
+              {
+              antX = auxTile[ii][jj];
+              this.possibilidadesX[antX][antX] =  this.possibilidadesX[antX][antX] + 1
+              }
+              else
+              {
+              let xx = auxTile[ii][jj];
+              this.possibilidadesX[antX][xx] =  this.possibilidadesX[antX][antX] + 1
+              antX = auxTile[ii][jj];
+              }
+              antY = auxTile[ii-1][jj]
+              if(antY==-1)
+              {
+                antY = auxTile[ii][jj];
+              }
+              let xx = auxTile[ii][jj]
+              this.possibilidadesY[antY][xx] =  this.possibilidadesY[antY][xx] + 1
+              antX =xx
+
+              contX = contX +1
+              contY = contY +1
+            }
             }
           }
         }
+        antX =-1;
+        antY =-1
       }
       auxTile[0] = 0
       auxTile[1] = 0
