@@ -63,8 +63,8 @@ export default class Mapa {
     }
   }
   carregaMapa() {
-    this.markov.addStates(1);
     this.markov.addStates(0);
+    this.markov.addStates(1);
     this.markov.addStates(2);
 
     this.tiles = this.markov.iniciar();

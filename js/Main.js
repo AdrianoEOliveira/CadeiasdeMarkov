@@ -14,7 +14,7 @@ assets.adicionaImagem("terreno","assets/terrain_atlas.png")
 assets.adicionaImagem("chest","assets/Chest.png")
 assets.adicionaImagem("coin","assets/coin.jpg")
 assets.adicionaImagem("ship","assets/ship.png")
-assets.adicionaImagem("Treino100","assets/Treino100.png")
+assets.adicionaImagem("Treino25","assets/Treino25.png")
 assets.adicionaAudio("boom","assets/boom.wav")
 assets.adicionaAudio("hurt","assets/hurt.wav")
 
