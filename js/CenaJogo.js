@@ -41,7 +41,7 @@ export default class CenaJogo extends Cena
 
         this.configuraMapa(mapa1);
         const cena = this;
-        const pc = new Sprite({x:140,y:100,w:20,h:20,vx:0,color:"white"});
+        const pc = new Sprite({x:400,y:400,w:20,h:20,vx:0,color:"white"});
         pc.tags.add("pc");
         //const imagem = new Image();
         //imagem = this.cena.assets.Img("ship");

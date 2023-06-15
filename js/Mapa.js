@@ -44,7 +44,7 @@ export default class Mapa {
           ctx.drawImage(chest, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
         }
         if (this.tiles[l][c] == 3) {
-          ctx.drawImage(img, 23 * 32, 23 * 32, 32, 32, c * 32, l * 32, 32, 32);
+          ctx.drawImage(img, 21 * 32, 22 * 32, 32, 32, c * 32, l * 32, 32, 32);
         }
         if (this.tiles[l][c] == 4) {
           ctx.drawImage(img, 22 * 32, 21 * 32, 32, 32, c * 32, l * 32, 32, 32);
@@ -66,6 +66,7 @@ export default class Mapa {
     this.markov.addStates(0);
     this.markov.addStates(1);
     this.markov.addStates(2);
+    this.markov.addStates(3)
 
     this.tiles = this.markov.iniciar();
     this.markov.limpa();

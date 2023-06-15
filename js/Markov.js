@@ -103,7 +103,7 @@ export default class Markov {
           if (data[0] == 0 && data[1] == 0 && data[2] == 0) {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //ant = 0;
-            MarkovTile[i%5][j%5] = -1;
+            MarkovTile[i%5][j%5] = 3;
           } 
           else 
           {
@@ -213,7 +213,7 @@ export default class Markov {
 
   iniciar() {
     this.treino();
-    return this.GenerateRandomMap(0);
+    return this.GenerateRandomMap(3);
   }
 
   limpa() {
