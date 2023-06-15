@@ -1,7 +1,7 @@
 import Markov from "./Markov.js";
 
 export default class Mapa {
-  constructor(linhas = 10, colunas = 10, tamanho = 32, markov) {
+  constructor(linhas = 21, colunas = 21, tamanho = 32, markov) {
     this.LINHAS = linhas;
     this.COLUNAS = colunas;
     this.TAMANHO = tamanho;
@@ -22,7 +22,7 @@ export default class Mapa {
     chest = this.cena.assets.Img("chest");
     let coin = new Image();
     coin = this.cena.assets.Img("coin");
-    let linha = 21;
+    let linha = 20;
     let coluna = 8;
     for (let l = 0; l < this.LINHAS; l++) {
       for (let c = 0; c < this.COLUNAS; c++) {
@@ -66,7 +66,8 @@ export default class Mapa {
     this.markov.addStates(0);
     this.markov.addStates(1);
     this.markov.addStates(2);
-    this.markov.addStates(3)
+    this.markov.addStates(3);
+    this.markov.ArrumaTamnhoFase(this.LINHAS,this.COLUNAS);
 
     this.tiles = this.markov.iniciar();
     this.markov.limpa();

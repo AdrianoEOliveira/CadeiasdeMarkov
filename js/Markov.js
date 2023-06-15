@@ -1,5 +1,7 @@
 export default class Markov {
   constructor(assets, canvas) {
+    this.LINHAS = 10;
+    this.COLUNAS = 10;
     this.tiles = [];
     this.possibilidadesX = [];
     this.possibilidadesY = [];
@@ -8,6 +10,14 @@ export default class Markov {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
   }
+
+  ArrumaTamnhoFase(linhas,colunas)
+  {
+    this.LINHAS = linhas;
+    this.COLUNAS = colunas;
+  }
+
+
   RandomIndex(arr) {
     let randomIndex = Math.floor(Math.random() * arr.length);
     //let randomIndex = Math.floor(Math.random())
@@ -39,9 +49,9 @@ export default class Markov {
   GenerateRandomMap(primeiroTile) {
     var anteriorX = primeiroTile;
     var anteriorY = primeiroTile
-    for (let l = 0; l < 10; l++) {
+    for (let l = 0; l < this.LINHAS; l++) {
       this.mapa[l] = [];
-      for (let c = 0; c < 10; c++) {
+      for (let c = 0;c < this.COLUNAS ; c++) {
           if(l>1)
           {
           anteriorY = this.mapa[l-1][c];
@@ -103,7 +113,7 @@ export default class Markov {
           if (data[0] == 0 && data[1] == 0 && data[2] == 0) {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //ant = 0;
-            MarkovTile[i%5][j%5] = 3;
+            MarkovTile[i%5][j%5] = 1;
           } 
           else 
           {
@@ -115,7 +125,7 @@ export default class Markov {
            }
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
-            MarkovTile[i%5][j%5] = 1;
+            MarkovTile[i%5][j%5] = 3;
               //tijolo
            }
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
@@ -213,7 +223,7 @@ export default class Markov {
 
   iniciar() {
     this.treino();
-    return this.GenerateRandomMap(3);
+    return this.GenerateRandomMap(0);
   }
 
   limpa() {
