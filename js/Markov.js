@@ -111,7 +111,7 @@ export default class Markov {
           MarkovTile[i%this.GRID] = []
           for (let j = gj*this.GRID; j < gj*this.GRID + this.GRID; j++) 
           {
-          let pixel = this.ctx.getImageData(i, j, 1, 1);
+          let pixel = this.ctx.getImageData(j, i, 1, 1);
           let data = pixel.data;
           //const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
           //console.log(data)
