@@ -157,8 +157,6 @@ export default class Markov {
         }
 
       let antX = -1;
-      
-      console.log(MarkovTile)
       for(let ii = 0 ; ii<this.GRID; ii++)
       {
         for(let jj = 0 ; jj<this.GRID; jj++)
