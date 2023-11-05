@@ -112,7 +112,8 @@ export default class Markov {
           //console.log(data)
           if (data[0] == 0 && data[1] == 0 && data[2] == 0) {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
-            //ant = 0;
+            //Cor Preto
+            //Tijolo
             MarkovTile[i%5][j%5] = 1;
           } 
           else 
@@ -120,18 +121,21 @@ export default class Markov {
             if(data[0]== 255 && data[1] == 255 && data[2] ==255)
             {
             //this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1;
-            //ant = 1;
+            //Cor Branca 
+            //Piso
             MarkovTile[i%5][j%5] = 0;
            }
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
             MarkovTile[i%5][j%5] = 3;
-              //tijolo
+              //Cinza
+              //Pedra
            }
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
            {
             MarkovTile[i%5][j%5] = 2;
               //bau
+              //Amarelo
            }
           }
         //cont = cont + 1;
