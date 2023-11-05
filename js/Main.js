@@ -42,7 +42,7 @@ input.configurarTeclado(
      "4":"C10",
      "5":"T3",
      "6":"T5",
-     "7":"T7"
+     "7":"T10"
     }
 );
 
@@ -62,7 +62,7 @@ const cena_3= new CenaJogo(canvas,assets,input,markov3,Linhas,COLUNAS);
 const markov5 = new Markov(assets,canvas,Linhas,COLUNAS,5,30,"Treino30",InicialX,InicialY);
 const cena_5= new CenaJogo(canvas,assets,input,markov5,Linhas,COLUNAS);
 const markov10 = new Markov(assets,canvas,Linhas,COLUNAS,10,30,"Treino30",InicialX,InicialY);
-const cena_10= new CenaJogo(canvas,assets,input,markovCirculo3,Linhas,COLUNAS);
+const cena_10= new CenaJogo(canvas,assets,input,markov10,Linhas,COLUNAS);
 
 const carregando= new CenaCarregando(canvas,assets,input,markov25);
 
