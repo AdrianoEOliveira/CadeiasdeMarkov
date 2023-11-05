@@ -12,7 +12,7 @@ export default class CenaCarregando extends Cena
         this.ctx.fillText(`Carregamento ${(this.assets?.progresso())}`,this.canvas.width/2,this.canvas.height/2);
         if(this.assets.acabou())
         {
-            this.ctx.fillText("Aperte espaço para continuar",this.canvas.width/2,this.canvas.height/2+120);
+            this.ctx.fillText("Aperte espaço sigua as instruções",this.canvas.width/2,this.canvas.height/2+120);
             this.ctx.fillText("Baus valem 1 ponto, moedas 2",this.canvas.width/2,this.canvas.height/2+40);
             this.ctx.fillText("Pegue a moeda para mudar de fase",this.canvas.width/2,this.canvas.height/2+80);
 
@@ -26,15 +26,40 @@ export default class CenaCarregando extends Cena
 
         if(this.assets.acabou())
         {
-            if(this.input.comandos.get("Markov"))
+
+            if(this.input.comandos.get("TESTE"))
             {
-            let img =new Image();
-            img = this.assets.Img("Treino");
-            this.ctx.drawImage(img, 0, 0);
+                this.game.selecionaCena("teste");
+                return;
             }
-            if(this.input.comandos.get("PROXIMA_CENA"))
+            if(this.input.comandos.get("C3"))
             {
-                this.game.selecionaCena("jogo");
+                this.game.selecionaCena("testeCirculo_3");
+                return;
+            }
+            if(this.input.comandos.get("C5"))
+            {
+                this.game.selecionaCena("testeCirculo_5");
+                return;
+            }
+            if(this.input.comandos.get("C10"))
+            {
+                this.game.selecionaCena("testeCirculo_10");
+                return;
+            }
+            if(this.input.comandos.get("T3"))
+            {
+                this.game.selecionaCena("teste_3");
+                return;
+            }
+            if(this.input.comandos.get("T5"))
+            {
+                this.game.selecionaCena("teste_5");
+                return;
+            }
+            if(this.input.comandos.get("T10"))
+            {
+                this.game.selecionaCena("teste_10");
                 return;
             }
         }

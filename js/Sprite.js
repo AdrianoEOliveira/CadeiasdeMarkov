@@ -119,7 +119,6 @@ export default class Sprite
                         {
                             this.cena.game.pontuacao = this.cena.game.pontuacao +2;
                             this.cena.game.stars++;
-                            this.cena.game.selecionaCena("jogo2");
                         }
                     }
                 }
@@ -174,7 +173,6 @@ export default class Sprite
                             {
                                 this.cena.game.pontuacao = this.cena.game.pontuacao +2;
                                 this.cena.game.stars++
-                                this.cena.game.selecionaCena("jogo2");
 
                             }
                         }
@@ -232,7 +230,6 @@ export default class Sprite
                             {
                                 this.cena.game.pontuacao = this.cena.game.pontuacao +2;
                                 this.cena.game.stars++
-                                this.cena.game.selecionaCena("jogo2");
                             }
                         }
                     }
@@ -289,7 +286,6 @@ export default class Sprite
                         {
                             this.cena.game.pontuacao = this.cena.game.pontuacao +2;
                             this.cena.game.stars++
-                            this.cena.game.selecionaCena("jogo2");
                             
                         }
                     }

@@ -1,7 +1,12 @@
 export default class Markov {
-  constructor(assets, canvas) {
-    this.LINHAS = 10;
-    this.COLUNAS = 10;
+  constructor(assets, canvas,LINHAS,COLUNAS,GRID,TAMANHOIMAGEM,IMAGEM,InicialX,InicialY) {
+    this.LINHAS = LINHAS;
+    this.COLUNAS =COLUNAS;
+    this.GRID = GRID;
+    this.TAMANHOIMAGEM = TAMANHOIMAGEM;
+    this.IMAGEM =IMAGEM;
+    this.InicialX = InicialX;
+    this.InicialY = InicialY;
     this.tiles = [];
     this.possibilidadesX = [];
     this.possibilidadesY = [];
@@ -11,11 +16,6 @@ export default class Markov {
     this.ctx = canvas.getContext("2d");
   }
 
-  ArrumaTamnhoFase(linhas,colunas)
-  {
-    this.LINHAS = linhas;
-    this.COLUNAS = colunas;
-  }
 
 
   RandomIndex(arr) {
@@ -46,10 +46,11 @@ export default class Markov {
     return this.RandomIndexXY(anteriorX,anteriorY)
     }
   }
-  GenerateRandomMap(primeiroTile) {
-    var anteriorX = primeiroTile;
-    var anteriorY = primeiroTile
-    for (let l = 0; l < this.LINHAS; l++) {
+  GenerateRandomMap() {
+    var anteriorX = this.InicialX;
+    var anteriorY = this.InicialY;
+    for (let l = 0; l < this.LINHAS; l++) 
+    {
       this.mapa[l] = [];
       for (let c = 0;c < this.COLUNAS ; c++) {
           if(l>1)
@@ -64,7 +65,7 @@ export default class Markov {
           this.mapa[l][c] = this.tiles[anteriorX];
           }
         }
-        anteriorX = primeiroTile
+        anteriorX = this.InicialX
       }
     return this.mapa;
   }
@@ -77,7 +78,8 @@ export default class Markov {
     this.possibilidades = possibilite;
   }
 
-  treino() {
+  treino() 
+  {
 
     for (let i = 0; i < this.tiles.length; i++) {
       this.possibilidadesX[i] = [];
@@ -91,30 +93,34 @@ export default class Markov {
       }
     }
     let img = new Image();
-    img = this.assets.Img("Treino25");
+    img = this.assets.Img(this.IMAGEM);
     this.ctx.drawImage(img, 0, 0);
     //img.style.display = "none";
 
     let contX = 0;
-    let contY = 0
-    for (let gi = 0; gi<5;gi++)
+    let contY = 0;
+    let tamanhoGrid = this.TAMANHOIMAGEM /this.GRID;
+    for (let gi = 0; gi<tamanhoGrid;gi++)
     {
-      for (let gj = 0; gj<5;gj++){
+      for (let gj = 0; gj<tamanhoGrid;gj++)
+      {
         let MarkovTile = []
 
-        for (let i = gi*5; i < gi*5 + 5; i++) 
+        for (let i = gi*this.GRID; i < gi*this.GRID + this.GRID; i++) 
         {
-          MarkovTile[i%5] = []
-          for (let j = gj*5; j < gj*5+ 5; j++) {
+          MarkovTile[i%this.GRID] = []
+          for (let j = gj*this.GRID; j < gj*this.GRID + this.GRID; j++) 
+          {
           let pixel = this.ctx.getImageData(i, j, 1, 1);
           let data = pixel.data;
           //const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
           //console.log(data)
-          if (data[0] == 0 && data[1] == 0 && data[2] == 0) {
+          if (data[0] == 0 && data[1] == 0 && data[2] == 0) 
+          {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //Cor Preto
             //Tijolo
-            MarkovTile[i%5][j%5] = 1;
+            MarkovTile[i%this.GRID][j%this.GRID] = 1;
           } 
           else 
           {
@@ -123,52 +129,51 @@ export default class Markov {
             //this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1;
             //Cor Branca 
             //Piso
-            MarkovTile[i%5][j%5] = 0;
+            MarkovTile[i%this.GRID][j%this.GRID] = 0;
            }
+           else
+           {
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
-            MarkovTile[i%5][j%5] = 3;
+            MarkovTile[i%this.GRID][j%this.GRID] = 3;
               //Cinza
               //Pedra
            }
+           else{
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
            {
-            MarkovTile[i%5][j%5] = 2;
+            MarkovTile[i%this.GRID][j%this.GRID] = 2;
               //bau
               //Amarelo
            }
+           else
+           {console.log(i,j,data)}
           }
+          }
+        }
         //cont = cont + 1;
         //console.log(rgba)
+          }
         }
-      }
+
       let antX = -1;
-      for(let ii = 0 ; ii<5; ii++)
+      
+      console.log(MarkovTile)
+      for(let ii = 0 ; ii<this.GRID; ii++)
       {
-        for(let jj = 0 ; jj<5 ; jj++)
+        for(let jj = 0 ; jj<this.GRID; jj++)
         {
           if(ii==0)
           {
             if(MarkovTile[ii][jj]>=0)
             {
               let AntY
-              if(MarkovTile[ii][jj]==2)
-              {
-                AntY = 0
-              }
-              else
-              {
               AntY = MarkovTile[ii][jj]
-              }
               let atual = MarkovTile[ii][jj]
               this.possibilidadesY[AntY][atual]= this.possibilidadesY[AntY][atual] + 1
               if(antX == -1)
               {
               antX = atual
-              }
-              if(MarkovTile[ii][jj]==2)
-              {
-                antX = 0
               }
               this.possibilidadesX[antX][atual] = this.possibilidadesX[antX][atual] + 1
               antX = atual
@@ -185,12 +190,16 @@ export default class Markov {
           {
             if(MarkovTile[ii][jj]>=0)
             {
-              let AntY = MarkovTile[ii][jj]
-              if(MarkovTile[ii-1][jj]>=0)
+              let AntY =-1;
+              if(jj==0)
               {
-                AntY = MarkovTile[ii-1][jj]
+               AntY = MarkovTile[ii][jj]
               }
-              let atual = MarkovTile[ii][jj]
+              else
+              {
+                AntY = MarkovTile[ii][jj-1]
+              }
+              let atual = MarkovTile[ii][jj];
               this.possibilidadesY[AntY][atual]= this.possibilidadesY[AntY][atual] + 1
               if(antX == -1)
               {
@@ -223,16 +232,16 @@ export default class Markov {
     console.log(this.possibilidadesX);
     console.log("Markov em relação a Y:")
     console.log(this.possibilidadesY);
-  }
+}
+iniciar() 
+{
+  this.treino();
+  return this.GenerateRandomMap();
+}
 
-  iniciar() {
-    this.treino();
-    return this.GenerateRandomMap(0);
-  }
-
-  limpa() {
-    this.possibilidadesX = [];
-    this.possibilidadesY = [];
-    this.tiles = [];
-  }
+limpa() {
+  this.possibilidadesX = [];
+  this.possibilidadesY = [];
+  this.tiles = [];
+}
 }

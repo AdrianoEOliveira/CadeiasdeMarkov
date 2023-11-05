@@ -4,7 +4,7 @@ export default class Cena
 {
     /* E responsável por desenhar elementos na tela de uma animação
     */
-    constructor(canvas,assets,input,modelo,markov){
+    constructor(canvas,assets,input,markov,linhas = 21, colunas = 21){
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.assets = assets;
@@ -13,8 +13,9 @@ export default class Cena
         this.rodando =true;
         this.input = input;
         this.pontuacao = 0;
-        this.modelo=modelo;
         this.markov = markov;
+        this.LINHAS = linhas;
+        this.COLUNAS = colunas;
         //this.preparar();
     }
     desenhar()

@@ -67,7 +67,6 @@ export default class Mapa {
     this.markov.addStates(1);
     this.markov.addStates(2);
     this.markov.addStates(3);
-    this.markov.ArrumaTamnhoFase(this.LINHAS,this.COLUNAS);
 
     this.tiles = this.markov.iniciar();
     this.markov.limpa();
