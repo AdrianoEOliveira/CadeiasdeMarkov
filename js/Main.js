@@ -7,8 +7,10 @@ import CenaJogo from   "./CenaJogo.js";
 import CenaFim from   "./CenaFim.js";
 import Markov from   "./Markov.js";
 
-const InicialX = 0;
-const InicialY = 0;
+const InicialX = 3;
+const InicialY = 3;
+const Linhas =15;
+const COLUNAS =15;
 
 
 const assets= new AssetManager(new Mixer(10));
@@ -25,12 +27,10 @@ assets.adicionaAudio("hurt","assets/hurt.wav")
 
 const input = new inputManager();
 
-const Linhas =15
-const COLUNAS =15
 
 const canvas = document.querySelector("canvas");
-canvas.width = 21*32;
-canvas.height = 21*32;
+canvas.width = Linhas*32;
+canvas.height = COLUNAS*32;
 input.configurarTeclado(
     {"ArrowLeft":"MOVE_ESQUERDA",
      "ArrowRight" : "MOVE_DIREITA",

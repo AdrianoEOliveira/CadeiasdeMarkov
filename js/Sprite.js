@@ -91,6 +91,22 @@ export default class Sprite
                 }
                 }
             }
+            if(this.cena.mapa.tiles[pmy][pmx]==3)
+            {
+                const tile = {x:(pmx*size)+(size/2),
+                y:(pmy*size)+(size/2),
+                w:size,
+                h:size}
+                if(this.colidiuCom(tile))
+                {
+                this.vx = 0;
+                this.x=tile.x-tile.w/2-this.w/2-1;
+                if(this.tags.has("pc"))
+                {
+                this.cena.assets.play("hurt");
+                }
+                }
+            }
                 else
                 {
                     if(this.tags.has("pc"))
@@ -131,6 +147,22 @@ export default class Sprite
         {
 
             if(this.cena.mapa.tiles[pmy][pmx]==1)
+            {
+                const tile = {x:(pmx*size)+(size/2),
+                y:(pmy*size)+(size/2),
+                w:size,
+                h:size}
+                if(this.colidiuCom(tile))
+                {
+                this.vx = 0;
+                this.x=tile.x+tile.w/2+this.w/2+1;
+                if(this.tags.has("pc"))
+                {
+                this.cena.assets.play("hurt");
+                }
+                }
+            }
+            if(this.cena.mapa.tiles[pmy][pmx]==3)
             {
                 const tile = {x:(pmx*size)+(size/2),
                 y:(pmy*size)+(size/2),
@@ -187,6 +219,22 @@ export default class Sprite
         {
 
             if(this.cena.mapa.tiles[pmy][pmx]==1)
+            {
+                const tile = {x:(pmx*size)+(size/2),
+                y:(pmy*size)+(size/2),
+                w:size,
+                h:size}
+                if(this.colidiuCom(tile))
+                {
+                this.vy = 0;
+                this.y=tile.y-tile.h/2-this.h/2-1;
+                if(this.tags.has("pc"))
+                {
+                this.cena.assets.play("hurt");
+                }
+                }
+            }
+            if(this.cena.mapa.tiles[pmy][pmx]==3)
             {
                 const tile = {x:(pmx*size)+(size/2),
                 y:(pmy*size)+(size/2),
@@ -259,6 +307,23 @@ export default class Sprite
                 }
                 }
             }
+            if(this.cena.mapa.tiles[pmy][pmx]==3)
+            {
+                const tile = {x:(pmx*size)+(size/2),
+                y:(pmy*size)+(size/2),
+                w:size,
+                h:size}
+                if(this.colidiuCom(tile))
+                {
+                this.vy = 0;
+                this.y=tile.y+tile.h/2+this.h/2+1;
+                if(this.tags.has("pc"))
+                {
+                this.cena.assets.play("hurt");
+                }
+                }
+            }
+            
             else
             {
                 if(this.tags.has("pc"))
