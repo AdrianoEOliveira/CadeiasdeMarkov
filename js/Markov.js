@@ -117,7 +117,7 @@ export default class Markov {
           {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //Cor Preto
-            //Tijolo
+            //Lava
             MarkovTile[i%this.GRID][j%this.GRID] = 1;
           } 
           else 
