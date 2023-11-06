@@ -97,8 +97,6 @@ export default class Markov {
     this.ctx.drawImage(img, 0, 0);
     //img.style.display = "none";
 
-    let contX = 0;
-    let contY = 0;
     let tamanhoGrid = this.TAMANHOIMAGEM /this.GRID;
     for (let gi = 0; gi<tamanhoGrid;gi++)
     {
@@ -175,8 +173,6 @@ export default class Markov {
               }
               this.possibilidadesX[antX][atual] = this.possibilidadesX[antX][atual] + 1
               antX = atual
-              contX ++
-              contY ++
 
             }
             else
@@ -205,8 +201,6 @@ export default class Markov {
               }
               this.possibilidadesX[antX][atual] = this.possibilidadesX[antX][atual] + 1
               antX = atual
-              contX ++
-              contY ++
 
             }
             else
@@ -220,11 +214,26 @@ export default class Markov {
     }
   }
   }
+
     for (let i = 0; i < this.tiles.length; i++) {
+      let SomatorioX =0;
+      let SomatorioY = 0;
       for (let j = 0; j < this.tiles.length; j++) {
-        this.possibilidadesX[i][j] = this.possibilidadesX[i][j] / contX;
-        this.possibilidadesY[i][j] = this.possibilidadesY[i][j] / contY;
+        SomatorioX = SomatorioX + this.possibilidadesX[i][j];
+        SomatorioY = SomatorioY + this.possibilidadesY[i][j];
       }
+      let totalX = SomatorioX;
+      let totalY = SomatorioY;
+      SomatorioX =0;
+      SomatorioY = 0;
+      for (let j = 0; j < this.tiles.length; j++) {
+        this.possibilidadesX[i][j] = this.possibilidadesX[i][j] / totalX;
+        SomatorioX = SomatorioX + this.possibilidadesX[i][j];
+        this.possibilidadesY[i][j] = this.possibilidadesY[i][j] / totalY;
+        SomatorioY = SomatorioY + this.possibilidadesY[i][j];
+      }
+      console.log("Somatorio em x de i =",i," = ",SomatorioX)
+      console.log("Somatorio em y de i =",i," = ",SomatorioY)
     }
     console.log("Markov em relação a X:" )
     console.log(this.possibilidadesX);
