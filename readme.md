@@ -12,5 +12,4 @@ Uma versão online pode ser acessada [diretamente pelo navegador](https://adrian
 
 # Assets utilizados
 
-##  Imagens:
 -  https://opengameart.org
