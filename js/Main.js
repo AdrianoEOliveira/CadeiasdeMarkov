@@ -93,10 +93,10 @@ game.iniciar();
 
 document.addEventListener("keydown",(e)=>{switch (e.key)
     {
-    case "s":
+    case " ":
         game.iniciar();
         break;
-    case "S":
+    case "Escape":
         game.parar()
         break;
         case "c":

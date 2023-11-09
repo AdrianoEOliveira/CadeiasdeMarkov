@@ -28,12 +28,53 @@ export default class CenaFim extends Cena
 
         if(this.assets.acabou())
         {
-            if(this.input.comandos.get("PROXIMA_CENA"))
+            if(this.input.comandos.get("TESTE"))
             {
                 this.game.pontuacao = 0;
                 this.game.chests = 0;
-                this.game.stars = 0;
-                this.game.selecionaCena("jogo");
+                this.game.selecionaCena("teste");
+                return;
+            }
+            if(this.input.comandos.get("C3"))
+            {
+                this.game.pontuacao = 0;
+                this.game.chests = 0;
+                this.game.selecionaCena("testeCirculo_3");
+                return;
+            }
+            if(this.input.comandos.get("C5"))
+            {
+                this.game.pontuacao = 0;
+                this.game.chests = 0;
+                this.game.selecionaCena("testeCirculo_5");
+                return;
+            }
+            if(this.input.comandos.get("C10"))
+            {
+                this.game.pontuacao = 0;
+                this.game.chests = 0;
+                this.game.selecionaCena("testeCirculo_10");
+                return;
+            }
+            if(this.input.comandos.get("T3"))
+            {
+                this.game.pontuacao = 0;
+                this.game.chests = 0;
+                this.game.selecionaCena("teste_3");
+                return;
+            }
+            if(this.input.comandos.get("T5"))
+            {
+                this.game.pontuacao = 0;
+                this.game.chests = 0;
+                this.game.selecionaCena("teste_5");
+                return;
+            }
+            if(this.input.comandos.get("T10"))
+            {
+                this.game.pontuacao = 0;
+                this.game.chests = 0;
+                this.game.selecionaCena("teste_10");
                 return;
             }
         }

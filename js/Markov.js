@@ -32,18 +32,25 @@ export default class Markov {
     let auxX = [];
     auxX = auxX.concat(this.possibilidadesX[anteriorX]);
     let xx = 0;
-    let yy = 0
+    let yy = 0;
     xx = this.RandomIndex(auxX);
     let auxY = [];
     auxY = auxY.concat(this.possibilidadesY[anteriorY]);
     yy = this.RandomIndex(auxY);
-    if(xx == yy)
+    if((auxX[xx] !=0) && (auxY[yy] != 0))
     {
-    return xx;
+      if(xx == yy)
+      {
+      return xx;
+      }
+      else
+      {
+      return this.RandomIndexXY(anteriorX,anteriorY);
+      }
     }
     else
     {
-    return this.RandomIndexXY(anteriorX,anteriorY)
+    return this.RandomIndexXY(anteriorX,anteriorY);
     }
   }
   GenerateRandomMap() {
@@ -52,8 +59,9 @@ export default class Markov {
     for (let l = 0; l < this.LINHAS; l++) 
     {
       this.mapa[l] = [];
-      for (let c = 0;c < this.COLUNAS ; c++) {
-          if(l>1)
+      for (let c = 0;c < this.COLUNAS ; c++) 
+      {
+          if(l>=1)
           {
           anteriorY = this.mapa[l-1][c];
           anteriorX = this.RandomIndexXY(anteriorX,anteriorY);
@@ -64,8 +72,8 @@ export default class Markov {
           anteriorX = this.RandomIndexXY(anteriorX,anteriorY);
           this.mapa[l][c] = this.tiles[anteriorX];
           }
-        }
-        anteriorX = this.InicialX
+      }
+      anteriorX = this.InicialX
       }
     return this.mapa;
   }
@@ -122,7 +130,7 @@ export default class Markov {
           } 
           else 
           {
-            if(data[0]== 255 && data[1] == 255 && data[2] ==255)
+          if(data[0]== 255 && data[1] == 255 && data[2] ==255)
             {
             //this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1;
             //Cor Branca 
@@ -153,10 +161,9 @@ export default class Markov {
         //console.log(rgba)
           }
         }
-
-      let antX = -1;
       for(let ii = 0 ; ii<this.GRID; ii++)
       {
+        let antX = -1;
         for(let jj = 0 ; jj<this.GRID; jj++)
         {
           if(ii==0)
@@ -184,15 +191,9 @@ export default class Markov {
           {
             if(MarkovTile[ii][jj]>=0)
             {
-              let AntY =-1;
-              if(jj==0)
-              {
-               AntY = MarkovTile[ii][jj]
-              }
-              else
-              {
-                AntY = MarkovTile[ii][jj-1]
-              }
+              
+              let AntY ;
+              AntY = MarkovTile[ii-1][jj];
               let atual = MarkovTile[ii][jj];
               this.possibilidadesY[AntY][atual]= this.possibilidadesY[AntY][atual] + 1
               if(antX == -1)
@@ -210,7 +211,6 @@ export default class Markov {
 
           }
         }
-      antX =-1
     }
   }
   }
