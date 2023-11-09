@@ -7,10 +7,10 @@ import CenaJogo from   "./CenaJogo.js";
 import CenaFim from   "./CenaFim.js";
 import Markov from   "./Markov.js";
 
-const InicialX = 3;
-const InicialY = 3;
-const Linhas =15;
-const COLUNAS =15;
+const InicialX = 3; // borda 
+const InicialY = 3; // borda cima
+const Linhas =15; // tamanho tela
+const COLUNAS =15; // tamanho tela
 
 
 const assets= new AssetManager(new Mixer(10));
@@ -18,11 +18,9 @@ assets.adicionaImagem("humano","assets/humano.png");
 assets.adicionaImagem("terreno","assets/terrain_atlas.png")
 assets.adicionaImagem("chest","assets/Chest.png")
 assets.adicionaImagem("coin","assets/coin.jpg")
-assets.adicionaImagem("ship","assets/ship.png")
 assets.adicionaImagem("Treino25","assets/Treino25.png")
 assets.adicionaImagem("Treino30","assets/Treino30.png")
 assets.adicionaImagem("TreinoCirculo","assets/TreinoCirculo.png")
-assets.adicionaAudio("boom","assets/boom.wav")
 assets.adicionaAudio("hurt","assets/hurt.wav")
 
 const input = new inputManager();
