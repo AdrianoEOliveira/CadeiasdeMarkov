@@ -364,13 +364,13 @@ export default class Sprite
         let xa ,ya;
         while(Invalido ===1)
         {
-        xa = Math.floor(Math.random() * 11*32) + 32 ;
+        xa = Math.floor(Math.random() * 15*32)  ;
         let mx=Math.floor(xa/this.cena.mapa.TAMANHO);
-        ya = Math.floor(Math.random() * 11*32) + 32 ;
+        ya = Math.floor(Math.random() * 15*32)  ;
         let my=Math.floor(ya/this.cena.mapa.TAMANHO);
             if(mx<15 && my <15)
             {
-                if(this.cena.mapa.tiles[my][mx]==0 || this.cena.mapa.tiles[my][mx]==2)
+                if(this.cena.mapa.tiles[my][mx]==0 )
                 {
                     Invalido = 0;
                 }

@@ -70,7 +70,6 @@ export default class Mapa {
 
     this.tiles = this.markov.iniciar();
     this.markov.limpa();
-    console.log(this.tiles)
     //this.desenhar()
   }
 }

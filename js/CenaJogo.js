@@ -37,11 +37,29 @@ export default class CenaJogo extends Cena
         super.preparar();
         let mapa1 = new Mapa(this.LINHAS,this.COLUNAS,32,this.markov);
 
+
         mapa1.carregaMapa();
+
+        let Invalido = 1;
+        let xa ,ya;
+        while(Invalido ===1)
+        {
+        xa = Math.floor(Math.random() * 15*32)  ;
+        let mx=Math.floor(xa/32);
+        ya = Math.floor(Math.random() * 15*32)  ;
+        let my=Math.floor(ya/32);
+            if(mx<15 && my <15)
+            {
+                if(mapa1.tiles[my][mx]==0 )
+                {
+                    Invalido = 0;
+                }
+            }
+        }
 
         this.configuraMapa(mapa1);
         const cena = this;
-        const pc = new Sprite({x:400,y:400,w:20,h:20,vx:0,color:"white"});
+        const pc = new Sprite({x:xa,y:ya,w:20,h:20,vx:0,color:"white"});
         pc.tags.add("pc");
         //const imagem = new Image();
         //imagem = this.cena.assets.Img("ship");
