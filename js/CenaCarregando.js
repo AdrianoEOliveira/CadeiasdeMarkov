@@ -12,8 +12,12 @@ export default class CenaCarregando extends Cena
         this.ctx.fillText(`Carregamento ${(this.assets?.progresso())}`,this.canvas.width/2,this.canvas.height/2);
         if(this.assets.acabou())
         {
-            this.ctx.fillText("Aperte 1 a 7 para continuar",this.canvas.width/2,this.canvas.height/2+120);
-            this.ctx.fillText("Baus valem 1 ponto",this.canvas.width/2,this.canvas.height/2+40);
+            this.ctx.fillText("Aperte 1 a 7 para continuar",this.canvas.width/2,this.canvas.height/2+40);
+            this.ctx.fillText("Aperte 1 para testar mapa base",this.canvas.width/2,this.canvas.height/2+80);
+            this.ctx.fillText("Aperte 2 a 4 para mapa circulo com grid 3,5,10",this.canvas.width/2,this.canvas.height/2+120);
+            this.ctx.fillText("Aperte 5 a 7 para mapa quadrado com grid 3,5,10",this.canvas.width/2,this.canvas.height/2+160);
+            this.ctx.fillText("Quando travar ou mudar o teste recarrege a pagina",this.canvas.width/2,this.canvas.height/2+200);
+            this.ctx.fillText("Baus valem 1 ponto",this.canvas.width/2,this.canvas.height/2 + 240);
         }
     }
 
