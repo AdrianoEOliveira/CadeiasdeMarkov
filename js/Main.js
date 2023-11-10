@@ -16,6 +16,8 @@ const COLUNAS =15; // tamanho tela
 const assets= new AssetManager(new Mixer(10));
 assets.adicionaImagem("humano","assets/humano.png");
 assets.adicionaImagem("terreno","assets/terrain_atlas.png")
+assets.adicionaImagem("pedra","assets/rock.png")
+assets.adicionaImagem("parede","assets/brick_gray.png")
 assets.adicionaImagem("chest","assets/Chest.png")
 assets.adicionaImagem("coin","assets/coin.jpg")
 assets.adicionaImagem("Treino25","assets/Treino25.png")
