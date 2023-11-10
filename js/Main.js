@@ -9,8 +9,8 @@ import Markov from   "./Markov.js";
 
 const InicialX = 3; // borda 
 const InicialY = 3; // borda cima
-const Linhas =15; // tamanho tela
-const COLUNAS =15; // tamanho tela
+const Linhas =25; // tamanho tela
+const COLUNAS =25; // tamanho tela
 
 
 const assets= new AssetManager(new Mixer(10));

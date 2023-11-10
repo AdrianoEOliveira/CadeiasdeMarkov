@@ -143,7 +143,7 @@ export default class Markov {
           {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //Cor Preto
-            //
+            // pedra
             MarkovTile[i%this.GRID][j%this.GRID] = 1;
           } 
           else 
@@ -161,7 +161,7 @@ export default class Markov {
            {
             MarkovTile[i%this.GRID][j%this.GRID] = 3;
               //Cinza
-              //Pedra
+              //parede
            }
            else{
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
