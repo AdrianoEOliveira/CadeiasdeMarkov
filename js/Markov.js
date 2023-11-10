@@ -31,17 +31,35 @@ export default class Markov {
   RandomIndexXY(anteriorX,anteriorY) {
     let auxX = [];
     auxX = auxX.concat(this.possibilidadesX[anteriorX]);
-    let xx = 0;
-    let yy = 0;
-    xx = this.RandomIndex(auxX);
+    let x = 0;
+    let y = 0;
     let auxY = [];
     auxY = auxY.concat(this.possibilidadesY[anteriorY]);
-    yy = this.RandomIndex(auxY);
-    if((auxX[xx] !=0) && (auxY[yy] != 0))
+    let limite = Math.random() *1;
+    let soma = 0;
+    for (let i = 0; i < auxX.length ; i++) {
+      soma += auxX[i];
+
+      if (soma >= limite) {
+        x= i;
+        break;
+      }
+    }
+    limite = Math.random() *1;
+    soma = 0
+    for (let i = 0; i < auxX.length ; i++) {
+      soma += auxY[i];
+
+      if (soma >= limite) {
+        y= i;
+        break;
+      }
+    }
+    if((auxX[x] !=0) && (auxY[y] != 0))
     {
-      if(xx == yy)
+      if(x == y)
       {
-      return xx;
+      return x;
       }
       else
       {
