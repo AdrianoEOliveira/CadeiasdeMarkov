@@ -60,7 +60,7 @@ export default class CenaJogo extends Cena
         this.configuraMapa(mapa1);
         const cena = this;
         const pc = new Sprite({x:xa,y:ya,w:20,h:20,vx:0,color:"white"});
-        pc.tags.add("pc");
+        //pc.tags.add("pc");
         //const imagem = new Image();
         //imagem = this.cena.assets.Img("ship");
         /*Uncaught TypeError: Cannot read property 'assets' of undefined
@@ -69,6 +69,7 @@ export default class CenaJogo extends Cena
         at new CenaJogo (CenaJogo.js:7)
         at Main.js:34
        */
+      
         pc.controlar = function(dt)
         {
             if(cena.input.comandos.get("MOVE_ESQUERDA"))
@@ -104,7 +105,8 @@ export default class CenaJogo extends Cena
 
             
         }
-        this.adicionarSprite(pc);
+        //this.adicionarSprite(pc);
+        
 
     }
 }

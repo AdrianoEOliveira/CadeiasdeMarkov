@@ -80,8 +80,8 @@ export default class Cena
         let vya = Math.floor(Math.random() * 11);
         positivoOuNegativo =Math.floor(Math.random() * 10) +1;
         vya = vya * Math.pow(-1,positivoOuNegativo);
-        const en1 = new Sprite({x:xa,y:ya,w:20,h:20,vx:vxa,vy:vya,color:"red"});
-        en1.tags.add("enemy");
+        //const en1 = new Sprite({x:xa,y:ya,w:20,h:20,vx:vxa,vy:vya,color:"red"});
+        //en1.tags.add("enemy");
         const pc = this.sprites[0];
         function perseguePC(dt)
         {
@@ -89,8 +89,8 @@ export default class Cena
             this.vy = 25 * Math.sign(pc.y-this.y);
     
         }
-        en1.controlar = perseguePC;
-        this.adicionarSprite(en1);
+        //en1.controlar = perseguePC;
+        //this.adicionarSprite(en1);
 
     }
 

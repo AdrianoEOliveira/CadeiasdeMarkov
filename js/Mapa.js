@@ -44,10 +44,10 @@ export default class Mapa {
         if (this.tiles[l][c] == 1) { //pedra
           ctx.drawImage(pedra, 0 , 0, 32, 32, c * 32, l * 32, 32, 32);
         }
-        if (this.tiles[l][c] == 2) { //bau
+        if (this.tiles[l][c] == 3) { //bau
           ctx.drawImage(chest, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
         }
-        if (this.tiles[l][c] == 3) { // parede
+        if (this.tiles[l][c] == 2) { // parede
           ctx.drawImage(parede, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
         }
         if (this.tiles[l][c] == 4) {

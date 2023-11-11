@@ -7,8 +7,8 @@ import CenaJogo from   "./CenaJogo.js";
 import CenaFim from   "./CenaFim.js";
 import Markov from   "./Markov.js";
 
-const InicialX = 3; // borda 
-const InicialY = 3; // borda cima
+const InicialX = 2; // borda 
+const InicialY = 2; // borda cima
 const Linhas =25; // tamanho tela
 const COLUNAS =25; // tamanho tela
 

@@ -35,7 +35,7 @@ export default class Markov {
     let y = 0;
     let auxY = [];
     auxY = auxY.concat(this.possibilidadesY[anteriorY]);
-    let limite = Math.random() *1;
+    let limite = Math.random() ;
     let soma = 0;
     for (let i = 0; i < auxX.length ; i++) {
       soma += auxX[i];
@@ -45,7 +45,7 @@ export default class Markov {
         break;
       }
     }
-    limite = Math.random() *1;
+    limite = Math.random() ;
     soma = 0
     for (let i = 0; i < auxX.length ; i++) {
       soma += auxY[i];
@@ -159,14 +159,14 @@ export default class Markov {
            {
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
-            MarkovTile[i%this.GRID][j%this.GRID] = 3;
+            MarkovTile[i%this.GRID][j%this.GRID] = 2;
               //Cinza
               //parede
            }
            else{
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
            {
-            MarkovTile[i%this.GRID][j%this.GRID] = 2;
+            MarkovTile[i%this.GRID][j%this.GRID] = 3;
               //bau
               //Amarelo
            }
