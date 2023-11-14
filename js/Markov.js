@@ -8,8 +8,7 @@ export default class Markov {
     this.InicialX = InicialX;
     this.InicialY = InicialY;
     this.tiles = [];
-    this.possibilidadesX = [];
-    this.possibilidadesY = [];
+    this.possibilidades = [];
     this.mapa = [];
     this.assets = assets;
     this.canvas = canvas;
@@ -29,42 +28,23 @@ export default class Markov {
   }
 
   RandomIndexXY(anteriorX,anteriorY) {
-    let auxX = [];
-    auxX = auxX.concat(this.possibilidadesX[anteriorX]);
+    let aux = [];
+    let indice = anteriorY *4 + anteriorX;
+    aux = aux.concat(this.possibilidades[indice]);
     let x = 0;
-    let y = 0;
-    let auxY = [];
-    auxY = auxY.concat(this.possibilidadesY[anteriorY]);
     let limite = Math.random() ;
     let soma = 0;
-    for (let i = 0; i < auxX.length ; i++) {
-      soma += auxX[i];
+    for (let i = 0; i < aux.length ; i++) {
+      soma += aux[i];
 
       if (soma >= limite) {
         x= i;
         break;
       }
     }
-    limite = Math.random() ;
-    soma = 0
-    for (let i = 0; i < auxX.length ; i++) {
-      soma += auxY[i];
-
-      if (soma >= limite) {
-        y= i;
-        break;
-      }
-    }
-    if((auxX[x] !=0) && (auxY[y] != 0))
+    if((aux[x] !=0) )
     {
-      if(x == y)
-      {
       return x;
-      }
-      else
-      {
-      return this.RandomIndexXY(anteriorX,anteriorY);
-      }
     }
     else
     {
@@ -100,22 +80,16 @@ export default class Markov {
   addStates(tile) {
     this.tiles.push(tile);
   }
-  setPosssibilidades(possibilite) {
-    this.possibilidades = possibilite;
-  }
 
   treino() 
   {
 
-    for (let i = 0; i < this.tiles.length; i++) {
-      this.possibilidadesX[i] = [];
-      this.possibilidadesY[i] = [];
+    for (let i = 0; i < this.tiles.length*this.tiles.length; i++) {
+      this.possibilidades[i] = [];
     }
-    for (let i = 0; i < this.tiles.length; i++) {
+    for (let i = 0; i <this.tiles.length*this.tiles.length; i++) {
       for (let j = 0; j < this.tiles.length; j++) {
-        this.possibilidadesX[i][j] = 0;
-        this.possibilidadesY[i][j] = 0;
-        
+        this.possibilidades[i][j] = 0;
       }
     }
     let img = new Image();
@@ -179,84 +153,71 @@ export default class Markov {
         //console.log(rgba)
           }
         }
-      for(let ii = 0 ; ii<this.GRID; ii++)
+        //tratamento borda coluna 0 e n-1 // diagonal - y - x
+      for(let ii = 0 ;ii<this.GRID;ii++)
       {
-        let antX = -1;
-        for(let jj = 0 ; jj<this.GRID; jj++)
+        let jj1 = 0
+        let jj2 = this.GRID -1;
+        let aux1 = 0;
+        let aux2 = 0;
+        let atual1 = MarkovTile[ii][jj1]
+        let atual2 = MarkovTile[ii][jj2]
+        if(ii==0)
         {
-          if(ii==0)
-          {
-            if(MarkovTile[ii][jj]>=0)
-            {
-              let AntY
-              AntY = MarkovTile[ii][jj]
-              let atual = MarkovTile[ii][jj]
-              this.possibilidadesY[AntY][atual]= this.possibilidadesY[AntY][atual] + 1
-              if(antX == -1)
-              {
-              antX = atual
-              }
-              this.possibilidadesX[antX][atual] = this.possibilidadesX[antX][atual] + 1
-              antX = atual
-
-            }
-            else
-            {
-              antX =-1
-            }
-          }
-          else
-          {
-            if(MarkovTile[ii][jj]>=0)
-            {
-              
-              let AntY ;
-              AntY = MarkovTile[ii-1][jj];
-              let atual = MarkovTile[ii][jj];
-              this.possibilidadesY[AntY][atual]= this.possibilidadesY[AntY][atual] + 1
-              if(antX == -1)
-              {
-              antX = atual
-              }
-              this.possibilidadesX[antX][atual] = this.possibilidadesX[antX][atual] + 1
-              antX = atual
-
-            }
-            else
-            {
-              antX =-1
-            }
-
-          }
+          aux1 = 4* MarkovTile[ii][jj1] + MarkovTile[ii][jj1]
+          aux2 = 4* MarkovTile[ii][jj2] + MarkovTile[ii][jj2-1]
         }
-    }
-  }
-  }
+        else
+        {
+          aux1 = 4* MarkovTile[ii-1][jj1] + MarkovTile[ii][jj1]
+          aux2 = 4* MarkovTile[ii-1][jj2] + MarkovTile[ii][jj2-1]
+        }
+        this.possibilidades[aux1][atual1] = this.possibilidades[aux1][atual1] + 1
+        this.possibilidades[aux2][atual2] = this.possibilidades[aux2][atual2] + 1  
+      }
+    //tratamento borda coluna 1 e n-2 // diagonal - y - x
+      for(let jj = 1 ;jj<this.GRID-1;jj++)
+      {
+        let ii1 = 0
+        let ii2 = this.GRID -1 ;
+        let aux1 = 0;
+        let aux2 = 0;
+        let atual1 = MarkovTile[ii1][jj]
+        let atual2 = MarkovTile[ii2][jj]
+        aux1 = 4* MarkovTile[ii1][jj] + MarkovTile[ii1][jj-1]
+        aux2 = 4* MarkovTile[ii2-1][jj] + MarkovTile[ii2][jj-1]
+        this.possibilidades[aux1][atual1] = this.possibilidades[aux1][atual1] + 1
+        this.possibilidades[aux2][atual2] = this.possibilidades[aux2][atual2] + 1  
+      }
+      for(let ii = 1 ;ii<this.GRID-1;ii++)
+      {
+        for(let jj = 1 ;jj<this.GRID-1;jj++)
+        {
+          let aux = 0;
+          let atual = MarkovTile[ii][jj]
+          aux = 4* MarkovTile[ii-1][jj] + MarkovTile[ii][jj-1]
+          this.possibilidades[aux][atual] = this.possibilidades[aux][atual] + 1
 
-    for (let i = 0; i < this.tiles.length; i++) {
-      let SomatorioX =0;
-      let SomatorioY = 0;
-      for (let j = 0; j < this.tiles.length; j++) {
-        SomatorioX = SomatorioX + this.possibilidadesX[i][j];
-        SomatorioY = SomatorioY + this.possibilidadesY[i][j];
+        }
       }
-      let totalX = SomatorioX;
-      let totalY = SomatorioY;
-      SomatorioX =0;
-      SomatorioY = 0;
-      for (let j = 0; j < this.tiles.length; j++) {
-        this.possibilidadesX[i][j] = this.possibilidadesX[i][j] / totalX;
-        SomatorioX = SomatorioX + this.possibilidadesX[i][j];
-        this.possibilidadesY[i][j] = this.possibilidadesY[i][j] / totalY;
-        SomatorioY = SomatorioY + this.possibilidadesY[i][j];
-      }
-      console.log("Somatorio em x de i =",i," = ",SomatorioX)
-      console.log("Somatorio em y de i =",i," = ",SomatorioY)
     }
-    console.log("Markov em relação a X:" )
-    console.log(this.possibilidadesX);
-    console.log("Markov em relação a Y:")
-    console.log(this.possibilidadesY);
+  }
+    console.log(this.possibilidades)
+    for (let i = 0; i < this.tiles.length**2; i++) {
+      let Somatorio = 0
+      for (let j = 0; j < this.tiles.length; j++) {
+        Somatorio = Somatorio + this.possibilidades[i][j];
+      }
+      let total = Somatorio;
+      Somatorio =0;
+      for (let j = 0; j < this.tiles.length; j++) {
+        this.possibilidades[i][j] = this.possibilidades[i][j] / total;
+        Somatorio = Somatorio + this.possibilidades[i][j];
+      }
+      console.log("Somatorio em x de i =",i," = ",Somatorio)
+    }
+    console.log("Markov de ordem 2 :" )
+    console.log(this.possibilidades);
 }
 iniciar() 
 {
