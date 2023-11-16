@@ -42,14 +42,8 @@ export default class Markov {
         break;
       }
     }
-    if((aux[x] !=0) )
-    {
-      return x;
-    }
-    else
-    {
-    return this.RandomIndexXY(anteriorX,anteriorY);
-    }
+    return x;
+    
   }
   GenerateRandomMap() {
     var anteriorX = this.InicialX;
@@ -64,7 +58,7 @@ export default class Markov {
             let anteriorXY;
           if(c==0)
           {
-            anteriorXY = anteriorX
+            anteriorXY = this.mapa[l-1][c]
           }
           else
           {
@@ -76,7 +70,7 @@ export default class Markov {
           }
           else
           {
-          let anteriorXY = anteriorY
+          let anteriorXY = this.InicialY;
           anteriorX = this.RandomIndexXY(anteriorX,anteriorY,anteriorXY);
           this.mapa[l][c] = this.tiles[anteriorX];
           }
@@ -175,11 +169,11 @@ export default class Markov {
         if(ii==0)
         {
           aux1 = 16*MarkovTile[ii][jj1] + 4* MarkovTile[ii][jj1] + MarkovTile[ii][jj1]
-          aux2 = 16*MarkovTile[ii][jj2] +4* MarkovTile[ii][jj2] + MarkovTile[ii][jj2-1]
+          aux2 = 16*MarkovTile[ii][jj2-1] +4* MarkovTile[ii][jj2] + MarkovTile[ii][jj2-1]
         }
         else
         {
-          aux1 = 16*MarkovTile[ii][jj1] + 4* MarkovTile[ii-1][jj1] + MarkovTile[ii][jj1]
+          aux1 = 16*MarkovTile[ii-1][jj1] + 4* MarkovTile[ii-1][jj1] + MarkovTile[ii][jj1]
           aux2 = 16*MarkovTile[ii-1][jj2-1] + 4* MarkovTile[ii-1][jj2] + MarkovTile[ii][jj2-1]
         }
         console.log()
@@ -227,7 +221,7 @@ export default class Markov {
       }
       console.log("Somatorio em x de i =",i," = ",Somatorio)
     }
-    console.log("Markov de ordem 2 :" )
+    console.log("Markov de ordem 3 :" )
     console.log(this.possibilidades);
 }
 iniciar() 
