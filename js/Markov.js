@@ -27,9 +27,9 @@ export default class Markov {
     }
   }
 
-  RandomIndexXY(anteriorX,anteriorY) {
+  RandomIndexXY(anteriorX,anteriorY,anteriorXY) {
     let aux = [];
-    let indice = anteriorY *4 + anteriorX;
+    let indice = anteriorXY*16 +anteriorY *4 + anteriorX;
     aux = aux.concat(this.possibilidades[indice]);
     let x = 0;
     let limite = Math.random() ;
@@ -61,13 +61,23 @@ export default class Markov {
       {
           if(l>=1)
           {
+            let anteriorXY;
+          if(c==0)
+          {
+            anteriorXY = anteriorX
+          }
+          else
+          {
+            anteriorXY = this.mapa[l-1][c-1]
+          }
           anteriorY = this.mapa[l-1][c];
-          anteriorX = this.RandomIndexXY(anteriorX,anteriorY);
+          anteriorX = this.RandomIndexXY(anteriorX,anteriorY,anteriorXY);
           this.mapa[l][c] = this.tiles[anteriorX];
           }
           else
           {
-          anteriorX = this.RandomIndexXY(anteriorX,anteriorY);
+          let anteriorXY = anteriorY
+          anteriorX = this.RandomIndexXY(anteriorX,anteriorY,anteriorXY);
           this.mapa[l][c] = this.tiles[anteriorX];
           }
       }
@@ -84,10 +94,10 @@ export default class Markov {
   treino() 
   {
 
-    for (let i = 0; i < this.tiles.length*this.tiles.length; i++) {
+    for (let i = 0; i < this.tiles.length**3; i++) {
       this.possibilidades[i] = [];
     }
-    for (let i = 0; i <this.tiles.length*this.tiles.length; i++) {
+    for (let i = 0; i <this.tiles.length**3; i++) {
       for (let j = 0; j < this.tiles.length; j++) {
         this.possibilidades[i][j] = 0;
       }
@@ -164,14 +174,15 @@ export default class Markov {
         let atual2 = MarkovTile[ii][jj2]
         if(ii==0)
         {
-          aux1 = 4* MarkovTile[ii][jj1] + MarkovTile[ii][jj1]
-          aux2 = 4* MarkovTile[ii][jj2] + MarkovTile[ii][jj2-1]
+          aux1 = 16*MarkovTile[ii][jj1] + 4* MarkovTile[ii][jj1] + MarkovTile[ii][jj1]
+          aux2 = 16*MarkovTile[ii][jj2] +4* MarkovTile[ii][jj2] + MarkovTile[ii][jj2-1]
         }
         else
         {
-          aux1 = 4* MarkovTile[ii-1][jj1] + MarkovTile[ii][jj1]
-          aux2 = 4* MarkovTile[ii-1][jj2] + MarkovTile[ii][jj2-1]
+          aux1 = 16*MarkovTile[ii][jj1] + 4* MarkovTile[ii-1][jj1] + MarkovTile[ii][jj1]
+          aux2 = 16*MarkovTile[ii-1][jj2-1] + 4* MarkovTile[ii-1][jj2] + MarkovTile[ii][jj2-1]
         }
+        console.log()
         this.possibilidades[aux1][atual1] = this.possibilidades[aux1][atual1] + 1
         this.possibilidades[aux2][atual2] = this.possibilidades[aux2][atual2] + 1  
       }
@@ -184,8 +195,8 @@ export default class Markov {
         let aux2 = 0;
         let atual1 = MarkovTile[ii1][jj]
         let atual2 = MarkovTile[ii2][jj]
-        aux1 = 4* MarkovTile[ii1][jj] + MarkovTile[ii1][jj-1]
-        aux2 = 4* MarkovTile[ii2-1][jj] + MarkovTile[ii2][jj-1]
+        aux1 = 16*MarkovTile[ii1][jj] + 4* MarkovTile[ii1][jj] + MarkovTile[ii1][jj-1]
+        aux2 = 16*MarkovTile[ii2-1][jj-1] +4* MarkovTile[ii2-1][jj] + MarkovTile[ii2][jj-1]
         this.possibilidades[aux1][atual1] = this.possibilidades[aux1][atual1] + 1
         this.possibilidades[aux2][atual2] = this.possibilidades[aux2][atual2] + 1  
       }
@@ -195,7 +206,7 @@ export default class Markov {
         {
           let aux = 0;
           let atual = MarkovTile[ii][jj]
-          aux = 4* MarkovTile[ii-1][jj] + MarkovTile[ii][jj-1]
+          aux =16*MarkovTile[ii-1][jj-1] + 4* MarkovTile[ii-1][jj] + MarkovTile[ii][jj-1]
           this.possibilidades[aux][atual] = this.possibilidades[aux][atual] + 1
 
         }
@@ -203,7 +214,7 @@ export default class Markov {
     }
   }
     console.log(this.possibilidades)
-    for (let i = 0; i < this.tiles.length**2; i++) {
+    for (let i = 0; i < this.tiles.length**3; i++) {
       let Somatorio = 0
       for (let j = 0; j < this.tiles.length; j++) {
         Somatorio = Somatorio + this.possibilidades[i][j];
