@@ -67,10 +67,10 @@ export default class Mapa {
     }
   }
   carregaMapa() {
-    this.markov.addStates(0);
-    this.markov.addStates(1);
-    this.markov.addStates(2);
-    this.markov.addStates(3);
+    this.markov.addStates("Piso");
+    this.markov.addStates("Pedra");
+    this.markov.addStates("Parede");
+    this.markov.addStates("Bau");
 
     this.tiles = this.markov.iniciar();
     this.markov.limpa();

@@ -7,47 +7,83 @@ export default class Markov {
     this.IMAGEM =IMAGEM;
     this.InicialX = InicialX;
     this.InicialY = InicialY;
-    this.tiles = [];
+    this.counts = []
+    this.states = [];
     this.possibilidades = [];
     this.mapa = [];
     this.assets = assets;
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
   }
-
-
-
-  RandomIndex(arr) {
-    let randomIndex = Math.floor(Math.random() * arr.length);
-    //let randomIndex = Math.floor(Math.random())
-    if (arr[randomIndex] > 0) {
-      return randomIndex;
-    } else {
-      return this.RandomIndex(arr);
+  Soma(states, target) {
+    const key = states.join("");
+    if (this.counts[key] === undefined) {
+      this.counts[key] = [];
+      this.possibilidades[key] = []
+      for(let i = 0;i<this.states.length;i++)
+      {
+        this.counts[key][this.states[i]] = 0
+        this.possibilidades[key][this.states[i]] =0
+      }
+      //this.counts[key] = [Array(this.states.length).fill(0)];
     }
+    this.counts[key][target]++;
+  }
+  calculate(){
+    let iterator = Object.keys(this.counts);
+    for (const key of iterator) {
+        let total = 0;
+        let it2 = Object.keys(this.counts[key]);
+        for (const key2 of it2)
+        {
+          total = total + this.counts[key][key2] 
+        }
+        for (const key2 of it2)
+        {
+          this.possibilidades[key][key2] = this.counts[key][key2] / total;
+        }
+    }
+    console.log(this.possibilidades)
+  }
+  getProbabilite(prevState, state){
+    const key = prevState.join("");
+    if (this.possibilidades[key] === undefined) {
+      console.log(key)
+      return 0.0;
+    }
+    return this.possibilidades[key][state];
   }
 
-  RandomIndexXY(anteriorX,anteriorY,anteriorXY) {
-    let aux = [];
-    let indice = anteriorXY*16 +anteriorY *4 + anteriorX;
-    aux = aux.concat(this.possibilidades[indice]);
+
+
+
+  RandomIndex(anteriorX,anteriorY,anteriorXY) {
+    let indice = [anteriorXY, anteriorY , anteriorX];
     let x = 0;
     let limite = Math.random() ;
     let soma = 0;
-    for (let i = 0; i < aux.length ; i++) {
-      soma += aux[i];
-
+    for (let i = 0; i < this.states.length ; i++) {
+      soma += this.getProbabilite(indice,this.states[i]);
       if (soma >= limite) {
         x= i;
         break;
       }
     }
-    return x;
-    
+    return this.states[x];
+  }
+  MudaParaNumero()
+  {
+    for (let l = 0; l < this.LINHAS; l++) 
+    {
+      for (let c = 0;c < this.COLUNAS ; c++) 
+      {
+        this.mapa[l][c] = this.states.indexOf(this.mapa[l][c])
+      }
+    }
   }
   GenerateRandomMap() {
-    var anteriorX = this.InicialX;
-    var anteriorY = this.InicialY;
+    var anteriorX = this.states[this.InicialX];
+    var anteriorY = this.states[this.InicialY];
     for (let l = 0; l < this.LINHAS; l++) 
     {
       this.mapa[l] = [];
@@ -65,37 +101,30 @@ export default class Markov {
             anteriorXY = this.mapa[l-1][c-1]
           }
           anteriorY = this.mapa[l-1][c];
-          anteriorX = this.RandomIndexXY(anteriorX,anteriorY,anteriorXY);
-          this.mapa[l][c] = this.tiles[anteriorX];
+          anteriorX = this.RandomIndex(anteriorX,anteriorY,anteriorXY);
+          this.mapa[l][c] = anteriorX;
           }
           else
           {
-          let anteriorXY = this.InicialY;
-          anteriorX = this.RandomIndexXY(anteriorX,anteriorY,anteriorXY);
-          this.mapa[l][c] = this.tiles[anteriorX];
+          let anteriorXY = this.states[this.InicialX];
+          anteriorX = this.RandomIndex(anteriorX,anteriorY,anteriorXY);
+          this.mapa[l][c] = anteriorX;
           }
       }
-      anteriorX = this.InicialX
-      }
+      anteriorX = this.states[this.InicialX]
+    }
+    this.MudaParaNumero()
     return this.mapa;
   }
 
   // Add a single state or states
   addStates(tile) {
-    this.tiles.push(tile);
+    this.states.push(tile);
   }
 
   treino() 
   {
 
-    for (let i = 0; i < this.tiles.length**3; i++) {
-      this.possibilidades[i] = [];
-    }
-    for (let i = 0; i <this.tiles.length**3; i++) {
-      for (let j = 0; j < this.tiles.length; j++) {
-        this.possibilidades[i][j] = 0;
-      }
-    }
     let img = new Image();
     img = this.assets.Img(this.IMAGEM);
     this.ctx.drawImage(img, 0, 0);
@@ -122,7 +151,7 @@ export default class Markov {
             //this.possibilidades[ant][0] = this.possibilidades[ant][0] + 1;
             //Cor Preto
             // pedra
-            MarkovTile[i%this.GRID][j%this.GRID] = 1;
+            MarkovTile[i%this.GRID][j%this.GRID] = "Pedra";
           } 
           else 
           {
@@ -131,20 +160,21 @@ export default class Markov {
             //this.possibilidades[ant][1] = this.possibilidades[ant][1] + 1;
             //Cor Branca 
             //Piso
-            MarkovTile[i%this.GRID][j%this.GRID] = 0;
+            //possibilete == 4 == vizinho pedra e 2 piso
+            MarkovTile[i%this.GRID][j%this.GRID] = "Piso";
            }
            else
            {
            if(data[0]== 32 && data[1] == 32 && data[2] ==32)
            {
-            MarkovTile[i%this.GRID][j%this.GRID] = 2;
+            MarkovTile[i%this.GRID][j%this.GRID] = "Parede";
               //Cinza
               //parede
            }
            else{
            if(data[0]== 255 && data[1] == 255 && data[2] ==0)
            {
-            MarkovTile[i%this.GRID][j%this.GRID] = 3;
+            MarkovTile[i%this.GRID][j%this.GRID] = "Bau";
               //bau
               //Amarelo
            }
@@ -168,19 +198,18 @@ export default class Markov {
         let atual2 = MarkovTile[ii][jj2]
         if(ii==0)
         {
-          aux1 = 16*MarkovTile[ii][jj1] + 4* MarkovTile[ii][jj1] + MarkovTile[ii][jj1]
-          aux2 = 16*MarkovTile[ii][jj2-1] +4* MarkovTile[ii][jj2] + MarkovTile[ii][jj2-1]
+          aux1 = [MarkovTile[ii][jj1], MarkovTile[ii][jj1] ,MarkovTile[ii][jj1]]
+          aux2 = [MarkovTile[ii][jj2-1],  MarkovTile[ii][jj2],MarkovTile[ii][jj2-1]]
         }
         else
         {
-          aux1 = 16*MarkovTile[ii-1][jj1] + 4* MarkovTile[ii-1][jj1] + MarkovTile[ii][jj1]
-          aux2 = 16*MarkovTile[ii-1][jj2-1] + 4* MarkovTile[ii-1][jj2] + MarkovTile[ii][jj2-1]
+          aux1 = [MarkovTile[ii-1][jj1] , MarkovTile[ii-1][jj1] ,MarkovTile[ii][jj1]]
+          aux2 = [MarkovTile[ii-1][jj2-1] , MarkovTile[ii-1][jj2], MarkovTile[ii][jj2-1]]
         }
-        console.log()
-        this.possibilidades[aux1][atual1] = this.possibilidades[aux1][atual1] + 1
-        this.possibilidades[aux2][atual2] = this.possibilidades[aux2][atual2] + 1  
+        this.Soma(aux1,atual1)
+        this.Soma(aux2,atual2)  
       }
-    //tratamento borda coluna 1 e n-2 // diagonal - y - x
+    //tratamento borda linha 0 e n-1 // diagonal - y - x
       for(let jj = 1 ;jj<this.GRID-1;jj++)
       {
         let ii1 = 0
@@ -189,10 +218,10 @@ export default class Markov {
         let aux2 = 0;
         let atual1 = MarkovTile[ii1][jj]
         let atual2 = MarkovTile[ii2][jj]
-        aux1 = 16*MarkovTile[ii1][jj] + 4* MarkovTile[ii1][jj] + MarkovTile[ii1][jj-1]
-        aux2 = 16*MarkovTile[ii2-1][jj-1] +4* MarkovTile[ii2-1][jj] + MarkovTile[ii2][jj-1]
-        this.possibilidades[aux1][atual1] = this.possibilidades[aux1][atual1] + 1
-        this.possibilidades[aux2][atual2] = this.possibilidades[aux2][atual2] + 1  
+        aux1 = [MarkovTile[ii1][jj-1] , MarkovTile[ii1][jj], MarkovTile[ii1][jj-1]]
+        aux2 = [MarkovTile[ii2-1][jj-1] , MarkovTile[ii2-1][jj] ,MarkovTile[ii2][jj-1]]
+        this.Soma(aux1,atual1)
+        this.Soma(aux2,atual2)   
       }
       for(let ii = 1 ;ii<this.GRID-1;ii++)
       {
@@ -200,29 +229,16 @@ export default class Markov {
         {
           let aux = 0;
           let atual = MarkovTile[ii][jj]
-          aux =16*MarkovTile[ii-1][jj-1] + 4* MarkovTile[ii-1][jj] + MarkovTile[ii][jj-1]
-          this.possibilidades[aux][atual] = this.possibilidades[aux][atual] + 1
+          aux =[MarkovTile[ii-1][jj-1] , MarkovTile[ii-1][jj] , MarkovTile[ii][jj-1]]
+          this.Soma(aux,atual)
 
         }
       }
     }
   }
-    console.log(this.possibilidades)
-    for (let i = 0; i < this.tiles.length**3; i++) {
-      let Somatorio = 0
-      for (let j = 0; j < this.tiles.length; j++) {
-        Somatorio = Somatorio + this.possibilidades[i][j];
-      }
-      let total = Somatorio;
-      Somatorio =0;
-      for (let j = 0; j < this.tiles.length; j++) {
-        this.possibilidades[i][j] = this.possibilidades[i][j] / total;
-        Somatorio = Somatorio + this.possibilidades[i][j];
-      }
-      console.log("Somatorio em x de i =",i," = ",Somatorio)
-    }
+
     console.log("Markov de ordem 3 :" )
-    console.log(this.possibilidades);
+    this.calculate()
 }
 iniciar() 
 {
