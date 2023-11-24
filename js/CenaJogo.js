@@ -35,13 +35,38 @@ export default class CenaJogo extends Cena
     preparar()
     {
         super.preparar();
-        let mapa1 = new Mapa(this.LINHAS,this.COLUNAS,32,this.markov);
+        this.markov.addStates("Piso");
+        this.markov.addStates("Pedra");
+        this.markov.addStates("Parede");
+        this.markov.addStates("Bau");
+        this.treinarMarkov();
+        console.log("Markov de ordem 3 :");
 
+        let mapa = new Mapa(this.LINHAS,this.COLUNAS,32);
+        this.iniciaMapa(mapa); // Aleatório ou tudo pedra
+        this.mapa = mapa;
+        const oldTiles = structuredClone(this.mapa.tiles);
+        const newTiles = structuredClone(this.mapa.tiles);
+        
 
-        mapa1.carregaMapa();
+        for (let l = 1; l < this.LINHAS - 1; l++) 
+        {
+            for (let c = 1; c < this.COLUNAS - 1; c++) 
+            {
 
+                newTiles[l][c] = this.markov.proximo([
+                    newTiles[l][c-1],
+                    newTiles[l-1][c-1],
+                    newTiles[l-1][c]
+                ]);
+            }
+        }
+    this.mapa.tiles = newTiles;
+
+        /*
         let Invalido = 1;
         let xa ,ya;
+
         while(Invalido ===1)
         {
         xa = Math.floor(Math.random() * 15*32)  ;
@@ -56,10 +81,11 @@ export default class CenaJogo extends Cena
                 }
             }
         }
+        */
 
-        this.configuraMapa(mapa1);
+        this.configuraMapa(mapa);
         const cena = this;
-        const pc = new Sprite({x:xa,y:ya,w:20,h:20,vx:0,color:"white"});
+        //const pc = new Sprite({x:xa,y:ya,w:20,h:20,vx:0,color:"white"});
         //pc.tags.add("pc");
         //const imagem = new Image();
         //imagem = this.cena.assets.Img("ship");
@@ -69,7 +95,7 @@ export default class CenaJogo extends Cena
         at new CenaJogo (CenaJogo.js:7)
         at Main.js:34
        */
-      
+      /*
         pc.controlar = function(dt)
         {
             if(cena.input.comandos.get("MOVE_ESQUERDA"))
@@ -106,7 +132,25 @@ export default class CenaJogo extends Cena
             
         }
         //this.adicionarSprite(pc);
-        
+        */
 
+    }
+    iniciaMapa(mapa)
+    {
+        for (let l = 0; l < this.LINHAS; l++) {
+            mapa.tiles[l] = [];
+            for (let c = 0; c < this.COLUNAS; c++) {
+              //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+              mapa.tiles[l][c] = 2
+            }
+            mapa.cena = this;
+          }
+         // console.log("Tudo pedra");
+          //console.log(this.tiles)
+        
+    }
+    treinarMarkov()
+    {
+        this.markov.treino()
     }
 }

@@ -6,24 +6,16 @@ export default class Mapa {
     this.COLUNAS = colunas;
     this.TAMANHO = tamanho;
     this.tiles = [];
-    for (let l = 0; l < this.LINHAS; l++) {
-      this.tiles[l] = [];
-      for (let c = 0; c < this.COLUNAS; c++) {
-        this.tiles[l][c] = 0;
-      }
-      this.cena = null;
-    }
-    this.markov = markov;
   }
   desenhar(ctx) {
     let img = new Image();
-    img = this.cena.assets.Img("terreno");
+    img = this.cena.assets.Img("terreno"); // 0
     let pedra = new Image()
-    pedra = this.cena.assets.Img("pedra");
+    pedra = this.cena.assets.Img("pedra"); // 1
     let parede = new Image()
-    parede = this.cena.assets.Img("parede");
+    parede = this.cena.assets.Img("parede"); //2
     let chest = new Image();
-    chest = this.cena.assets.Img("chest");
+    chest = this.cena.assets.Img("chest"); //3
     let coin = new Image();
     coin = this.cena.assets.Img("coin");
     let linha = 20;
@@ -65,15 +57,5 @@ export default class Mapa {
         );
       }
     }
-  }
-  carregaMapa() {
-    this.markov.addStates("Piso");
-    this.markov.addStates("Pedra");
-    this.markov.addStates("Parede");
-    this.markov.addStates("Bau");
-
-    this.tiles = this.markov.iniciar();
-    this.markov.limpa();
-    //this.desenhar()
   }
 }

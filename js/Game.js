@@ -11,6 +11,7 @@ export default class Game{
         this.chests = 0;
         this.stars = 0;
         this.eliminacoes = 0;
+        this.markov = markov
     }
     adicionarCena(chave,cena)
     {
