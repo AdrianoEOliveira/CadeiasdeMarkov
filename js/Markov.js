@@ -75,7 +75,7 @@ export default class Markov {
     }
     if(total==0)
     {
-      console.log("Vizinho não detectado no treinamento :", key);
+      console.log("Erro na geração vizinho não existe ", key);
     }
     return x;
   }
