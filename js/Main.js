@@ -20,7 +20,7 @@ assets.adicionaImagem("pedra","assets/rock.png")
 assets.adicionaImagem("parede","assets/brick_gray.png")
 assets.adicionaImagem("chest","assets/Chest.png")
 assets.adicionaImagem("coin","assets/coin.jpg")
-assets.adicionaImagem("Treino25","assets/Treino25.png")
+assets.adicionaImagem("Treino25","assets/Treino25b.bmp")
 assets.adicionaImagem("Treino30","assets/Treino30.png")
 assets.adicionaImagem("TreinoCirculo","assets/TreinoCirculo.png")
 assets.adicionaAudio("hurt","assets/hurt.wav")
@@ -46,7 +46,7 @@ input.configurarTeclado(
     }
 );
 
-const markov25 = new Markov(assets,canvas,Linhas,COLUNAS,5,25,"Treino25",InicialX,InicialY);
+const markov25 = new Markov(assets,canvas,Linhas,COLUNAS,5,25,"Treino25");
 const cenaTeste= new CenaJogo(canvas,assets,input,markov25,Linhas,COLUNAS);
 
 const game = new Game(canvas,assets,input);

@@ -48,7 +48,8 @@ export default class Markov {
     }
     console.log(this.possibilidades);
   }
-  getProbabilite(key, state) {
+
+  getPossibilidades(key, state) {
     if (this.possibilidades[key] === undefined) {
       //console.log(key);
       return 0.0;
@@ -67,7 +68,7 @@ export default class Markov {
     let limite = Math.random();
     let total = 0;
     for (let i = 0; i < this.states.length; i++) {
-      total += this.getProbabilite(key, this.states[i]);
+      total += this.getPossibilidades(key, this.states[i]);
       if (total >= limite) {
         x = i;
         break;
@@ -76,8 +77,10 @@ export default class Markov {
     if(total==0)
     {
       console.log("Erro na geração vizinho não existe ", key);
+      return -1;
     }
     return x;
+    
   }
 
   // Add a single state or states
@@ -92,6 +95,7 @@ export default class Markov {
     //img.style.display = "none";
 
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
+    //console.log(tamanhoGrid);
     for (let gi = 0; gi < tamanhoGrid; gi++) {
       for (let gj = 0; gj < tamanhoGrid; gj++) {
         let MarkovTile = [];
@@ -135,12 +139,14 @@ export default class Markov {
             //console.log(rgba)
           }
         }
-        //tratamento borda coluna 0 e n-1 // diagonal - y - x
+        //tratamento borda coluna 0 e n-1 // x - diagonal - y
+        //console.log(MarkovTile)
+        /*
         for (let ii = 0; ii < this.GRID; ii++) {
           let jj1 = 0;
           let jj2 = this.GRID - 1;
-          let aux1 = 0;
-          let aux2 = 0;
+          let aux1;
+          let aux2;
           let atual1 = MarkovTile[ii][jj1];
           let atual2 = MarkovTile[ii][jj2];
           if (ii == 0) {
@@ -190,24 +196,28 @@ export default class Markov {
           this.soma(aux1, atual1);
           this.soma(aux2, atual2);
         }
-        for (let ii = 1; ii < this.GRID - 1; ii++) {
-          for (let jj = 1; jj < this.GRID - 1; jj++) {
-            let aux = 0;
-            let atual = MarkovTile[ii][jj];
-            aux = [
-              MarkovTile[ii][jj-1],
-              MarkovTile[ii -1][jj - 1],
-              MarkovTile[ii -1][jj],
+        */
+        for (let l = 1; l < this.GRID - 1; l++) {
+          for (let c = 1; c < this.GRID - 1; c++) {
+            let vizinhos;
+            let atual = MarkovTile[l][c];
+            vizinhos = [
+              MarkovTile[l][c-1],
+              MarkovTile[l -1][c - 1],
+              MarkovTile[l-1][c],
+              MarkovTile[l-1][c+1],
+              MarkovTile[l][c+1],
+              MarkovTile[l+1][c+1],
+              MarkovTile[l+1][c],
+              MarkovTile[l+1][c-1],
             ];
-            this.soma(aux, atual);
+            //if(vizinhos)
+            this.soma(vizinhos, atual);
           }
         }
       }
     }
     this.calculate();
-  }
-  iniciar() {
-    this.treino();
   }
 
   limpa() {
