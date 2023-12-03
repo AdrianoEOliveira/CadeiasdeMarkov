@@ -7,8 +7,6 @@ import CenaJogo from   "./CenaJogo.js";
 import CenaFim from   "./CenaFim.js";
 import Markov from   "./Markov.js";
 
-const InicialX = 2; // borda 
-const InicialY = 2; // borda cima
 const Linhas =25; // tamanho tela
 const COLUNAS =25; // tamanho tela
 
@@ -46,25 +44,25 @@ input.configurarTeclado(
     }
 );
 
-const markov25 = new Markov(assets,canvas,Linhas,COLUNAS,5,25,"Treino25");
-const cenaTeste= new CenaJogo(canvas,assets,input,markov25,Linhas,COLUNAS);
+const MarkovBasico = new Markov(assets,canvas,Linhas,COLUNAS,5,25,"Treino25");
+const cenaTeste= new CenaJogo(canvas,assets,input,MarkovBasico,Linhas,COLUNAS);
 
 const game = new Game(canvas,assets,input);
-const markovCirculo3 = new Markov(assets,canvas,Linhas,COLUNAS,3,30,"TreinoCirculo",InicialX,InicialY);
+const markovCirculo3 = new Markov(assets,canvas,Linhas,COLUNAS,3,30,"TreinoCirculo");
 const cenaCirculo_3= new CenaJogo(canvas,assets,input,markovCirculo3,Linhas,COLUNAS);
-const markovCirculo5 = new Markov(assets,canvas,Linhas,COLUNAS,5,30,"TreinoCirculo",InicialX,InicialY);
+const markovCirculo5 = new Markov(assets,canvas,Linhas,COLUNAS,5,30,"TreinoCirculo")
 const cenaCirculo_5= new CenaJogo(canvas,assets,input,markovCirculo5,Linhas,COLUNAS);
-const markovCirculo10 = new Markov(assets,canvas,Linhas,COLUNAS,10,30,"TreinoCirculo",InicialX,InicialY);
+const markovCirculo10 = new Markov(assets,canvas,Linhas,COLUNAS,10,30,"TreinoCirculo")
 const cenaCirculo_10= new CenaJogo(canvas,assets,input,markovCirculo10,Linhas,COLUNAS);
 
-const markov3 = new Markov(assets,canvas,Linhas,COLUNAS,3,30,"Treino30",InicialX,InicialY);
-const cena_3= new CenaJogo(canvas,assets,input,markov3,Linhas,COLUNAS);
-const markov5 = new Markov(assets,canvas,Linhas,COLUNAS,5,30,"Treino30",InicialX,InicialY);
-const cena_5= new CenaJogo(canvas,assets,input,markov5,Linhas,COLUNAS);
-const markov10 = new Markov(assets,canvas,Linhas,COLUNAS,10,30,"Treino30",InicialX,InicialY);
-const cena_10= new CenaJogo(canvas,assets,input,markov10,Linhas,COLUNAS);
+const markovMaior3 = new Markov(assets,canvas,Linhas,COLUNAS,3,30,"Treino30")
+const cenaMaior_3= new CenaJogo(canvas,assets,input,markovMaior3,Linhas,COLUNAS);
+const markovMaior5 = new Markov(assets,canvas,Linhas,COLUNAS,5,30,"Treino30")
+const cenaMaior_5= new CenaJogo(canvas,assets,input,markovMaior5,Linhas,COLUNAS);
+const markovMaior10 = new Markov(assets,canvas,Linhas,COLUNAS,10,30,"Treino30")
+const cenaMaior_10= new CenaJogo(canvas,assets,input,markovMaior10,Linhas,COLUNAS);
 
-const carregando= new CenaCarregando(canvas,assets,input,markov25);
+const carregando= new CenaCarregando(canvas,assets,input,MarkovBasico);
 
 const fim= new CenaFim(canvas,assets,input);
 
@@ -73,9 +71,9 @@ game.adicionarCena("teste",cenaTeste);
 game.adicionarCena("testeCirculo_3",cenaCirculo_3);
 game.adicionarCena("testeCirculo_5",cenaCirculo_5);
 game.adicionarCena("testeCirculo_10",cenaCirculo_10);
-game.adicionarCena("teste_3",cena_3);
-game.adicionarCena("teste_5",cena_5);
-game.adicionarCena("teste_10",cena_10);
+game.adicionarCena("teste_3",cenaMaior_3);
+game.adicionarCena("teste_5",cenaMaior_5);
+game.adicionarCena("teste_10",cenaMaior_10);
 game.adicionarCena("fim",fim);
 
 
