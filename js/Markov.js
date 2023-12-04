@@ -9,6 +9,7 @@ export default class Markov {
     this.estados = [];
     this.probabilidades = [];
     this.probabilidadesGlobal = [];
+    this.totalGlobal=0;
     this.assets = assets;
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -23,29 +24,35 @@ export default class Markov {
     if (this.contagem[chave] === undefined) {
       this.contagem[chave] = [];
       this.probabilidades[chave] = [];
+
       for (let i = 0; i < this.estados.length; i++) {
         this.contagem[chave][this.estados[i]] = 0;
         this.probabilidades[chave][this.estados[i]] = 0;
       }
     }
+
     this.contagem[chave][alvo]++;
+    this.totalGlobal++;
     this.probabilidadesGlobal[alvo]++;
   }
   calculate() {
-    let iterador = Object.keys(this.contagem);
-    for (const chave of iterador) {
+    let vizinhos = Object.keys(this.contagem);
+    for (const vizinho of vizinhos) 
+    {
       let total = 0;
-      let totalglobal = 0
-      let iterador2 = Object.keys(this.contagem[chave]);
-      for (const chave2 of iterador2) {
-        total = total + this.contagem[chave][chave2];
-        totalglobal = totalglobal + this.probabilidadesGlobal[chave2] 
+      let chaves = Object.keys(this.contagem[vizinho]);
+      for (const chave of chaves) {
+        total = total + this.contagem[vizinho][chave];
       }
-      for (const chave2 of iterador2) {
-        this.probabilidades[chave][chave2] =
-          this.contagem[chave][chave2] / total;
-        this.probabilidadesGlobal[chave2] = this.probabilidadesGlobal[chave2]/totalglobal;
+      for (const chave of chaves) {
+        this.probabilidades[vizinho][chave] =
+          this.contagem[vizinho][chave] / total;
       }
+    }
+    for(let i=0;i<this.estados.length;i++)
+    {
+      this.probabilidadesGlobal[this.estados[i]] = 
+      this.probabilidadesGlobal[this.estados[i]] / this.totalGlobal;
     }
     console.log(this.probabilidadesGlobal)
     console.log(this.probabilidades);
@@ -81,8 +88,10 @@ export default class Markov {
   treino() {
 
     for (let i = 0; i < this.estados.length; i++) {
+
       this.probabilidadesGlobal[this.estados[i]] = 0;
     }
+
     let img = new Image();
     img = this.assets.Img(this.IMAGEM);
     this.ctx.drawImage(img, 0, 0);
