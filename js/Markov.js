@@ -51,7 +51,7 @@ export default class Markov {
     console.log(this.probabilidades);
   }
 
-  getProbabilidades(vizinho, alvo,l,c) {
+  getProbabilidades(vizinho, alvo) {
     if (this.probabilidades[vizinho] === undefined) {
     console.log("Viziho não Existe",vizinho)
       return this.probabilidadesGlobal[alvo];
@@ -59,7 +59,7 @@ export default class Markov {
     return this.probabilidades[vizinho][alvo];
   }
 
-  proximo(anteriores,l,c) {
+  proximo(anteriores) {
     let indice = [];
     for (let i = 0; i < anteriores.length; i++) {
       indice[i] = this.estados[anteriores[i]];
@@ -69,7 +69,7 @@ export default class Markov {
     let limite = Math.random();
     let total = 0;
     for (let i = 0; i < this.estados.length; i++) {
-      total += this.getProbabilidades(vizinho, this.estados[i],l,c);
+      total += this.getProbabilidades(vizinho, this.estados[i]);
       if (total >= limite) {
         x = i;
         break;
