@@ -34,22 +34,15 @@ export default class CenaJogo extends Cena {
     let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
     this.iniciaMapa(mapa);
     this.mapa = mapa;
-    for (let k = 0; k < 10; k++) {
+    let z = 20
+    for (let  k= 0; k < z; k++) {
       const oldTiles = structuredClone(this.mapa.tiles);
       const newTiles = structuredClone(this.mapa.tiles);
 
-      for (let l = 1; l < this.LINHAS - 1; l++) {
-        for (let c = 1; c < this.COLUNAS - 1; c++) {
-          let proximo = this.markov.proximo([
-            newTiles[l][c - 1],
-            newTiles[l - 1][c - 1],
-            newTiles[l - 1][c],
-            //newTiles[l-1][c+1],
-            //newTiles[l][c+1],
-            //newTiles[l+1][c+1],
-            //newTiles[l+1][c],
-            //newTiles[l+1][c-1],
-          ]);
+      for (let l = 2; l < this.LINHAS - 2; l++) {
+        for (let c = 2; c < this.COLUNAS - 2; c++) {
+          let proximo = this.markov.proximo(
+            this.markov.getVizinho(newTiles,l,c));
           if (proximo >= 0) {
             newTiles[l][c] = proximo;
           }
@@ -57,6 +50,8 @@ export default class CenaJogo extends Cena {
       }
       this.mapa.tiles = newTiles;
     }
+    console.log("Media de falhas em k=",z)
+    console.log(this.markov.getFalhas()/z)
 
     this.configuraMapa(mapa);
   }
@@ -84,4 +79,5 @@ export default class CenaJogo extends Cena {
   treinarMarkov() {
     this.markov.treino();
   }
+
 }

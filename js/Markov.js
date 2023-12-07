@@ -9,6 +9,7 @@ export default class Markov {
     this.estados = [];
     this.probabilidades = [];
     this.probabilidadesGlobal = [];
+    this.falhas = 0
     this.totalGlobal=0;
     this.assets = assets;
     this.canvas = canvas;
@@ -17,6 +18,11 @@ export default class Markov {
 
   adicionaEstado(estado) {
     this.estados.push(estado);
+  }
+
+  getFalhas()
+  {
+    return this.falhas;
   }
 
   soma(vizinhos, alvo) {
@@ -54,16 +60,30 @@ export default class Markov {
       this.probabilidadesGlobal[this.estados[i]] = 
       this.probabilidadesGlobal[this.estados[i]] / this.totalGlobal;
     }
-    console.log(this.probabilidadesGlobal)
+    //console.log(this.probabilidadesGlobal)
     console.log(this.probabilidades);
   }
 
   getProbabilidades(vizinho, alvo) {
     if (this.probabilidades[vizinho] === undefined) {
-    console.log("Viziho não Existe",vizinho)
       return this.probabilidadesGlobal[alvo];
     }
     return this.probabilidades[vizinho][alvo];
+  }
+  
+  getVizinho(tile,l,c)
+  {
+    let vizinho = [
+      tile[l][c - 1],
+      tile[l - 1][c - 1],
+      tile[l - 1][c],
+      //tile[l - 1][c + 1],
+      //tile[l][c + 1],
+      //tile[l + 1][c + 1],
+      //tile[l + 1][c],
+      //tile[l + 1][c - 1],
+    ]
+    return vizinho;
   }
 
   proximo(anteriores) {
@@ -75,6 +95,10 @@ export default class Markov {
     let x = 0;
     let limite = Math.random();
     let total = 0;
+    if(this.probabilidades[vizinho]===undefined)
+    {
+      this.falhas++;
+    }
     for (let i = 0; i < this.estados.length; i++) {
       total += this.getProbabilidades(vizinho, this.estados[i]);
       if (total >= limite) {
@@ -137,18 +161,8 @@ export default class Markov {
         }
         for (let l = 1; l < this.GRID - 1; l++) {
           for (let c = 1; c < this.GRID - 1; c++) {
-            let vizinhos;
+            let vizinhos = this.getVizinho(imagemTile,l,c);
             let atual = imagemTile[l][c];
-            vizinhos = [
-              imagemTile[l][c - 1],
-              imagemTile[l - 1][c - 1],
-              imagemTile[l - 1][c],
-              //imagemTile[l - 1][c + 1],
-              //imagemTile[l][c + 1],
-              //imagemTile[l + 1][c + 1],
-              //imagemTile[l + 1][c],
-              //imagemTile[l + 1][c - 1],
-            ];
             this.soma(vizinhos, atual);
           }
         }
