@@ -71,19 +71,128 @@ export default class Markov {
     return this.probabilidades[vizinho][alvo];
   }
   
-  getVizinho(tile,l,c)
+  getVizinho(tile,l,c,ordem)
   {
+    if(ordem ==8)
+    {
     let vizinho = [
       tile[l][c - 1],
       tile[l - 1][c - 1],
       tile[l - 1][c],
-      //tile[l - 1][c + 1],
-      //tile[l][c + 1],
-      //tile[l + 1][c + 1],
-      //tile[l + 1][c],
-      //tile[l + 1][c - 1],
-    ]
-    return vizinho;
+      tile[l - 1][c + 1],
+      tile[l][c + 1],
+      tile[l + 1][c + 1],
+      tile[l + 1][c],
+      tile[l + 1][c - 1],
+      ]
+      return vizinho;
+    }
+    else
+    {
+      if(ordem ==4)
+      {
+      let vizinho = [
+        tile[l][c - 1],
+        //tile[l - 1][c - 1],
+        tile[l - 1][c],
+        //tile[l - 1][c + 1],
+        tile[l][c + 1],
+        //tile[l + 1][c + 1],
+        tile[l + 1][c],
+        //tile[l + 1][c - 1],
+        ]  
+        return vizinho
+    }
+    else
+    {
+      if(ordem ==3)
+      {
+      let vizinho = [
+        tile[l][c - 1],
+        tile[l - 1][c - 1],
+        tile[l - 1][c],
+        //tile[l - 1][c + 1],
+        //tile[l][c + 1],
+        //tile[l + 1][c + 1],
+        //tile[l + 1][c],
+        //tile[l + 1][c - 1],
+        ]
+        return vizinho  
+      }
+      else
+      {
+        if(ordem ==2)
+        {
+        let vizinho = [
+          tile[l][c - 1],
+          //tile[l - 1][c - 1],
+          tile[l - 1][c],
+          //tile[l - 1][c + 1],
+          //tile[l][c + 1],
+          //tile[l + 1][c + 1],
+          //tile[l + 1][c],
+          //tile[l + 1][c - 1],
+          ]
+          return vizinho  
+        }
+        else
+        {
+          if(ordem ==1)
+          {
+          let vizinho = [
+            tile[l][c - 1],
+            //tile[l - 1][c - 1],
+            //tile[l - 1][c],
+            //tile[l - 1][c + 1],
+            //tile[l][c + 1],
+            //tile[l + 1][c + 1],
+            //tile[l + 1][c],
+            //tile[l + 1][c - 1],
+            ]
+            return vizinho  
+          }
+        }
+      }
+    }
+  }
+}
+
+  verificaBacktracking(tile,l,c,ordemInicial)
+  {
+    let proximaOrdem = 0
+    if(ordemInicial==8)
+    {
+      proximaOrdem = 4;
+    }
+    if(ordemInicial==8)
+    {
+      proximaOrdem = 3;
+    }
+    if(ordemInicial==3)
+    {
+      proximaOrdem = 2;
+    }
+    if(ordemInicial==2)
+    {
+      proximaOrdem = 1;
+    }
+    if(ordemInicial==1)
+    {
+      proximaOrdem = 0;
+    }
+    let anteriores = this.getVizinho(tile,l,c,ordemInicial)
+    for (let i = 0; i < anteriores.length; i++) {
+      indice[i] = this.estados[anteriores[i]];
+    }
+    let vizinho = indice.join("");
+    if(this.probabilidades[vizinho]===undefined)
+    {
+      return this.verificaBacktracking(tile,l,c,proximaOrdem)//realiza backtarcking
+    }
+    else
+    {
+      return ordemInicial;
+    }
   }
 
   proximo(anteriores) {
@@ -161,8 +270,16 @@ export default class Markov {
         }
         for (let l = 1; l < this.GRID - 1; l++) {
           for (let c = 1; c < this.GRID - 1; c++) {
-            let vizinhos = this.getVizinho(imagemTile,l,c);
+            let vizinhos = this.getVizinho(imagemTile,l,c,8);
             let atual = imagemTile[l][c];
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(imagemTile,l,c,4);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(imagemTile,l,c,3);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(imagemTile,l,c,2);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(imagemTile,l,c,1);
             this.soma(vizinhos, atual);
           }
         }
