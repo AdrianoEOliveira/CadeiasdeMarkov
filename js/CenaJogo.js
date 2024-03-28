@@ -41,17 +41,19 @@ export default class CenaJogo extends Cena {
 
       for (let l = 2; l < this.LINHAS - 2; l++) {
         for (let c = 2; c < this.COLUNAS - 2; c++) {
+          let ordem = this.markov.verificaBacktracking(newTiles,l,c,8)
           let proximo = this.markov.proximo(
-            this.markov.getVizinho(newTiles,l,c));
+            this.markov.getVizinho(newTiles,l,c,ordem));
           if (proximo >= 0) {
-            newTiles[l][c] = proximo;
+          newTiles[l][c] = proximo;
           }
         }
       }
       this.mapa.tiles = newTiles;
+      
     }
     console.log("Media de falhas em k=",z)
-    console.log(this.markov.getFalhas()/z)
+    console.log(this.markov.getPorcentagem())
 
     this.configuraMapa(mapa);
   }

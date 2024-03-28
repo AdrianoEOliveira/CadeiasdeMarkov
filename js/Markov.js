@@ -9,7 +9,7 @@ export default class Markov {
     this.estados = [];
     this.probabilidades = [];
     this.probabilidadesGlobal = [];
-    this.falhas = 0
+    this.porcentagemDeUso = [] 
     this.totalGlobal=0;
     this.assets = assets;
     this.canvas = canvas;
@@ -20,9 +20,17 @@ export default class Markov {
     this.estados.push(estado);
   }
 
-  getFalhas()
+  iniciaPorcentagem(ordems)
   {
-    return this.falhas;
+    for(let i=0;i<ordems.length;i++)
+    {
+      this.porcentagemDeUso[ordems[i].toString()] = 0;
+    }
+  }
+
+  getPorcentagem()
+  {
+    return this.porcentagemDeUso;
   }
 
   soma(vizinhos, alvo) {
@@ -38,8 +46,6 @@ export default class Markov {
     }
 
     this.contagem[chave][alvo]++;
-    this.totalGlobal++;
-    this.probabilidadesGlobal[alvo]++;
   }
   calculate() {
     let vizinhos = Object.keys(this.contagem);
@@ -61,7 +67,6 @@ export default class Markov {
       this.probabilidadesGlobal[this.estados[i]] / this.totalGlobal;
     }
     //console.log(this.probabilidadesGlobal)
-    console.log(this.probabilidades);
   }
 
   getProbabilidades(vizinho, alvo) {
@@ -102,12 +107,12 @@ export default class Markov {
         //tile[l + 1][c - 1],
         ]  
         return vizinho
-    }
-    else
-    {
-      if(ordem ==3)
+      }
+      else
       {
-      let vizinho = [
+        if(ordem ==3)
+        {
+        let vizinho = [
         tile[l][c - 1],
         tile[l - 1][c - 1],
         tile[l - 1][c],
@@ -149,7 +154,7 @@ export default class Markov {
             //tile[l + 1][c],
             //tile[l + 1][c - 1],
             ]
-            return vizinho  
+            return vizinho
           }
         }
       }
@@ -159,38 +164,46 @@ export default class Markov {
 
   verificaBacktracking(tile,l,c,ordemInicial)
   {
-    let proximaOrdem = 0
-    if(ordemInicial==8)
+    if(ordemInicial==0)
     {
-      proximaOrdem = 4;
-    }
-    if(ordemInicial==8)
-    {
-      proximaOrdem = 3;
-    }
-    if(ordemInicial==3)
-    {
-      proximaOrdem = 2;
-    }
-    if(ordemInicial==2)
-    {
-      proximaOrdem = 1;
-    }
-    if(ordemInicial==1)
-    {
-      proximaOrdem = 0;
+      this.porcentagemDeUso[ordemInicial.toString()]++;
+      return 8;
     }
     let anteriores = this.getVizinho(tile,l,c,ordemInicial)
+    let indice = [];
     for (let i = 0; i < anteriores.length; i++) {
       indice[i] = this.estados[anteriores[i]];
     }
     let vizinho = indice.join("");
     if(this.probabilidades[vizinho]===undefined)
     {
+      let proximaOrdem = 0
+      if(ordemInicial==8)
+      {
+        proximaOrdem = 4;
+      }
+      if(ordemInicial==4)
+      {
+        proximaOrdem = 3;
+      }
+      if(ordemInicial==3)
+      {
+        proximaOrdem = 2;
+      }
+      if(ordemInicial==2)
+      {
+        proximaOrdem = 1;
+      }
+      if(ordemInicial==1)
+      {
+        proximaOrdem = 0;
+      }
+
       return this.verificaBacktracking(tile,l,c,proximaOrdem)//realiza backtarcking
     }
     else
     {
+      this.porcentagemDeUso[ordemInicial.toString()]++;
       return ordemInicial;
     }
   }
@@ -204,10 +217,6 @@ export default class Markov {
     let x = 0;
     let limite = Math.random();
     let total = 0;
-    if(this.probabilidades[vizinho]===undefined)
-    {
-      this.falhas++;
-    }
     for (let i = 0; i < this.estados.length; i++) {
       total += this.getProbabilidades(vizinho, this.estados[i]);
       if (total >= limite) {
@@ -219,6 +228,8 @@ export default class Markov {
   }
 
   treino() {
+
+    this.iniciaPorcentagem([8,4,3,2,1,0]);
 
     for (let i = 0; i < this.estados.length; i++) {
 
@@ -281,6 +292,8 @@ export default class Markov {
             this.soma(vizinhos, atual);
             vizinhos = this.getVizinho(imagemTile,l,c,1);
             this.soma(vizinhos, atual);
+            this.totalGlobal++;
+            this.probabilidadesGlobal[atual]++;
           }
         }
       }
