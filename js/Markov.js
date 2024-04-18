@@ -13,7 +13,7 @@ export default class Markov {
     this.totalGlobal=0;
     this.assets = assets;
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+    this.ctx = canvas.getContext("2d", { willReadFrequently: true });
   }
 
   adicionaEstado(estado) {
@@ -296,8 +296,10 @@ export default class Markov {
             this.probabilidadesGlobal[atual]++;
           }
         }
+        console.log(imagemTile)
       }
     }
     this.calculate();
+    console.log(this.probabilidades)
   }
 }

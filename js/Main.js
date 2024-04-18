@@ -20,6 +20,8 @@ assets.adicionaImagem("coin", "assets/coin.jpg");
 assets.adicionaImagem("Treino25", "assets/Treino25b.bmp");
 assets.adicionaImagem("Treino30", "assets/Treino30.png");
 assets.adicionaImagem("TreinoCirculo", "assets/TreinoCirculo.png");
+assets.adicionaImagem("xadrez", "assets/xadrez.bmp");
+assets.adicionaImagem("corredor", "assets/corredores.bmp");
 assets.adicionaAudio("hurt", "assets/hurt.wav");
 
 const input = new inputManager();
@@ -58,6 +60,7 @@ const cenaTeste = new CenaJogo(
   Linhas,
   COLUNAS
 );
+
 
 const game = new Game(canvas, assets, input);
 const markovCirculo3 = new Markov(
@@ -163,19 +166,51 @@ const cenaMaior_10 = new CenaJogo(
   Linhas,
   COLUNAS
 );
+const xadrez = new Markov(
+  assets,
+  canvas,
+  Linhas,
+  COLUNAS,
+  5,
+  5,
+  "xadrez"
+);
+
+const cenaXadrez = new CenaJogo(
+  canvas,
+  assets,
+  input,
+  xadrez,
+  Linhas,
+  COLUNAS
+);
+
+const corredor = new Markov(
+  assets,
+  canvas,
+  Linhas,
+  COLUNAS,
+  5,
+  10,
+  "corredor"
+);
+const cenaCorredor = new CenaJogo(
+  canvas,
+  assets,
+  input,
+  corredor,
+  Linhas,
+  COLUNAS
+);
 
 const carregando = new CenaCarregando(canvas, assets, input, MarkovBasico);
 
 const fim = new CenaFim(canvas, assets, input);
 
 game.adicionarCena("carregando", carregando);
-game.adicionarCena("teste", cenaTeste);
-game.adicionarCena("testeCirculo_3", cenaCirculo_3);
-game.adicionarCena("testeCirculo_5", cenaCirculo_5);
-game.adicionarCena("testeCirculo_10", cenaCirculo_10);
-game.adicionarCena("teste_3", cenaMaior_3);
-game.adicionarCena("teste_5", cenaMaior_5);
-game.adicionarCena("teste_10", cenaMaior_10);
+//game.adicionarCena("teste", cenaTeste);
+game.adicionarCena("teste", cenaXadrez);
+//game.adicionarCena("teste", cenaCorredor);
 game.adicionarCena("fim", fim);
 
 //cena1.adicionarSprite(new Sprite({x:50,y:100,w:20,h:20,vx:-10,color:"red"}));

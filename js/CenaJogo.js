@@ -4,6 +4,11 @@ import modeloMapa1 from "./maps/mapa1.js";
 import modeloMapa2 from "./maps/mapa2.js";
 import Sprite from "./Sprite.js";
 
+const Piso = 0;
+const Pedra = 1;
+const Parede = 2;
+const Bau =3;
+
 export default class CenaJogo extends Cena {
   quandoColidir(a, b) {
     if (!this.aRemover.includes(a) && !a.tags.has("pc")) {
@@ -34,7 +39,7 @@ export default class CenaJogo extends Cena {
     let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
     this.iniciaMapa(mapa);
     this.mapa = mapa;
-    let z = 20
+    let z = 0
     for (let  k= 0; k < z; k++) {
       const oldTiles = structuredClone(this.mapa.tiles);
       const newTiles = structuredClone(this.mapa.tiles);
@@ -58,22 +63,41 @@ export default class CenaJogo extends Cena {
     this.configuraMapa(mapa);
   }
   iniciaMapa(mapa) {
+    
     for (let l = 0; l < this.LINHAS; l++) {
       mapa.tiles[l] = [];
       for (let c = 0; c < this.COLUNAS; c++) {
         //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
-        mapa.tiles[l][c] = 0;
+        mapa.tiles[l][c] = Piso;
       }
     }
     for (let l = 0; l < this.LINHAS; l++) {
       for (let c = 0; c < this.COLUNAS; c++) {
-        //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+        /*
         if (l == 1 || l == this.LINHAS - 2 || c == 1 || c == this.COLUNAS - 2) {
-          mapa.tiles[l][c] = 2;
+          mapa.tiles[l][c] = Parede;
+          continue;
+        }
+        */
+        if (l == 1 || l == this.LINHAS - 2 || c == 1 || c == this.COLUNAS - 2) {
+          mapa.tiles[l][c] =(l+c)%2===0? Parede:Piso;
+          continue;
         }
         if (l == 0 || l == this.LINHAS - 1 || c == 0 || c == this.COLUNAS - 1) {
-          mapa.tiles[l][c] = 1;
+          mapa.tiles[l][c] = Pedra;
+          continue;
         }
+        else
+        {
+          /*
+          if(Math.random()< 0.1)
+          {
+          mapa.tiles[l][c] = Parede
+          }
+          */
+        }
+        
+        
       }
     }
     mapa.cena = this;

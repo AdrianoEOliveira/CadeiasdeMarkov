@@ -1,7 +1,7 @@
 export default class Game {
   constructor(canvas, assets, input, markov) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+    this.ctx = canvas.getContext("2d" , { willReadFrequently: true });
     this.assets = assets;
     this.input = input;
     this.cenas = new Map();
