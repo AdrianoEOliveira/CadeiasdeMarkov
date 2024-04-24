@@ -209,8 +209,8 @@ const fim = new CenaFim(canvas, assets, input);
 
 game.adicionarCena("carregando", carregando);
 //game.adicionarCena("teste", cenaTeste);
-game.adicionarCena("teste", cenaXadrez);
-//game.adicionarCena("teste", cenaCorredor);
+//game.adicionarCena("teste", cenaXadrez);
+game.adicionarCena("teste", cenaCorredor);
 game.adicionarCena("fim", fim);
 
 //cena1.adicionarSprite(new Sprite({x:50,y:100,w:20,h:20,vx:-10,color:"red"}));

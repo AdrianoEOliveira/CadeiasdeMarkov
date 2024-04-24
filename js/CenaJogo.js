@@ -39,7 +39,7 @@ export default class CenaJogo extends Cena {
     let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
     this.iniciaMapa(mapa);
     this.mapa = mapa;
-    let z = 0
+    let z = 1
     for (let  k= 0; k < z; k++) {
       const oldTiles = structuredClone(this.mapa.tiles);
       const newTiles = structuredClone(this.mapa.tiles);
@@ -63,7 +63,29 @@ export default class CenaJogo extends Cena {
     this.configuraMapa(mapa);
   }
   iniciaMapa(mapa) {
+
     
+    if(this.markov.modelo == "xadrez")
+    {
+      return this.modeloXadrez(mapa)
+    }
+    if(this.markov.modelo == "padrao")
+    {
+      return this.modeloPadrao(mapa)
+    }
+    if(this.markov.modelo == "aleatoriedade")
+    {
+      return this.modeloPadraoComAleatorio(mapa)
+    }
+    //if(this.markov.modelo == "usuario")
+    //{
+      //return this.modeloUsuario(mapa)
+    //}
+  }
+
+  modeloXadrez(mapa)
+  {
+
     for (let l = 0; l < this.LINHAS; l++) {
       mapa.tiles[l] = [];
       for (let c = 0; c < this.COLUNAS; c++) {
@@ -101,6 +123,80 @@ export default class CenaJogo extends Cena {
       }
     }
     mapa.cena = this;
+
+  }
+
+  modeloPadrao(mapa)
+  {
+
+    for (let l = 0; l < this.LINHAS; l++) {
+      mapa.tiles[l] = [];
+      for (let c = 0; c < this.COLUNAS; c++) {
+        //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+        mapa.tiles[l][c] = Piso;
+      }
+    }
+    for (let l = 0; l < this.LINHAS; l++) {
+      for (let c = 0; c < this.COLUNAS; c++) {
+        if (l == 1 || l == this.LINHAS - 2 || c == 1 || c == this.COLUNAS - 2) {
+          mapa.tiles[l][c] = Parede;
+          continue;
+        }
+        
+        if (l == 0 || l == this.LINHAS - 1 || c == 0 || c == this.COLUNAS - 1) {
+          mapa.tiles[l][c] = Pedra;
+          continue;
+        }
+        else
+        {
+          /*
+          if(Math.random()< 0.1)
+          {
+          mapa.tiles[l][c] = Parede
+          }
+          */
+        }
+        
+        
+      }
+    }
+    mapa.cena = this;
+
+  }
+
+  modeloPadraoComAleatorio(mapa)
+  {
+
+    for (let l = 0; l < this.LINHAS; l++) {
+      mapa.tiles[l] = [];
+      for (let c = 0; c < this.COLUNAS; c++) {
+        //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+        mapa.tiles[l][c] = Piso;
+      }
+    }
+    for (let l = 0; l < this.LINHAS; l++) {
+      for (let c = 0; c < this.COLUNAS; c++) {
+        if (l == 1 || l == this.LINHAS - 2 || c == 1 || c == this.COLUNAS - 2) {
+          mapa.tiles[l][c] = Parede;
+          continue;
+        }
+        
+        if (l == 0 || l == this.LINHAS - 1 || c == 0 || c == this.COLUNAS - 1) {
+          mapa.tiles[l][c] = Pedra;
+          continue;
+        }
+          
+          if(Math.random()< 0.1)
+          {
+          mapa.tiles[l][c] = Parede
+          }
+          
+        
+        
+      }
+    }
+    mapa.cena = this;
+
   }
   treinarMarkov() {
     this.markov.treino();
