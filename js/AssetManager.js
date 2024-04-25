@@ -7,11 +7,17 @@ export default class AssetManager {
     this.mixer = mixer;
   }
   adicionaImagem(chave, source) {
+    if(this.imagens.get(chave))
+    {
+      this.imagens.delete(chave);
+      this.aCarregar--;
+      this.carregadas--;
+    }
     const img1 = new Image();
     const that = this;
     img1.addEventListener("load", function () {
-      console.log(`Imagem ${that.carregadas}/${that.aCarregar}carregado!`);
       that.carregadas++;
+      console.log(`Imagem ${that.carregadas}/${that.aCarregar}carregado!`);
     });
     img1.src = source;
     this.imagens.set(chave, img1);
@@ -21,8 +27,8 @@ export default class AssetManager {
     const audio = new Audio();
     const that = this;
     audio.addEventListener("loadeddata", function () {
-      console.log(`Audio ${that.carregadas}/${that.aCarregar}carregado!`);
       that.carregadas++;
+      console.log(`Audio ${that.carregadas}/${that.aCarregar}carregado!`);
     });
     audio.src = source;
     this.audios.set(chave, audio);
