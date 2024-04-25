@@ -42,8 +42,8 @@ document.querySelector("form").addEventListener("submit", function(event) {
   const input = new inputManager();
 
   const canvas = document.querySelector("canvas");
-  canvas.width = LINHAS * 32;
-  canvas.height = COLUNAS * 32;
+  canvas.width = COLUNAS * 32;
+  canvas.height = LINHAS * 32;
   input.configurarTeclado({
   ArrowLeft: "MOVE_ESQUERDA",
   ArrowRight: "MOVE_DIREITA",
