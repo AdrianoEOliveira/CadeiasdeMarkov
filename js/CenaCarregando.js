@@ -15,7 +15,7 @@ export default class CenaCarregando extends Cena {
     if (this.assets.acabou()) {
 
       this.ctx.fillText(
-        "Aperte 1 para testar mapa base",
+        "Aperte esc para iniciar",
         this.canvas.width / 2,
         this.canvas.height / 2 + 80
       );

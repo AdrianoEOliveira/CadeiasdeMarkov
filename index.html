@@ -4,6 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geracao Procedural com Cadeia de Markov</title>
+    <form>
+        <label for="linhas">linhas:</label>
+        <input type="number" id="linhas">
+    
+        <label for="colunas">colunas:</label>
+        <input type="number" id="colunas">
+
+        <label for="treino">Modelo Inicial:</label>
+        <select id="treino">
+            <option value="padrao">Padrao</option>
+            <option value="xadrez">Xadrez</option>
+            <option value="aleatorio">Aleatorio</option>
+            <option value="usuario">Usuario</option>
+        </select>
+        
+
+        <label for="localizacao">Localizacao mapa de treino:</label>
+        <input type="text" id="localizacao">
+
+        <label for="tamanho">tamanho do mapa de treino:</label>
+        <input type="number" id="tamanho">
+
+        <label for="grid">grid para treinamento:</label>
+        <input type="number" id="grid">
+
+        <label for="iteracoes">iteracoes:</label>
+        <input type="number" id="iteracoes">
+
+    
+        <button type="submit">Enviar</button>
+      </form>
     <script src = "js/Main.js" type="module"></script>
 </head>
 <body>

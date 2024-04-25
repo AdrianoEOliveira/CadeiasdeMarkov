@@ -1,10 +1,12 @@
 export default class Markov {
-  constructor(assets, canvas, linhas, colunas, grid, tamanhoimagem, imagem) {
+  constructor(assets, canvas, linhas, colunas, grid, tamanhoimagem, imagem,numero_de_iteracoes,modelo) {
     this.LINHAS = linhas;
     this.COLUNAS = colunas;
     this.GRID = grid;
     this.TAMANHOIMAGEM = tamanhoimagem;
     this.IMAGEM = imagem;
+    this.iteracoes = numero_de_iteracoes
+    this.modelo = modelo
     this.contagem = [];
     this.estados = [];
     this.probabilidades = [];
@@ -245,21 +247,19 @@ export default class Markov {
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
         let imagemTile = [];
-
         for (
           let i = gridI * this.GRID;
-          i < gridI * this.GRID + this.GRID;
+          i < (gridI * this.GRID) + this.GRID;
           i++
         ) {
           imagemTile[i % this.GRID] = [];
           for (
             let j = gridJ * this.GRID;
-            j < gridJ * this.GRID + this.GRID;
+            j < (gridJ * this.GRID) + this.GRID;
             j++
           ) {
             let pixel = this.ctx.getImageData(j, i, 1, 1);
             let corRgb = pixel.data;
-
             if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
               imagemTile[i % this.GRID][j % this.GRID] = "Pedra";
             } else {

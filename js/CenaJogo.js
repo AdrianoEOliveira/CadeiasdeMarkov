@@ -39,7 +39,7 @@ export default class CenaJogo extends Cena {
     let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
     this.iniciaMapa(mapa);
     this.mapa = mapa;
-    let z = 1
+    let z = this.markov.iteracoes;
     for (let  k= 0; k < z; k++) {
       const oldTiles = structuredClone(this.mapa.tiles);
       const newTiles = structuredClone(this.mapa.tiles);
