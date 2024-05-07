@@ -1,5 +1,5 @@
 export default class Markov {
-  constructor(assets, canvas, linhas, colunas, grid, tamanhoimagem, imagem,numero_de_iteracoes,modelo) {
+  constructor(assets, canvas, linhas, colunas, grid, tamanhoimagem, imagem,numero_de_iteracoes,modelo,newTiles) {
     this.LINHAS = linhas;
     this.COLUNAS = colunas;
     this.GRID = grid;
@@ -7,15 +7,27 @@ export default class Markov {
     this.IMAGEM = imagem;
     this.iteracoes = numero_de_iteracoes
     this.modelo = modelo
+    this.newTiles = newTiles;
+    
     this.contagem = [];
     this.estados = [];
     this.probabilidades = [];
     this.probabilidadesGlobal = [];
-    this.porcentagemDeUso = [] 
+    this.porcentagemDeUso = []; 
     this.totalGlobal=0;
     this.assets = assets;
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d", { willReadFrequently: true });
+  }
+
+  zeraTreino()
+  {
+    this.contagem = [];
+    this.estados = [];
+    this.probabilidades = [];
+    this.probabilidadesGlobal = [];
+    this.porcentagemDeUso = []; 
+    this.totalGlobal=0;
   }
 
   adicionaEstado(estado) {
@@ -237,7 +249,6 @@ export default class Markov {
 
       this.probabilidadesGlobal[this.estados[i]] = 0;
     }
-
     let img = new Image();
     img = this.assets.Img(this.IMAGEM);
     this.ctx.drawImage(img, 0, 0);
