@@ -28,40 +28,70 @@ export default class CenaJogo extends Cena {
       }
     }
   }
+
   preparar() {
     super.preparar();
-    this.markov.adicionaEstado("Piso");
-    this.markov.adicionaEstado("Pedra");
-    this.markov.adicionaEstado("Parede");
-    this.markov.adicionaEstado("Bau");
-    this.treinarMarkov();
+    
+    this.gerar()
+  }
+
+  gerar()
+  {
 
     let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
     this.iniciaMapa(mapa);
     this.mapa = mapa;
+    
     let z = this.markov.iteracoes;
-    for (let  k= 0; k < z; k++) {
-      const oldTiles = structuredClone(this.mapa.tiles);
-      const newTiles = structuredClone(this.mapa.tiles);
-
-      for (let l = 2; l < this.LINHAS - 2; l++) {
-        for (let c = 2; c < this.COLUNAS - 2; c++) {
-          let ordem = this.markov.verificaBacktracking(newTiles,l,c,8)
-          let proximo = this.markov.proximo(
-            this.markov.getVizinho(newTiles,l,c,ordem));
-          if (proximo >= 0) {
-          newTiles[l][c] = proximo;
+    if(this.markov.newTiles == "true")
+    {
+      for (let  k= 0; k < z; k++) {
+        const oldTiles = structuredClone(this.mapa.tiles);
+        const newTiles = structuredClone(this.mapa.tiles);
+  
+        for (let l = 2; l < this.LINHAS - 2; l++) {
+          for (let c = 2; c < this.COLUNAS - 2; c++) {
+            let ordem = this.markov.verificaBacktracking(newTiles,l,c,8)
+            let proximo = this.markov.proximo(
+              this.markov.getVizinho(newTiles,l,c,ordem));
+            if (proximo >= 0) {
+            newTiles[l][c] = proximo;
+            }
           }
         }
+        this.mapa.tiles = newTiles;
       }
-      this.mapa.tiles = newTiles;
-      
     }
-    console.log("Media de falhas em k=",z)
-    console.log(this.markov.getPorcentagem())
-
+    else
+    {
+      for (let  k= 0; k < z; k++) {
+        const oldTiles = structuredClone(this.mapa.tiles);
+        const newTiles = structuredClone(this.mapa.tiles);
+  
+        for (let l = 2; l < this.LINHAS - 2; l++) {
+          for (let c = 2; c < this.COLUNAS - 2; c++) {
+            let ordem = this.markov.verificaBacktracking(oldTiles,l,c,8)
+            let proximo = this.markov.proximo(
+              this.markov.getVizinho(oldTiles,l,c,ordem));
+            if (proximo >= 0) {
+            newTiles[l][c] = proximo;
+            }
+          }
+        }
+        this.mapa.tiles = newTiles;    
+      }
+    }
     this.configuraMapa(mapa);
   }
+
+  iniciaConfiguracao()
+  {
+    this.markov.adicionaEstado("Piso");
+    this.markov.adicionaEstado("Pedra");
+    this.markov.adicionaEstado("Parede");
+    this.markov.adicionaEstado("Bau");
+  }
+
   iniciaMapa(mapa) {
 
     
@@ -199,6 +229,8 @@ export default class CenaJogo extends Cena {
 
   }
   treinarMarkov() {
+    this.markov.zeraTreino();
+    this.iniciaConfiguracao();
     this.markov.treino();
   }
 
