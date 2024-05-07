@@ -13,6 +13,10 @@ export default class Game {
     this.markov = markov;
   }
   adicionarCena(chave, cena) {
+    if(this.cenas.get(chave))
+    {
+      this.cenas.delete(chave);
+    }
     cena.game = this;
     this.cenas.set(chave, cena);
     if (this.cena === null) this.cena = cena;

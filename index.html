@@ -11,10 +11,10 @@
             <input type="number" id="linhas" name="linhas" value="20">
         
             <label for="colunas">colunas:</label>
-            <input type="number" id="colunas" value="20">
+            <input type="number" id="colunas" name ="colunas"value="20">
 
             <label for="treino">Modelo Inicial:</label>
-            <select id="treino">
+            <select id="modelo" name="modelo">
                 <option value="padrao">Padrao</option>
                 <option value="xadrez">Xadrez</option>
                 <option value="aleatorio">Aleatorio</option>
@@ -24,26 +24,46 @@
         </fieldset>
 
         
+        <fieldset>
+            <legend>Adiciona Mapa de treinamento</legend>
 
-        <label for="localizacao">Localizacao mapa de treino:</label>
-        <input type="text" id="localizacao" value="assets/xadrez.bmp" >
+            <label for="localizacao">Localizacao mapa de treino:</label>
+            <input type="text" id="localizacao" name="localizacao" value="assets/xadrez.bmp" >
 
-        <label for="tamanho">tamanho do mapa de treino:</label>
-        <input type="number" id="tamanho" value="5">
+            <label for="tamanho">tamanho do mapa de treino:</label>
+            <input type="number" id="tamanho" name ="tamanho" value="5">
 
-        <label for="grid">grid para treinamento:</label>
-        <input type="number" id="grid" value="5">
+            <label for="grid">grid para treinamento:</label>
+            <input type="number" id="grid" name="grid" value="5">
 
-        <label for="iteracoes">iteracoes:</label>
-        <input type="number" id="iteracoes" value="10">
+            <button type="button" name="treinamento">treinar</button>
+        </fieldset>
+        <fieldset>
+            <legend>Ver Tabela</legend>
 
+            <button type="button" name="tabela">verTabela
+            </button>
+        </fieldset>
+
+        <fieldset >
+            <legend>Testar</legend>
+            <label for="iteracoes">iteracoes:</label>
+            <input type="number" id="iteracoes" name="iteracoes" value="10">
+
+            <select id="newTiles" name="newTiles">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+            <button type="button" name="gerar">gerar</button>
+        </fieldset>
     
         <button type="submit">Enviar</button>
       </form>
     <script src = "js/Main.js" type="module"></script>
 </head>
 <body>
-    <canvas></canvas>
+    <canvas id = "canvasMarkov" name="canvasMarkov"></canvas>
+    <canvas id = "canvas" name="canvas"></canvas>
     <p>Autor: Adriano Eiterer Oliveira<p>
     <p>Orientador: Igor de Oliveira Knop<p></p>
 

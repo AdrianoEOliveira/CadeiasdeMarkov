@@ -32,30 +32,6 @@ export default class CenaCarregando extends Cena {
         this.game.selecionaCena("teste");
         return;
       }
-      if (this.input.comandos.get("C3")) {
-        this.game.selecionaCena("testeCirculo_3");
-        return;
-      }
-      if (this.input.comandos.get("C5")) {
-        this.game.selecionaCena("testeCirculo_5");
-        return;
-      }
-      if (this.input.comandos.get("C10")) {
-        this.game.selecionaCena("testeCirculo_10");
-        return;
-      }
-      if (this.input.comandos.get("T3")) {
-        this.game.selecionaCena("teste_3");
-        return;
-      }
-      if (this.input.comandos.get("T5")) {
-        this.game.selecionaCena("teste_5");
-        return;
-      }
-      if (this.input.comandos.get("T10")) {
-        this.game.selecionaCena("teste_10");
-        return;
-      }
     }
     this.desenhar();
 

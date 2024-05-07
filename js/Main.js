@@ -16,7 +16,16 @@ assets.adicionaImagem("chest", "assets/Chest.png");
 assets.adicionaImagem("coin", "assets/coin.jpg");
 
 assets.adicionaAudio("hurt", "assets/hurt.wav");
-const canvas = document.querySelector("canvas");
+let canvas = document.getElementById("canvas")
+
+let canvasMarkov = document.getElementById("canvasMarkov")
+canvasMarkov.setAttribute("hidden", "hidden");
+
+canvas.width = 10 * 32;
+canvas.height = 10 * 32;
+
+canvasMarkov.width = 50;
+canvasMarkov.height = 50;
 
 
 const input = new inputManager();
@@ -29,34 +38,60 @@ input.configurarTeclado({
   Escape:"TESTE"
 });
 
+let LINHAS = document.entrada.linhas.valueAsNumber;
+let COLUNAS = document.entrada.colunas.valueAsNumber
+let modelo = document.entrada.modelo.value;
+let localizacao = document.entrada.localizacao.value;
+let tamanhoMapa = document.entrada.tamanho.valueAsNumber;
+let grid = document.entrada.grid.valueAsNumber;
+let iteracoes = document.entrada.iteracoes.valueAsNumber;
+let newTiles = document.entrada.newTiles.value
+
+
+let  markov = new Markov(
+  assets,
+  canvasMarkov,
+  LINHAS,
+  COLUNAS,
+  grid,
+  tamanhoMapa,
+  "treino",
+  0,
+  modelo,
+  newTiles
+);
+
+
+let cena = new CenaJogo(canvas,assets,input,markov);
+
+let carregando = new CenaCarregando(canvas, assets, input, markov);
+
+let game = new Game(canvas, assets, input);
+
+let fim = new CenaFim(canvas, assets, input);
+
+
+game.adicionarCena("carregando", carregando);
+game.adicionarCena("teste", cena);
+game.adicionarCena("fim", fim);
+
+
+game.iniciar();
+
 document.entrada.iniciar.addEventListener("click", function(event) {
-  let LINHAS = document.entrada.linhas.valueAsNumber;
-  let COLUNAS = Number(document.getElementById("colunas").value);
-  let modelo = document.getElementById("treino").value;
+
+  LINHAS = document.entrada.linhas.valueAsNumber;
+  COLUNAS = document.entrada.colunas.valueAsNumber
+  modelo = document.entrada.modelo.value;
 
   canvas.width = COLUNAS * 32;
   canvas.height = LINHAS * 32;
+  markov.LINHAS = LINHAS;
+  markov.COLUNAS = COLUNAS;
+  markov.modelo = modelo;
+  markov.iteracoes = 0;
 
-  console.log(LINHAS)
-  console.log(COLUNAS)
-  console.log(modelo)
-  console.log(localizacao)
-  console.log(tamanhoMapa)
-  console.log(grid)
-  console.log(iteracoes)
-
-  let markov = new Markov(
-    assets,
-    canvas,
-    LINHAS,
-    COLUNAS,
-    grid,
-    tamanhoMapa,
-    "treino",
-    iteracoes,
-    modelo
-  );
-  const cena = new CenaJogo(
+  cena = new CenaJogo(
     canvas,
     assets,
     input,
@@ -64,52 +99,25 @@ document.entrada.iniciar.addEventListener("click", function(event) {
     LINHAS,
     COLUNAS
   );
-  const game = new Game(canvas, assets, input);
 
-  const carregando = new CenaCarregando(canvas, assets, input, markov);
-
-  const fim = new CenaFim(canvas, assets, input);
-
-  game.adicionarCena("carregando", carregando);
   game.adicionarCena("teste", cena);
-  game.adicionarCena("fim", fim);
-
-  game.iniciar();
+  game.selecionaCena("teste");
 
 });
 
 
-document.entrada.addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  let localizacao = document.getElementById("localizacao").value;
-  let tamanhoMapa = Number(document.getElementById("tamanho").value);
-  let grid = Number(document.getElementById("grid").value);
-  let iteracoes = Number(document.getElementById("iteracoes").value);
-
-  console.log(LINHAS)
-  console.log(COLUNAS)
-  console.log(modelo)
-  console.log(localizacao)
-  console.log(tamanhoMapa)
-  console.log(grid)
-  console.log(iteracoes)
-
+document.entrada.treinamento.addEventListener("click", function(event) {
+  
+  localizacao = document.entrada.localizacao.value;
+  tamanhoMapa = document.entrada.tamanho.valueAsNumber;
+  grid = document.entrada.grid.valueAsNumber;
 
   assets.adicionaImagem("treino",localizacao);
+  game.selecionaCena("carregando")
 
-  let markov = new Markov(
-    assets,
-    canvas,
-    LINHAS,
-    COLUNAS,
-    grid,
-    tamanhoMapa,
-    "treino",
-    iteracoes,
-    modelo
-  );
-  const cena = new CenaJogo(
+  markov.GRID = grid;
+  markov.TAMANHOIMAGEM = tamanhoMapa
+  cena = new CenaJogo(
     canvas,
     assets,
     input,
@@ -117,18 +125,44 @@ document.entrada.addEventListener("submit", function(event) {
     LINHAS,
     COLUNAS
   );
-  const game = new Game(canvas, assets, input);
 
-  const carregando = new CenaCarregando(canvas, assets, input, markov);
-
-  const fim = new CenaFim(canvas, assets, input);
-
-  game.adicionarCena("carregando", carregando);
   game.adicionarCena("teste", cena);
-  game.adicionarCena("fim", fim);
 
-  game.iniciar();
+});
+
+document.entrada.tabela.addEventListener("click", function(event) {
+
+cena.treinarMarkov();
+
+});
+
+document.entrada.gerar.addEventListener("click", function(event) {
+
+  game.selecionaCena("carregando")
+
+  iteracoes = document.entrada.iteracoes.valueAsNumber;
+  newTiles = document.entrada.newTiles.value
+  markov.iteracoes = iteracoes;
+  markov.newTiles = newTiles
+  cena = new CenaJogo(
+    canvas,
+    assets,
+    input,
+    markov,
+    LINHAS,
+    COLUNAS
+  );
+
+  game.adicionarCena("teste", cena);
+
+  cena.treinarMarkov();
+  
+
+  cena.treinarMarkov();
+
+  game.selecionaCena("teste");
 
 
 });
+
 
