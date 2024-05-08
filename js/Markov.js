@@ -8,7 +8,8 @@ export default class Markov {
     this.iteracoes = numero_de_iteracoes
     this.modelo = modelo
     this.newTiles = newTiles;
-    
+
+    this.dados = [];
     this.contagem = [];
     this.estados = [];
     this.probabilidades = [];
@@ -28,6 +29,11 @@ export default class Markov {
     this.probabilidadesGlobal = [];
     this.porcentagemDeUso = []; 
     this.totalGlobal=0;
+  }
+
+  zeraTabela()
+  {
+    this.dados = [];
   }
 
   adicionaEstado(estado) {
@@ -88,6 +94,113 @@ export default class Markov {
       return this.probabilidadesGlobal[alvo];
     }
     return this.probabilidades[vizinho][alvo];
+  }
+
+  separarPorLetrasMaiusculas(string) {
+    return string.split(/(?=[A-Z])/);
+  }
+
+  adicionaDadosNaTabela(vizinho,vizinhosTabela,probabilidades)
+  {
+    if(vizinhosTabela.length == 8)
+    {
+      let aux = {"( L,C-1 )":vizinhosTabela[0],
+      "( L - 1,C - 1 )":vizinhosTabela[1],
+      "( L - 1,C )":vizinhosTabela[2],
+      "( L - 1,C + 1 )":vizinhosTabela[3],
+      "( L,C + 1 )":vizinhosTabela[4],
+      "( L + 1,C + 1 )":vizinhosTabela[5],
+      "( L + 1,C )":vizinhosTabela[6],
+      "( L + 1,C - 1 )":vizinhosTabela[7],
+      Piso:probabilidades[0],
+      Pedra:probabilidades[1],
+      Parede:probabilidades[2],
+      Bau:probabilidades[3]};
+      this.dados.push(aux)
+    }
+    if(vizinhosTabela.length == 4)
+    {
+      let aux = {
+      "( L,C-1 )":vizinhosTabela[0],
+      "( L - 1,C - 1 )":"",
+      "( L - 1,C )":vizinhosTabela[1],
+      "( L - 1,C + 1 )":"",
+      "( L,C + 1 )":vizinhosTabela[2],
+      "( L + 1,C + 1 )":"",
+      "( L + 1,C )":vizinhosTabela[3],
+      "( L + 1,C - 1 )":"",
+      Piso:probabilidades[0],
+      Pedra:probabilidades[1],
+      Parede:probabilidades[2],
+      Bau:probabilidades[3]};
+      this.dados.push(aux) 
+    }
+    if(vizinhosTabela.length == 3)
+    {
+      let aux = {
+        "( L,C-1 )":vizinhosTabela[0],
+        "( L - 1,C - 1 )":vizinhosTabela[1],
+        "( L - 1,C )":vizinhosTabela[2],
+        "( L - 1,C + 1 )":"",
+        "( L,C + 1 )":"",
+        "( L + 1,C + 1 )":"",
+        "( L + 1,C )":"",
+        "( L + 1,C - 1 )":"",
+      Piso:probabilidades[0],
+      Pedra:probabilidades[1],
+      Parede:probabilidades[2],
+      Bau:probabilidades[3]};
+      this.dados.push(aux) 
+    }
+    if(vizinhosTabela.length == 2)
+    {
+      let aux = {
+        "( L,C-1 )":vizinhosTabela[0],
+        "( L - 1,C - 1 )":"",
+        "( L - 1,C )":vizinhosTabela[1],
+        "( L - 1,C + 1 )":"",
+        "( L,C + 1 )":"",
+        "( L + 1,C + 1 )":"",
+        "( L + 1,C )":"",
+        "( L + 1,C - 1 )":"",
+      Piso:probabilidades[0],
+      Pedra:probabilidades[1],
+      Parede:probabilidades[2],
+      Bau:probabilidades[3]};
+      this.dados.push(aux) 
+    }
+    if(vizinhosTabela.length == 1)
+    {
+      let aux = {
+        "( L,C-1 )":vizinhosTabela[0],
+        "( L - 1,C - 1 )":"",
+        "( L - 1,C )":"",
+        "( L - 1,C + 1 )":"",
+        "( L,C + 1 )":"",
+        "( L + 1,C + 1 )":"",
+        "( L + 1,C )":"",
+        "( L + 1,C - 1 )":"",
+      Piso:probabilidades[0],
+      Pedra:probabilidades[1],
+      Parede:probabilidades[2],
+      Bau:probabilidades[3]};
+      this.dados.push(aux) 
+    }
+  }
+
+  getTabelaDados()
+  {
+    let vizinhos = Object.keys(this.contagem);
+    for (const vizinho of vizinhos) 
+    {
+      const vizinhosTabela = this.separarPorLetrasMaiusculas(vizinho)
+      let probabilidades = []
+      for (let i = 0; i < this.estados.length; i++) {
+        probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
+      }
+      this.adicionaDadosNaTabela(vizinho,vizinhosTabela,probabilidades);
+    }
+    return this.dados;
   }
   
   getVizinho(tile,l,c,ordem)
@@ -314,3 +427,4 @@ export default class Markov {
     console.log(this.probabilidades)
   }
 }
+

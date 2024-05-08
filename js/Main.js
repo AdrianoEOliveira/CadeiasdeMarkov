@@ -7,6 +7,7 @@ import CenaJogo from "./CenaJogo.js";
 import CenaFim from "./CenaFim.js";
 import Markov from "./Markov.js";
 
+
 const assets = new AssetManager(new Mixer(10));
 assets.adicionaImagem("humano", "assets/humano.png");
 assets.adicionaImagem("terreno", "assets/terrain_atlas.png");
@@ -78,6 +79,46 @@ game.adicionarCena("fim", fim);
 
 game.iniciar();
 
+// Dados da tabela (exemplo)
+
+// Função para criar a tabela
+function criarTabela(dados) {
+  // Criando a tabela e o cabeçalho
+  let tabela = document.createElement('table');
+  let cabecalho = tabela.createTHead();
+  let linhaCabecalho = cabecalho.insertRow();
+
+  // Adicionando os cabeçalhos das colunas
+  for (let chave in dados[0]) {
+      let th = document.createElement('th');
+      th.textContent = chave.charAt(0).toUpperCase() + chave.slice(1); // Primeira letra maiúscula
+      linhaCabecalho.appendChild(th);
+  }
+
+  // Adicionando os dados
+  let corpoTabela = tabela.createTBody();
+  dados.forEach(item => {
+    let linha = corpoTabela.insertRow();
+    for (let chave in item) {
+        let celula = linha.insertCell();
+        // Verifica se a chave existe antes de acessá-la
+        celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
+    }
+});
+
+  // Adicionando a tabela ao container
+  document.getElementById('tabela-container').appendChild(tabela);
+
+}
+
+function limparTabela() {
+  // Define o innerHTML do elemento da tabela como uma string vazia
+  document.getElementById('tabela-container').innerHTML = '';
+}
+
+// Chamando a função para criar a tabela com os dados fornecidos
+
+
 document.entrada.iniciar.addEventListener("click", function(event) {
 
   LINHAS = document.entrada.linhas.valueAsNumber;
@@ -132,9 +173,18 @@ document.entrada.treinamento.addEventListener("click", function(event) {
 
 document.entrada.tabela.addEventListener("click", function(event) {
 
+
+cena.markov.zeraTabela();
 cena.treinarMarkov();
+criarTabela(cena.markov.getTabelaDados());
 
 });
+
+document.entrada.limpar.addEventListener("click", function(event) {
+
+  limparTabela()
+
+  });
 
 document.entrada.gerar.addEventListener("click", function(event) {
 
