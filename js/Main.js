@@ -1,6 +1,7 @@
 import AssetManager from "./AssetManager.js";
 import Mixer from "./Mixer.js";
 import inputManager from "./inputManager.js";
+import Mapa from "./Mapa.js";
 import Game from "./Game.js";
 import CenaCarregando from "./CenaCarregando.js";
 import CenaJogo from "./CenaJogo.js";
@@ -20,7 +21,7 @@ assets.adicionaAudio("hurt", "assets/hurt.wav");
 let canvas = document.getElementById("canvas")
 
 let canvasMarkov = document.getElementById("canvasMarkov")
-canvasMarkov.setAttribute("hidden", "hidden");
+//canvasMarkov.setAttribute("hidden", "hidden");
 
 canvas.width = 10 * 32;
 canvas.height = 10 * 32;
@@ -100,9 +101,46 @@ function criarTabela(dados) {
   dados.forEach(item => {
     let linha = corpoTabela.insertRow();
     for (let chave in item) {
+      console.log(chave);
         let celula = linha.insertCell();
         // Verifica se a chave existe antes de acessá-la
-        celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
+        if(chave == "vizinho")
+        {
+          //console.log(item[chave])
+          var canvasTabela = document.createElement('canvas');
+          canvasTabela.width = 100;
+          canvasTabela.height = 100;
+          var ctx = canvasTabela.getContext('2d');
+          let mapaTabela = new Mapa(3, 3, 32);
+          mapaTabela.tiles = item[chave];
+          //console.log(mapaTabela)
+          let cenaAux = new CenaJogo(
+            canvasTabela,
+            assets,
+            input,
+            markov,
+            3,
+            3
+          );
+          cenaAux.configuraMapa(mapaTabela)
+          mapaTabela.desenhar(ctx);
+          celula.appendChild(canvasTabela);
+        }
+        else
+        {
+          var canvasTabela = document.createElement('canvas');
+          canvasTabela.width = 200;
+          canvasTabela.height = 100;
+          var ctx = canvasTabela.getContext('2d');
+          ctx.font = "15px Arial";
+          var textoNumero = item[chave].toString();
+          var larguraTexto = ctx.measureText(textoNumero).width;
+          var x = (canvasTabela.width - larguraTexto) / 2;
+          var y = canvasTabela.height / 2;
+          ctx.fillText(textoNumero, x, y);
+          celula.appendChild(canvasTabela);
+        //celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
+        }
     }
 });
 

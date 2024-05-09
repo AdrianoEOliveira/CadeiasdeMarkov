@@ -8,10 +8,10 @@
         <fieldset>
             <legend>Mapa Inicial</legend>
             <label for="linhas">linhas:</label>
-            <input type="number" id="linhas" name="linhas" value="20">
+            <input type="number" id="linhas" name="linhas" value="20"><br>
         
             <label for="colunas">colunas:</label>
-            <input type="number" id="colunas" name ="colunas"value="20">
+            <input type="number" id="colunas" name ="colunas"value="20"><br>
 
             <label for="treino">Modelo Inicial:</label>
             <select id="modelo" name="modelo">
@@ -19,7 +19,7 @@
                 <option value="xadrez">Xadrez</option>
                 <option value="aleatorio">Aleatorio</option>
                 <option value="usuario">Usuario</option>
-            </select>
+            </select><br>
             <button type="button" name="iniciar">Iniciar</button>
         </fieldset>
 
@@ -28,20 +28,21 @@
             <legend>Adiciona Mapa de treinamento</legend>
 
             <label for="localizacao">Localizacao mapa de treino:</label>
-            <input type="text" id="localizacao" name="localizacao" value="assets/xadrez.bmp" >
+            <input type="text" id="localizacao" name="localizacao" value="assets/xadrez.bmp" ><br>
 
             <label for="tamanho">tamanho do mapa de treino:</label>
-            <input type="number" id="tamanho" name ="tamanho" value="5">
+            <input type="number" id="tamanho" name ="tamanho" value="5"><br>
 
             <label for="grid">grid para treinamento:</label>
-            <input type="number" id="grid" name="grid" value="5">
+            <input type="number" id="grid" name="grid" value="5"><br>
 
             <button type="button" name="treinamento">treinar</button>
         </fieldset>
         <fieldset>
-            <legend>Ver Tabela</legend>
+            <legend>Ver Tabela de probabilidades</legend>
+            <label for="alvo">O tile que sera sorteado esta preenchido de amarelo:</label>
             <div id="tabela-container" name="tabela-container" ></div>
-            <button type="button" name="tabela">ver Tabela
+            <button type="button" name="tabela">mostrar Tabela
                 <button type="button" name="limpar">Limpar Tabela
             </button>
         </fieldset>
@@ -51,6 +52,7 @@
             <label for="iteracoes">iteracoes:</label>
             <input type="number" id="iteracoes" name="iteracoes" value="10">
 
+            <label for="newTiles">New Tiles:</label>
             <select id="newTiles" name="newTiles">
                 <option value="true">True</option>
                 <option value="false">False</option>

@@ -1,3 +1,8 @@
+const Piso = 0;
+const Pedra = 1;
+const Parede = 2;
+const Bau =3;
+
 export default class Markov {
   constructor(assets, canvas, linhas, colunas, grid, tamanhoimagem, imagem,numero_de_iteracoes,modelo,newTiles) {
     this.LINHAS = linhas;
@@ -100,90 +105,103 @@ export default class Markov {
     return string.split(/(?=[A-Z])/);
   }
 
-  adicionaDadosNaTabela(vizinho,vizinhosTabela,probabilidades)
+  converterEstado(vizinhos)
   {
+    for(let i = 0;i<3;i++)
+    {
+      for(let j =0;j<3;j++)
+      {
+        if(vizinhos[i][j] =="Piso")
+          vizinhos[i][j] = Piso
+          if(vizinhos[i][j] =="Pedra")
+          vizinhos[i][j] = Pedra
+          if(vizinhos[i][j] =="Parede")
+          vizinhos[i][j] = Parede
+          if(vizinhos[i][j] =="Bau")
+          vizinhos[i][j] = Bau
+      }
+    }
+    console.log(vizinhos)
+    return vizinhos;
+  }
+
+  adicionaDadosNaTabela(vizinhosTabela,probabilidades)
+  {
+    console.log(vizinhosTabela)
     if(vizinhosTabela.length == 8)
     {
-      let aux = {"( L,C-1 )":vizinhosTabela[0],
-      "( L - 1,C - 1 )":vizinhosTabela[1],
-      "( L - 1,C )":vizinhosTabela[2],
-      "( L - 1,C + 1 )":vizinhosTabela[3],
-      "( L,C + 1 )":vizinhosTabela[4],
-      "( L + 1,C + 1 )":vizinhosTabela[5],
-      "( L + 1,C )":vizinhosTabela[6],
-      "( L + 1,C - 1 )":vizinhosTabela[7],
+      let vizinhos = [[vizinhosTabela[1],vizinhosTabela[2],vizinhosTabela[3]],
+      [vizinhosTabela[0],1000,vizinhosTabela[4]],
+      [vizinhosTabela[7],vizinhosTabela[6],vizinhosTabela[5]]];
+      vizinhos = this.converterEstado(vizinhos);
+      let aux = {
+        vizinho:vizinhos,
       Piso:probabilidades[0],
       Pedra:probabilidades[1],
       Parede:probabilidades[2],
-      Bau:probabilidades[3]};
+      Bau:probabilidades[3]
+    };
       this.dados.push(aux)
     }
     if(vizinhosTabela.length == 4)
     {
+      let vizinhos = [[-1,vizinhosTabela[0],-1],
+      [vizinhosTabela[1],1000,vizinhosTabela[2]],
+      [-1,vizinhosTabela[3],-1]];
+      vizinhos = this.converterEstado(vizinhos);
       let aux = {
-      "( L,C-1 )":vizinhosTabela[0],
-      "( L - 1,C - 1 )":"",
-      "( L - 1,C )":vizinhosTabela[1],
-      "( L - 1,C + 1 )":"",
-      "( L,C + 1 )":vizinhosTabela[2],
-      "( L + 1,C + 1 )":"",
-      "( L + 1,C )":vizinhosTabela[3],
-      "( L + 1,C - 1 )":"",
+        vizinho:vizinhos,
       Piso:probabilidades[0],
       Pedra:probabilidades[1],
       Parede:probabilidades[2],
-      Bau:probabilidades[3]};
+      Bau:probabilidades[3]
+    };
       this.dados.push(aux) 
     }
     if(vizinhosTabela.length == 3)
     {
+      let vizinhos = [[vizinhosTabela[1],vizinhosTabela[2],-1],
+      [vizinhosTabela[0],1000,-1],
+      [-1,-1,-1]]
+
+      vizinhos = this.converterEstado(vizinhos);
       let aux = {
-        "( L,C-1 )":vizinhosTabela[0],
-        "( L - 1,C - 1 )":vizinhosTabela[1],
-        "( L - 1,C )":vizinhosTabela[2],
-        "( L - 1,C + 1 )":"",
-        "( L,C + 1 )":"",
-        "( L + 1,C + 1 )":"",
-        "( L + 1,C )":"",
-        "( L + 1,C - 1 )":"",
+        vizinho:vizinhos,
       Piso:probabilidades[0],
       Pedra:probabilidades[1],
       Parede:probabilidades[2],
-      Bau:probabilidades[3]};
+      Bau:probabilidades[3]
+    };
       this.dados.push(aux) 
     }
     if(vizinhosTabela.length == 2)
     {
+      let vizinhos = [[-1,vizinhosTabela[1],-1],
+      [vizinhosTabela[0],1000,-1],
+      [-1,-1,-1]]
+      vizinhos = this.converterEstado(vizinhos);
       let aux = {
-        "( L,C-1 )":vizinhosTabela[0],
-        "( L - 1,C - 1 )":"",
-        "( L - 1,C )":vizinhosTabela[1],
-        "( L - 1,C + 1 )":"",
-        "( L,C + 1 )":"",
-        "( L + 1,C + 1 )":"",
-        "( L + 1,C )":"",
-        "( L + 1,C - 1 )":"",
+        vizinho:vizinhos,
       Piso:probabilidades[0],
       Pedra:probabilidades[1],
       Parede:probabilidades[2],
-      Bau:probabilidades[3]};
+      Bau:probabilidades[3]
+    };
       this.dados.push(aux) 
     }
     if(vizinhosTabela.length == 1)
     {
+      let vizinhos = [[-1,-1,-1],
+      [vizinhosTabela[0],1000,-1],
+      [-1,-1,-1]]
+      vizinhos = this.converterEstado(vizinhos);
       let aux = {
-        "( L,C-1 )":vizinhosTabela[0],
-        "( L - 1,C - 1 )":"",
-        "( L - 1,C )":"",
-        "( L - 1,C + 1 )":"",
-        "( L,C + 1 )":"",
-        "( L + 1,C + 1 )":"",
-        "( L + 1,C )":"",
-        "( L + 1,C - 1 )":"",
+        vizinho:vizinhos,
       Piso:probabilidades[0],
       Pedra:probabilidades[1],
       Parede:probabilidades[2],
-      Bau:probabilidades[3]};
+      Bau:probabilidades[3]
+    };
       this.dados.push(aux) 
     }
   }
@@ -198,7 +216,7 @@ export default class Markov {
       for (let i = 0; i < this.estados.length; i++) {
         probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
       }
-      this.adicionaDadosNaTabela(vizinho,vizinhosTabela,probabilidades);
+      this.adicionaDadosNaTabela(vizinhosTabela,probabilidades);
     }
     return this.dados;
   }
