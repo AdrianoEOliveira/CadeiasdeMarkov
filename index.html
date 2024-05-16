@@ -8,10 +8,10 @@
         <fieldset>
             <legend>Mapa Inicial</legend>
             <label for="linhas">linhas:</label>
-            <input type="number" id="linhas" name="linhas" value="20"><br>
+            <input type="number" id="linhas" name="linhas" value="20">
         
-            <label for="colunas">colunas:</label>
-            <input type="number" id="colunas" name ="colunas"value="20"><br>
+            <label for="colunas"> colunas:</label>
+            <input type="number" id="colunas" name ="colunas"value="20">
 
             <label for="treino">Modelo Inicial:</label>
             <select id="modelo" name="modelo">
@@ -27,21 +27,43 @@
         <fieldset>
             <legend>Adiciona Mapa de treinamento</legend>
 
-            <label for="localizacao">Localizacao mapa de treino:</label>
-            <input type="text" id="localizacao" name="localizacao" value="assets/xadrez.bmp" ><br>
+            <label for="localizacao">Mapa de treino:</label>
+            <select id="localizacao" name="localizacao">
+                <option value="assets/xadrez.bmp">xadrez</option>
+                <option value="assets/corredores.bmp">corredores</option>
+            </select><br>
 
             <label for="tamanho">tamanho do mapa de treino:</label>
             <input type="number" id="tamanho" name ="tamanho" value="5"><br>
 
+            <button type="button" name="adicionar">adicionar</button>
+
+            <canvas id = "canvasVisual" name="canvasVisual"></canvas>
+        </fieldset>
+
+        <fieldset >
+            <legend>treinamento</legend>
+
+            <label for="highOrLow">Metodo:</label>
+            <select id="highOrLow" name="highOrLow">
+                <option value="high">High</option>
+                <option value="low">Low</option>
+            </select>
+
             <label for="grid">grid para treinamento:</label>
             <input type="number" id="grid" name="grid" value="5"><br>
 
-            <button type="button" name="treinamento">treinar</button>
+            <button type="button" name="treinar">treinar</button><br>
+            <canvas id = "canvasTreinamento" name="canvasTreinamento"></canvas>
+
         </fieldset>
+
         <fieldset>
             <legend>Ver Tabela de probabilidades</legend>
+
             <label for="alvo">O tile que sera sorteado esta preenchido de amarelo:</label>
             <div id="tabela-container" name="tabela-container" ></div>
+
             <button type="button" name="tabela">mostrar Tabela
                 <button type="button" name="limpar">Limpar Tabela
             </button>

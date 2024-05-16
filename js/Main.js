@@ -21,7 +21,7 @@ assets.adicionaAudio("hurt", "assets/hurt.wav");
 let canvas = document.getElementById("canvas")
 
 let canvasMarkov = document.getElementById("canvasMarkov")
-//canvasMarkov.setAttribute("hidden", "hidden");
+canvasMarkov.setAttribute("hidden", "hidden");
 
 canvas.width = 10 * 32;
 canvas.height = 10 * 32;
@@ -48,6 +48,15 @@ let tamanhoMapa = document.entrada.tamanho.valueAsNumber;
 let grid = document.entrada.grid.valueAsNumber;
 let iteracoes = document.entrada.iteracoes.valueAsNumber;
 let newTiles = document.entrada.newTiles.value
+let metodo = document.entrada.highOrLow.value;
+
+let canvasVisual= document.getElementById("canvasVisual");
+canvasVisual.width = 0;
+canvasVisual.height = 0;
+
+let canvasTreinamento= document.getElementById("canvasTreinamento");
+canvasTreinamento.width = 0;
+canvasTreinamento.height = 0;
 
 
 let  markov = new Markov(
@@ -60,7 +69,8 @@ let  markov = new Markov(
   "treino",
   0,
   modelo,
-  newTiles
+  newTiles,
+  metodo
 );
 
 
@@ -154,7 +164,64 @@ function limparTabela() {
   document.getElementById('tabela-container').innerHTML = '';
 }
 
-// Chamando a função para criar a tabela com os dados fornecidos
+function redimensionarImagem(img , canvas , taxa)
+{
+
+  canvas.width = tamanhoMapa;
+  canvas.height = tamanhoMapa;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    const newWidth = tamanhoMapa * 32 /taxa; // Nova largura desejada
+    const newHeight = tamanhoMapa * 32/ taxa; // Nova altura desejada
+  
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    ctx.imageSmoothingEnabled = false;
+
+    ctx.putImageData(imageData, 0, 0);
+    ctx.drawImage(canvas, 0, 0, imageData.width, imageData.height, 0, 0, newWidth, newHeight);
+
+}
+
+function contornarImagem(canvas)
+{
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = "blue"
+
+  for (let l = 0; l < tamanhoMapa; l++) {
+    for (let c = 0; c < tamanhoMapa; c++) {
+    
+      ctx.strokeRect(
+        c * 32,
+        l * 32,
+        32,
+        32
+      );
+    }
+  }
+
+  ctx.strokeStyle = "red"
+  ctx.lineWidth = 2; // Largura da linha do contorno
+
+  let tamanhoGrid = tamanhoMapa / grid;
+  tamanhoGrid = Math.floor(tamanhoGrid);
+    for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+      for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+
+        ctx.strokeRect(
+          gridI * grid * 32,
+          gridJ * grid * 32,
+          32 *grid,
+          32 *grid
+        );
+      }
+  }
+}
 
 
 document.entrada.iniciar.addEventListener("click", function(event) {
@@ -170,14 +237,9 @@ document.entrada.iniciar.addEventListener("click", function(event) {
   markov.modelo = modelo;
   markov.iteracoes = 0;
 
-  cena = new CenaJogo(
-    canvas,
-    assets,
-    input,
-    markov,
-    LINHAS,
-    COLUNAS
-  );
+  cena.LINHAS = LINHAS;
+  cena.COLUNAS = COLUNAS;
+  cena.Markov = markov;
 
   game.adicionarCena("teste", cena);
   game.selecionaCena("teste");
@@ -185,29 +247,47 @@ document.entrada.iniciar.addEventListener("click", function(event) {
 });
 
 
-document.entrada.treinamento.addEventListener("click", function(event) {
+document.entrada.adicionar.addEventListener("click", function(event) {
   
   localizacao = document.entrada.localizacao.value;
   tamanhoMapa = document.entrada.tamanho.valueAsNumber;
-  grid = document.entrada.grid.valueAsNumber;
 
   assets.adicionaImagem("treino",localizacao);
   game.selecionaCena("carregando")
 
-  markov.GRID = grid;
   markov.TAMANHOIMAGEM = tamanhoMapa
-  cena = new CenaJogo(
-    canvas,
-    assets,
-    input,
-    markov,
-    LINHAS,
-    COLUNAS
-  );
+  cena.Markov = markov
 
   game.adicionarCena("teste", cena);
 
-});
+  const img = new Image();
+  img.src = localizacao;
+  img.onload = function(){
+    redimensionarImagem(img,canvasVisual ,tamanhoMapa/5);
+  }
+}
+);
+
+document.entrada.treinar.addEventListener("click", function(event) {
+
+  metodo = document.entrada.highOrLow.value;
+  grid = document.entrada.grid.valueAsNumber;
+  
+  markov.GRID = grid;
+  markov.metodo = metodo
+
+  cena.Markov = markov
+
+  game.adicionarCena("teste", cena);
+
+  let img = new Image();
+  img = assets.Img("treino");
+
+  redimensionarImagem(img,canvasTreinamento,1);
+
+  contornarImagem(canvasTreinamento);
+  
+  });
 
 document.entrada.tabela.addEventListener("click", function(event) {
 
@@ -226,7 +306,7 @@ document.entrada.limpar.addEventListener("click", function(event) {
 
 document.entrada.gerar.addEventListener("click", function(event) {
 
-  game.selecionaCena("carregando")
+  //game.selecionaCena("carregando")
 
   iteracoes = document.entrada.iteracoes.valueAsNumber;
   newTiles = document.entrada.newTiles.value
@@ -245,8 +325,6 @@ document.entrada.gerar.addEventListener("click", function(event) {
 
   cena.treinarMarkov();
   
-
-  cena.treinarMarkov();
 
   game.selecionaCena("teste");
 

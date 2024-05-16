@@ -35,6 +35,102 @@ export default class CenaJogo extends Cena {
     this.gerar()
   }
 
+  HighMarkovNewTile(z)
+  {
+    for(let k = 0;k<z;k++)
+    {
+      const oldTiles = structuredClone(this.mapa.tiles);
+      const newTiles = structuredClone(this.mapa.tiles);
+
+      let tamanhoGrid = this.markov.TAMANHOIMAGEM / this.markov.GRID;
+      tamanhoGrid = Math.floor(tamanhoGrid);
+      let separadorl = (this.LINHAS - 4) / tamanhoGrid;
+      let separadorC = (this.COLUNAS - 4) / tamanhoGrid;
+      let gi = 0;
+      for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+        for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+          for (
+            let l = gridI * separadorl + 2;
+            l < (gridI + 1) * separadorl + 2;
+            l++
+          ) {
+            for (
+              let c = gridJ * separadorC + 2;
+              c < (gridJ + 1) * separadorC + 2;
+              c++
+            ) {
+              
+              let ordem = this.markov.verificaBacktrackingHigh(
+                newTiles,
+                l,
+                c,
+                8,
+                gi
+              );
+              let proximo = this.markov.proximoHigh(
+                this.markov.getVizinho(newTiles, l, c, ordem),gi
+              );
+              if (proximo >= 0) {
+                newTiles[l][c] = proximo;
+              }
+            }
+          }
+        }
+        gi++;
+      }
+        this.mapa.tiles = newTiles;
+    }
+    return this.mapa.tiles
+  }
+
+  HighMarkovOldTile(z)
+  {
+    for(let k = 0;k<z;k++)
+    {
+      const oldTiles = structuredClone(this.mapa.tiles);
+      const newTiles = structuredClone(this.mapa.tiles);
+
+      let tamanhoGrid = this.markov.TAMANHOIMAGEM / this.markov.GRID;
+      tamanhoGrid = Math.floor(tamanhoGrid);
+      let separadorl = (this.LINHAS - 4) / tamanhoGrid;
+      let separadorC = (this.COLUNAS - 4) / tamanhoGrid;
+      let gi = 0;
+      for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+        for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+          for (
+            let l = gridI * separadorl + 2;
+            l < (gridI + 1) * separadorl + 2;
+            l++
+          ) {
+            for (
+              let c = gridJ * separadorC + 2;
+              c < (gridJ + 1) * separadorC + 2;
+              c++
+            ) {
+              console.log(l,c)
+              let ordem = this.markov.verificaBacktrackingHigh(
+                oldTiles,
+                l,
+                c,
+                8,
+                gi
+              );
+              let proximo = this.markov.proximoHigh(
+                this.markov.getVizinho(oldTiles, l, c, ordem),gi
+              );
+              if (proximo >= 0) {
+                newTiles[l][c] = proximo;
+              }
+            }
+          }
+        }
+        gi++;
+      }
+      this.mapa.tiles = newTiles;
+    }
+    return this.mapa.tiles
+  }
+
   gerar()
   {
 
@@ -45,6 +141,12 @@ export default class CenaJogo extends Cena {
     let z = this.markov.iteracoes;
     if(this.markov.newTiles == "true")
     {
+      if(this.markov.metodo =="high")
+      {
+        this.HighMarkovNewTile(z)
+      }
+      else
+      {
       for (let  k= 0; k < z; k++) {
         const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(this.mapa.tiles);
@@ -62,8 +164,15 @@ export default class CenaJogo extends Cena {
         this.mapa.tiles = newTiles;
       }
     }
+    }
     else
     {
+      if(this.markov.metodo =="high")
+      {
+        this.HighMarkovNewTile(z)
+      }
+      else
+      {
       for (let  k= 0; k < z; k++) {
         const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(this.mapa.tiles);
@@ -80,6 +189,7 @@ export default class CenaJogo extends Cena {
         }
         this.mapa.tiles = newTiles;    
       }
+    }
     }
     this.configuraMapa(mapa);
   }
