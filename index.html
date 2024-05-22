@@ -1,99 +1,136 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geracao Procedural com Cadeia de Markov</title>
-    <form name="entrada">
-        <fieldset>
-            <legend>Mapa Inicial</legend>
-            <label for="linhas">linhas:</label>
-            <input type="number" id="linhas" name="linhas" value="20">
-        
-            <label for="colunas"> colunas:</label>
-            <input type="number" id="colunas" name ="colunas"value="20">
+    <script src="js/Main.js" type="module"></script>
 
-            <label for="treino">Modelo Inicial:</label>
-            <select id="modelo" name="modelo">
-                <option value="padrao">Padrao</option>
-                <option value="xadrez">Xadrez</option>
-                <option value="aleatorio">Aleatorio</option>
-                <option value="usuario">Usuario</option>
-            </select><br>
-            <button type="button" name="iniciar">Iniciar</button>
-        </fieldset>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 
-        
-        <fieldset>
-            <legend>Adiciona Mapa de treinamento</legend>
+    <style>
+        :root {
+            --pico-font-size: 80%;
 
-            <label for="localizacao">Mapa de treino:</label>
-            <select id="localizacao" name="localizacao">
-                <option value="assets/xadrez.bmp">xadrez</option>
-                <option value="assets/corredores.bmp">corredores</option>
-            </select><br>
+        }
+    </style>
 
-            <label for="tamanho">tamanho do mapa de treino:</label>
-            <input type="number" id="tamanho" name ="tamanho" value="5"><br>
-
-            <button type="button" name="adicionar">adicionar</button>
-
-            <canvas id = "canvasVisual" name="canvasVisual"></canvas>
-        </fieldset>
-
-        <fieldset >
-            <legend>treinamento</legend>
-
-            <label for="highOrLow">Metodo:</label>
-            <select id="highOrLow" name="highOrLow">
-                <option value="high">High</option>
-                <option value="low">Low</option>
-            </select>
-
-            <label for="grid">grid para treinamento:</label>
-            <input type="number" id="grid" name="grid" value="5"><br>
-
-            <button type="button" name="treinar">treinar</button><br>
-            <canvas id = "canvasTreinamento" name="canvasTreinamento"></canvas>
-
-        </fieldset>
-
-        <fieldset>
-            <legend>Ver Tabela de probabilidades</legend>
-
-            <label for="alvo">O tile que sera sorteado esta preenchido de amarelo:</label>
-            <div id="tabela-container" name="tabela-container" ></div>
-
-            <button type="button" name="tabela">mostrar Tabela
-                <button type="button" name="limpar">Limpar Tabela
-            </button>
-        </fieldset>
-
-        <fieldset >
-            <legend>Testar</legend>
-            <label for="iteracoes">iteracoes:</label>
-            <input type="number" id="iteracoes" name="iteracoes" value="10">
-
-            <label for="newTiles">New Tiles:</label>
-            <select id="newTiles" name="newTiles">
-                <option value="true">True</option>
-                <option value="false">False</option>
-            </select>
-            <button type="button" name="gerar">gerar</button>
-        </fieldset>
-    
-        <button type="submit">Enviar</button>
-      </form>
-    <script src = "js/Main.js" type="module"></script>
 </head>
-<body>
-    <canvas id = "canvasMarkov" name="canvasMarkov"></canvas>
-    <canvas id = "canvas" name="canvas"></canvas>
-    <p>Autor: Adriano Eiterer Oliveira<p>
-    <p>Orientador: Igor de Oliveira Knop<p></p>
 
-    <script>
-        
-    </script>
+<body>
+    <div class="grid">
+        <article>
+
+            <h2>Mapa Inicial</h2>
+            <form name="inicial">
+
+                <h4 for="linhas ">linhas:
+                    <input type="number" id="linhas" name="linhas" value="20">
+                </h4>
+                <h4 for="colunas">colunas:
+                    <input type="number" id="colunas" name="colunas" value="20">
+                </h4>
+                <h4 for="treino">Modelo Inicial:
+                    <select id="modelo" name="modelo">
+                        <option value="padrao">Padrao</option>
+                        <option value="xadrez">Xadrez</option>
+                        <option value="aleatorio">Aleatorio</option>
+                        <option value="usuario">Usuario</option>
+                    </select>
+                </h4>
+                <button type="button" name="iniciar">Iniciar</button>
+            </form>
+        </article>
+
+        <article>
+            <form name="mapaTreinamento">
+
+                <h2>Adiciona Mapa de treinamento</h2>
+
+                <h4 for="localizacao">Mapa de treino:
+                    <select id="localizacao" name="localizacao">
+                        <option value="assets/xadrez.bmp">xadrez</option>
+                        <option value="assets/corredores.bmp">corredores</option>
+                    </select>
+                </h4>
+
+                <h4 for="tamanho">tamanho do mapa de treino:
+                    <input type="number" id="tamanho" name="tamanho" value="5">
+                </h4>
+
+                <button type="button" name="adicionar">adicionar</button>
+                <canvas id="canvasVisual" name="canvasVisual"></canvas>
+
+            </form>
+        </article>
+
+        <article>
+            <form name="metodo">
+
+                <h2>treinamento</h2>
+
+                <h4 for="highOrLow">Metodo:
+                    <select id="highOrLow" name="highOrLow">
+                        <option value="high">High</option>
+                        <option value="low">Low</option>
+                    </select>
+                </h4>
+
+                <h4 for="grid">grid para treinamento:
+                    <input type="number" id="grid" name="grid" value="5">
+                </h4>
+
+                <button type="button" name="treinar">treinar</button><br>
+                <canvas id="canvasTreinamento" name="canvasTreinamento"></canvas>
+
+            </form>
+
+        </article>
+
+
+        <article>
+            <form name="teste">
+                <h2>Testar</h2>
+                <h4 for="iteracoes">iteracoes:
+                    <input type="number" id="iteracoes" name="iteracoes" value="10">
+                </h4>
+
+                <h4 for="newTiles">New Tiles:
+                    <select id="newTiles" name="newTiles">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </h4>
+                <button type="button" name="gerar">gerar</button>
+            </form>
+        </article>
+        <canvas id="canvasMarkov" name="canvasMarkov"></canvas>
+    </div>
+    <div>
+        <canvas id="canvas" name="canvas"></canvas>
+
+    </div>
+    <div>
+        <article>
+            <form name="tabelas">
+
+                <h2>Ver Tabela de probabilidades</h2>
+
+                <h4 for="alvo">O tile que sera sorteado esta preenchido de amarelo:</h4>
+                <div   id="tabela-container" name="tabela-container">
+                </div>
+
+                <button type="button" name="tabela">mostrar Tabela
+                    <button type="button" name="limpar">Limpar Tabela
+                    </button>
+            </form>
+        </article>
+        <h1>Autor: Adriano Eiterer Oliveira</h1>
+        <h1>Orientador: Igor de Oliveira Knop</h1>
+
+    </div>
+
 </body>
+
 </html>

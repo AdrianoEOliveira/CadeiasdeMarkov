@@ -213,7 +213,7 @@ export default class CenaJogo extends Cena {
     {
       return this.modeloPadrao(mapa)
     }
-    if(this.markov.modelo == "aleatoriedade")
+    if(this.markov.modelo == "aleatorio")
     {
       return this.modeloPadraoComAleatorio(mapa)
     }

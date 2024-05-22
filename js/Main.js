@@ -40,15 +40,15 @@ input.configurarTeclado({
   Escape:"TESTE"
 });
 
-let LINHAS = document.entrada.linhas.valueAsNumber;
-let COLUNAS = document.entrada.colunas.valueAsNumber
-let modelo = document.entrada.modelo.value;
-let localizacao = document.entrada.localizacao.value;
-let tamanhoMapa = document.entrada.tamanho.valueAsNumber;
-let grid = document.entrada.grid.valueAsNumber;
-let iteracoes = document.entrada.iteracoes.valueAsNumber;
-let newTiles = document.entrada.newTiles.value
-let metodo = document.entrada.highOrLow.value;
+let LINHAS = document.inicial.linhas.valueAsNumber;
+let COLUNAS = document.inicial.colunas.valueAsNumber
+let modelo = document.inicial.modelo.value;
+let localizacao = document.mapaTreinamento.localizacao.value;
+let tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
+let grid = document.metodo.grid.valueAsNumber;
+let metodo = document.metodo.highOrLow.value;
+let iteracoes = document.teste.iteracoes.valueAsNumber;
+let newTiles = document.teste.newTiles.value
 
 let canvasVisual= document.getElementById("canvasVisual");
 canvasVisual.width = 0;
@@ -118,8 +118,8 @@ function criarTabela(dados) {
         {
           //console.log(item[chave])
           var canvasTabela = document.createElement('canvas');
-          canvasTabela.width = 100;
-          canvasTabela.height = 100;
+          canvasTabela.width = 3*32;
+          canvasTabela.height = 3*32;
           var ctx = canvasTabela.getContext('2d');
           let mapaTabela = new Mapa(3, 3, 32);
           mapaTabela.tiles = item[chave];
@@ -134,22 +134,42 @@ function criarTabela(dados) {
           );
           cenaAux.configuraMapa(mapaTabela)
           mapaTabela.desenhar(ctx);
+
+          
+          const imageData = ctx.getImageData(0, 0, canvasTabela.width, canvasTabela.height);
+
+          const tempCanvas = document.createElement('canvas');
+          const tempCtx = tempCanvas.getContext('2d');
+          tempCanvas.width = imageData.width;
+          tempCanvas.height = imageData.height;
+          tempCtx.putImageData(imageData, 0, 0);
+
+          const newWidth = 50; // Nova largura desejada
+          const newHeight = 50; // Nova altura desejada
+        
+          canvasTabela.width = newWidth;
+          canvasTabela.height = newHeight;
+      
+        ctx.imageSmoothingEnabled = false; // Desabilitar suavização de imagem para preservar a nitidez
+        ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
+
           celula.appendChild(canvasTabela);
         }
         else
         {
+          /*
           var canvasTabela = document.createElement('canvas');
           canvasTabela.width = 200;
           canvasTabela.height = 100;
           var ctx = canvasTabela.getContext('2d');
-          ctx.font = "15px Arial";
           var textoNumero = item[chave].toString();
           var larguraTexto = ctx.measureText(textoNumero).width;
           var x = (canvasTabela.width - larguraTexto) / 2;
           var y = canvasTabela.height / 2;
           ctx.fillText(textoNumero, x, y);
-          celula.appendChild(canvasTabela);
-        //celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
+          //celula.appendChild(textoNumero);
+          */
+          celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
         }
     }
 });
@@ -224,11 +244,11 @@ function contornarImagem(canvas)
 }
 
 
-document.entrada.iniciar.addEventListener("click", function(event) {
+document.inicial.iniciar.addEventListener("click", function(event) {
 
-  LINHAS = document.entrada.linhas.valueAsNumber;
-  COLUNAS = document.entrada.colunas.valueAsNumber
-  modelo = document.entrada.modelo.value;
+  LINHAS = document.inicial.linhas.valueAsNumber;
+  COLUNAS = document.inicial.colunas.valueAsNumber
+  modelo = document.inicial.modelo.value;
 
   canvas.width = COLUNAS * 32;
   canvas.height = LINHAS * 32;
@@ -247,10 +267,10 @@ document.entrada.iniciar.addEventListener("click", function(event) {
 });
 
 
-document.entrada.adicionar.addEventListener("click", function(event) {
+document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
   
-  localizacao = document.entrada.localizacao.value;
-  tamanhoMapa = document.entrada.tamanho.valueAsNumber;
+  localizacao = document.mapaTreinamento.localizacao.value;
+  tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
 
   assets.adicionaImagem("treino",localizacao);
   game.selecionaCena("carregando")
@@ -268,10 +288,10 @@ document.entrada.adicionar.addEventListener("click", function(event) {
 }
 );
 
-document.entrada.treinar.addEventListener("click", function(event) {
+document.metodo.treinar.addEventListener("click", function(event) {
 
-  metodo = document.entrada.highOrLow.value;
-  grid = document.entrada.grid.valueAsNumber;
+  metodo = document.metodo.highOrLow.value;
+  grid = document.metodo.grid.valueAsNumber;
   
   markov.GRID = grid;
   markov.metodo = metodo
@@ -289,7 +309,7 @@ document.entrada.treinar.addEventListener("click", function(event) {
   
   });
 
-document.entrada.tabela.addEventListener("click", function(event) {
+document.tabelas.tabela.addEventListener("click", function(event) {
 
 
 cena.markov.zeraTabela();
@@ -298,28 +318,21 @@ criarTabela(cena.markov.getTabelaDados());
 
 });
 
-document.entrada.limpar.addEventListener("click", function(event) {
+document.tabelas.limpar.addEventListener("click", function(event) {
 
   limparTabela()
 
   });
 
-document.entrada.gerar.addEventListener("click", function(event) {
+document.teste.gerar.addEventListener("click", function(event) {
 
   //game.selecionaCena("carregando")
 
-  iteracoes = document.entrada.iteracoes.valueAsNumber;
-  newTiles = document.entrada.newTiles.value
+  iteracoes = document.teste.iteracoes.valueAsNumber;
+  newTiles = document.teste.newTiles.value
   markov.iteracoes = iteracoes;
   markov.newTiles = newTiles
-  cena = new CenaJogo(
-    canvas,
-    assets,
-    input,
-    markov,
-    LINHAS,
-    COLUNAS
-  );
+  cena.markov = markov
 
   game.adicionarCena("teste", cena);
 
