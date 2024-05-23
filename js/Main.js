@@ -302,9 +302,9 @@ document.metodo.treinar.addEventListener("click", function(event) {
   let img = new Image();
   img = assets.Img("treino");
 
-  redimensionarImagem(img,canvasTreinamento,tamanhoMapa/5);
+  redimensionarImagem(img,canvasTreinamento,tamanhoMapa/9);
 
-  contornarImagem(canvasTreinamento,tamanhoMapa/5);
+  contornarImagem(canvasTreinamento,tamanhoMapa/9);
   
   });
 
