@@ -194,8 +194,8 @@ function redimensionarImagem(img , canvas , taxa)
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-    const newWidth = tamanhoMapa * 32 /taxa; // Nova largura desejada
-    const newHeight = tamanhoMapa * 32/ taxa; // Nova altura desejada
+    const newWidth = (tamanhoMapa * 32) /taxa; // Nova largura desejada
+    const newHeight = (tamanhoMapa * 32)/ taxa; // Nova altura desejada
   
     canvas.width = newWidth;
     canvas.height = newHeight;
@@ -207,7 +207,7 @@ function redimensionarImagem(img , canvas , taxa)
 
 }
 
-function contornarImagem(canvas)
+function contornarImagem(canvas,taxa)
 {
   const ctx = canvas.getContext('2d');
   ctx.strokeStyle = "blue"
@@ -216,10 +216,10 @@ function contornarImagem(canvas)
     for (let c = 0; c < tamanhoMapa; c++) {
     
       ctx.strokeRect(
-        c * 32,
-        l * 32,
-        32,
-        32
+        (c * 32) /taxa,
+        l * 32 /taxa,
+        32 /taxa,
+        32 /taxa
       );
     }
   }
@@ -233,10 +233,10 @@ function contornarImagem(canvas)
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
 
         ctx.strokeRect(
-          gridI * grid * 32,
-          gridJ * grid * 32,
-          32 *grid,
-          32 *grid
+          gridI * grid * 32/taxa,
+          gridJ * grid * 32 /taxa,
+          32 *grid /taxa,
+          32 *grid /taxa
         );
       }
   }
@@ -302,9 +302,9 @@ document.metodo.treinar.addEventListener("click", function(event) {
   let img = new Image();
   img = assets.Img("treino");
 
-  redimensionarImagem(img,canvasTreinamento,1);
+  redimensionarImagem(img,canvasTreinamento,tamanhoMapa/5);
 
-  contornarImagem(canvasTreinamento);
+  contornarImagem(canvasTreinamento,tamanhoMapa/5);
   
   });
 
