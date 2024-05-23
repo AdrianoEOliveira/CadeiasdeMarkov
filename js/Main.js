@@ -282,7 +282,7 @@ document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
   const img = new Image();
   img.src = localizacao;
   img.onload = function(){
-    redimensionarImagem(img,canvasVisual ,tamanhoMapa/5);
+    redimensionarImagem(img,canvasVisual ,tamanhoMapa/9);
   }
 }
 );
