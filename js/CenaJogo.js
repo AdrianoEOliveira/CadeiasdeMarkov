@@ -65,7 +65,8 @@ export default class CenaJogo extends Cena {
                 l,
                 c,
                 8,
-                gi
+                gi,
+                " "
               );
               let proximo = this.markov.proximoHigh(
                 this.markov.getVizinho(newTiles, l, c, ordem),gi
@@ -113,7 +114,8 @@ export default class CenaJogo extends Cena {
                 l,
                 c,
                 8,
-                gi
+                gi,
+                " "
               );
               let proximo = this.markov.proximoHigh(
                 this.markov.getVizinho(oldTiles, l, c, ordem),gi
@@ -153,7 +155,7 @@ export default class CenaJogo extends Cena {
   
         for (let l = 2; l < this.LINHAS - 2; l++) {
           for (let c = 2; c < this.COLUNAS - 2; c++) {
-            let ordem = this.markov.verificaBacktracking(newTiles,l,c,8)
+            let ordem = this.markov.verificaBacktracking(newTiles,l,c,8," ")
             let proximo = this.markov.proximo(
               this.markov.getVizinho(newTiles,l,c,ordem));
             if (proximo >= 0) {
@@ -179,7 +181,7 @@ export default class CenaJogo extends Cena {
   
         for (let l = 2; l < this.LINHAS - 2; l++) {
           for (let c = 2; c < this.COLUNAS - 2; c++) {
-            let ordem = this.markov.verificaBacktracking(oldTiles,l,c,8)
+            let ordem = this.markov.verificaBacktracking(oldTiles,l,c,8," ")
             let proximo = this.markov.proximo(
               this.markov.getVizinho(oldTiles,l,c,ordem));
             if (proximo >= 0) {
@@ -330,9 +332,6 @@ export default class CenaJogo extends Cena {
           {
           mapa.tiles[l][c] = Parede
           }
-          
-        
-        
       }
     }
     mapa.cena = this;

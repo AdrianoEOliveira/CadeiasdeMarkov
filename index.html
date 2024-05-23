@@ -12,7 +12,6 @@
     <style>
         :root {
             --pico-font-size: 80%;
-
         }
     </style>
 
@@ -115,15 +114,17 @@
         <article>
             <form name="tabelas">
 
-                <h2>Ver Tabela de probabilidades</h2>
+                <h2>Ver Tabelas</h2>
 
-                <h4 for="alvo">O tile que sera sorteado esta preenchido de amarelo:</h4>
-                <div   id="tabela-container" name="tabela-container">
+                <h4 for="alvo">A primeira tabela possui as probabilidades geradas pelo treino:</h4>
+                <h4 for="alvo">A segunda possui possui a quantidade de vezes que foram sorteados:</h4>
+                <h4 for="alvo">A terceira possui os backtracking realizados a partir dos vizinhos em relaçao a ordem:</h4>
+                <button type="button" name="tabela">mostrar Tabela</button>
+                <button type="button" name="limpar">Limpar Tabela</button>
+                
+                <div id="tabela-container" name="tabela-container">
                 </div>
 
-                <button type="button" name="tabela">mostrar Tabela
-                    <button type="button" name="limpar">Limpar Tabela
-                    </button>
             </form>
         </article>
         <h1>Autor: Adriano Eiterer Oliveira</h1>

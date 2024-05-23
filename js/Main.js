@@ -111,7 +111,6 @@ function criarTabela(dados) {
   dados.forEach(item => {
     let linha = corpoTabela.insertRow();
     for (let chave in item) {
-      console.log(chave);
         let celula = linha.insertCell();
         // Verifica se a chave existe antes de acessá-la
         if(chave == "vizinho")
@@ -313,9 +312,14 @@ document.tabelas.tabela.addEventListener("click", function(event) {
 
 
 cena.markov.zeraTabela();
-cena.treinarMarkov();
-criarTabela(cena.markov.getTabelaDados());
-
+limparTabela()
+//cena.treinarMarkov();
+let dados = cena.markov.getTabelaDados()
+for (let i = 0 ; i< dados.length; i++)
+{
+  console.log(dados)
+  criarTabela(dados[i]);
+}
 });
 
 document.tabelas.limpar.addEventListener("click", function(event) {

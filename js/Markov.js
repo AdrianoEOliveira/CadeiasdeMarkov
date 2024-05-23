@@ -16,6 +16,13 @@ export default class Markov {
     this.metodo = metodo;
 
     this.dados = [];
+
+    this.dadosBacktracking = [];
+    this.backVezes = [];
+
+    this.escolhidos = [];
+    this.dadosEscolhidos = [];
+
     this.contagem = [];
     this.estados = [];
     this.probabilidades = [];
@@ -29,6 +36,8 @@ export default class Markov {
 
   zeraTreino()
   {
+    this.backVezes = []
+    this.escolhidos = []
     this.contagem = [];
     this.estados = [];
     this.probabilidades = [];
@@ -40,6 +49,8 @@ export default class Markov {
   zeraTabela()
   {
     this.dados = [];
+    this.dadosBacktracking = [];
+    this.dadosEscolhidos = [];
   }
 
   adicionaEstado(estado) {
@@ -57,6 +68,30 @@ export default class Markov {
   getPorcentagem()
   {
     return this.porcentagemDeUso;
+  }
+
+  adicionaVezesEscolhidos(vizinhos, alvo) {
+    const chave = vizinhos.join("");
+    if (this.escolhidos[chave] === undefined) {
+      this.escolhidos[chave] = [];
+
+      for (let i = 0; i < this.estados.length; i++) {
+        this.escolhidos[chave][this.estados[i]] = 0;
+      }
+    }
+    this.escolhidos[chave][alvo]++;
+  }
+
+  adicionaBacktracking(vizinhos, ordem) {
+    const chave = vizinhos.join("");
+    if (this.backVezes[chave] === undefined) {
+      this.backVezes[chave] = [];
+
+      for (let i = 0; i < 4; i++) {
+        this.backVezes[chave][i] = 0;
+      }
+    }
+    this.backVezes[chave][ordem-1]++;
   }
 
   soma(vizinhos, alvo) {
@@ -123,13 +158,11 @@ export default class Markov {
           vizinhos[i][j] = Bau
       }
     }
-    console.log(vizinhos)
     return vizinhos;
   }
 
-  adicionaDadosNaTabela(vizinhosTabela,probabilidades)
+  adicionaDadosNaTabela(vizinhosTabela,probabilidades,vizinho)
   {
-    console.log(vizinhosTabela)
     if(vizinhosTabela.length == 8)
     {
       let vizinhos = [[vizinhosTabela[1],vizinhosTabela[2],vizinhosTabela[3]],
@@ -143,7 +176,23 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux)
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      }
+
     }
     if(vizinhosTabela.length == 4)
     {
@@ -158,7 +207,22 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      } 
     }
     if(vizinhosTabela.length == 3)
     {
@@ -174,7 +238,23 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+         aux = {
+          vizinho:vizinhos,
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      } 
     }
     if(vizinhosTabela.length == 2)
     {
@@ -189,7 +269,22 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho] === undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      } 
     }
     if(vizinhosTabela.length == 1)
     {
@@ -204,12 +299,60 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+      if(this.escolhidos[vizinhosTabela]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      } 
     }
   }
 
+  adicionaDadosBack(vizinhosTabela,vizinho)
+  {
+    let vizinhos = [[vizinhosTabela[1],vizinhosTabela[2],vizinhosTabela[3]],
+    [vizinhosTabela[0],1000,vizinhosTabela[4]],
+    [vizinhosTabela[7],vizinhosTabela[6],vizinhosTabela[5]]];
+    vizinhos = this.converterEstado(vizinhos);
 
-  adicionaDadosNaTabelaHigh(vizinhosTabela,probabilidades)
+    if(this.metodo == "high")
+    {
+        let aux = {
+          vizinho:vizinhos,
+          Grade:vizinhosTabela[8],
+        "Ordem 4":this.backVezes[vizinho][3],
+        "Ordem 3":this.backVezes[vizinho][2],
+        "Ordem 2":this.backVezes[vizinho][1],
+        "Ordem 1":this.backVezes[vizinho][0]
+      };
+      this.dadosBacktracking.push(aux);
+    }
+    else
+    {
+            let aux = {
+          vizinho:vizinhos,
+        "Ordem 4":this.backVezes[vizinho][3],
+        "Ordem 3":this.backVezes[vizinho][2],
+        "Ordem 2":this.backVezes[vizinho][1],
+        "Ordem 1":this.backVezes[vizinho][0]
+      };
+      this.dadosBacktracking.push(aux);
+
+    }
+
+  }
+
+  adicionaDadosNaTabelaHigh(vizinhosTabela,probabilidades,vizinho)
   {
     if(vizinhosTabela.length == 9)
     {
@@ -225,7 +368,23 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux)
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+          Grade:vizinhosTabela[8],
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      }
     }
     if(vizinhosTabela.length == 5)
     {
@@ -241,8 +400,25 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+          Grade:vizinhosTabela[4],
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
     }
+  }
     if(vizinhosTabela.length == 4)
     {
       let vizinhos = [[vizinhosTabela[1],vizinhosTabela[2],-1],
@@ -258,8 +434,24 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+          Grade:vizinhosTabela[3],
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
     }
+  }
     if(vizinhosTabela.length == 3)
     {
       let vizinhos = [[-1,vizinhosTabela[1],-1],
@@ -274,8 +466,24 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+          Grade:vizinhosTabela[2],
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
     }
+  }
     if(vizinhosTabela.length == 2)
     {
       let vizinhos = [[-1,-1,-1],
@@ -290,9 +498,25 @@ export default class Markov {
       Parede:probabilidades[2],
       Bau:probabilidades[3]
     };
-      this.dados.push(aux) 
+      this.dados.push(aux);
+      if(this.escolhidos[vizinho]===undefined)
+      {
+        return;
+      }
+      else
+      {
+        let aux = {
+          vizinho:vizinhos,
+          Grade:vizinhosTabela[1],
+        Piso:this.escolhidos[vizinho]["Piso"],
+        Pedra:this.escolhidos[vizinho]["Pedra"],
+        Parede:this.escolhidos[vizinho]["Parede"],
+        Bau:this.escolhidos[vizinho]["Bau"]
+      };
+      this.dadosEscolhidos.push(aux);
+      }
     }
-  }
+}
 
   getTabelaDados()
   {
@@ -300,21 +524,29 @@ export default class Markov {
     for (const vizinho of vizinhos) 
     {
       const vizinhosTabela = this.separarPorNumerosEMaiusculas(vizinho)
-      console.log(vizinhosTabela)
       let probabilidades = []
       for (let i = 0; i < this.estados.length; i++) {
         probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
       }
       if(this.metodo == "high")
       {
-        this.adicionaDadosNaTabelaHigh(vizinhosTabela,probabilidades);
+        this.adicionaDadosNaTabelaHigh(vizinhosTabela,probabilidades,vizinho);
       }
       else
       {
-      this.adicionaDadosNaTabela(vizinhosTabela,probabilidades);
+      this.adicionaDadosNaTabela(vizinhosTabela,probabilidades,vizinho);
       }
     }
-    return this.dados;
+    vizinhos = Object.keys(this.backVezes)
+    for (const vizinho of vizinhos)
+    {
+      const vizinhosTabela = this.separarPorNumerosEMaiusculas(vizinho)
+      this.adicionaDadosBack(vizinhosTabela,vizinho);
+    }
+    console.log(this.backVezes)
+    console.log(this.dadosBacktracking);
+    console.log(this.dadosEscolhidos);
+    return [this.dados,this.dadosEscolhidos,this.dadosBacktracking];
   }
   
   getVizinho(tile,l,c,ordem)
@@ -494,7 +726,7 @@ getVizinhoHigh(tile,l,c,ordem,gi)
   }
 }
 
-verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
+verificaBacktrackingHigh(tile,l,c,ordemInicial,gi,original)
 {
   if(ordemInicial==0)
   {
@@ -514,6 +746,7 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
     if(ordemInicial==8)
     {
       proximaOrdem = 4;
+      return this.verificaBacktrackingHigh(tile,l,c,proximaOrdem,gi,indice)
     }
     if(ordemInicial==4)
     {
@@ -532,16 +765,20 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
       proximaOrdem = 0;
     }
 
-    return this.verificaBacktrackingHigh(tile,l,c,proximaOrdem,gi)//realiza backtarcking
+    return this.verificaBacktrackingHigh(tile,l,c,proximaOrdem,gi,original)//realiza backtarcking
   }
   else
   {
+    if(ordemInicial<8)
+    {
+      this.adicionaBacktracking(original,ordemInicial);
+    }
     this.porcentagemDeUso[ordemInicial.toString()]++;
     return ordemInicial;
   }
 }
 
-  verificaBacktracking(tile,l,c,ordemInicial)
+  verificaBacktracking(tile,l,c,ordemInicial,original)
   {
     if(ordemInicial==0)
     {
@@ -560,6 +797,7 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
       if(ordemInicial==8)
       {
         proximaOrdem = 4;
+        return this.verificaBacktracking(tile,l,c,proximaOrdem,indice)//realiza backtarcking
       }
       if(ordemInicial==4)
       {
@@ -578,7 +816,7 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
         proximaOrdem = 0;
       }
 
-      return this.verificaBacktracking(tile,l,c,proximaOrdem)//realiza backtarcking
+      return this.verificaBacktracking(tile,l,c,proximaOrdem,original)//realiza backtarcking
     }
     else
     {
@@ -603,6 +841,8 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
         break;
       }
     }
+
+    this.adicionaVezesEscolhidos(indice,this.estados[x])
     return x;
   }
 
@@ -623,6 +863,8 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
         break;
       }
     }
+
+    this.adicionaVezesEscolhidos(indice,this.estados[x])
     return x;
   }
 
@@ -640,6 +882,7 @@ verificaBacktrackingHigh(tile,l,c,ordemInicial,gi)
     //img.style.display = "none";
     let gi = 0
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
+    tamanhoGrid = Math.floor(tamanhoGrid)
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
         let imagemTile = [];
