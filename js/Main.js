@@ -194,8 +194,8 @@ function redimensionarImagem(img , canvas , taxa)
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-    const newWidth = (tamanhoMapa * 32) /taxa; // Nova largura desejada
-    const newHeight = (tamanhoMapa * 32)/ taxa; // Nova altura desejada
+    const newWidth = (tamanhoMapa * 20) /taxa; // Nova largura desejada
+    const newHeight = (tamanhoMapa * 20)/ taxa; // Nova altura desejada
   
     canvas.width = newWidth;
     canvas.height = newHeight;
@@ -216,10 +216,10 @@ function contornarImagem(canvas,taxa)
     for (let c = 0; c < tamanhoMapa; c++) {
     
       ctx.strokeRect(
-        (c * 32) /taxa,
-        l * 32 /taxa,
-        32 /taxa,
-        32 /taxa
+        (c * 20) /taxa,
+        l * 20 /taxa,
+        20 /taxa,
+        20 /taxa
       );
     }
   }
@@ -233,10 +233,10 @@ function contornarImagem(canvas,taxa)
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
 
         ctx.strokeRect(
-          gridI * grid * 32/taxa,
-          gridJ * grid * 32 /taxa,
-          32 *grid /taxa,
-          32 *grid /taxa
+          gridI * grid * 20/taxa,
+          gridJ * grid * 20 /taxa,
+          20 *grid /taxa,
+          20 *grid /taxa
         );
       }
   }
@@ -315,9 +315,9 @@ cena.markov.zeraTabela();
 limparTabela()
 //cena.treinarMarkov();
 let dados = cena.markov.getTabelaDados()
+console.log(dados)
 for (let i = 0 ; i< dados.length; i++)
 {
-  console.log(dados)
   criarTabela(dados[i]);
 }
 });

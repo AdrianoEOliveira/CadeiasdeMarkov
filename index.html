@@ -11,18 +11,20 @@
 
     <style>
         :root {
-            --pico-font-size: 80%;
+            --pico-font-size: 60%;
         }
     </style>
 
 </head>
 
 <body>
-    <div class="grid">
-        <article>
+    <div class ="grid">
+    <div class="">
+        <div class="grid">
+            <article>
 
-            <h2>Mapa Inicial</h2>
-            <form name="inicial">
+                <h2>Mapa Inicial</h2>
+                <form name="inicial">
 
                 <h4 for="linhas ">linhas:
                     <input type="number" id="linhas" name="linhas" value="20">
@@ -63,7 +65,8 @@
 
             </form>
         </article>
-        
+    </div>
+        <div class ="grid">
         <article>
             <form name="metodo">
 
@@ -95,10 +98,10 @@
                     <input type="number" id="iteracoes" name="iteracoes" value="10">
                 </h4>
 
-                <h4 for="newTiles">New Tiles:
+                <h4 for="iteracão Distinta">iteracão Distinta:
                     <select id="newTiles" name="newTiles">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
+                        <option value="sim">sim</option>
+                        <option value="nao">não</option>
                     </select>
                 </h4>
                 <button type="button" name="gerar">gerar</button>
@@ -106,11 +109,10 @@
         </article>
         <canvas id="canvasMarkov" name="canvasMarkov"></canvas>
     </div>
+</div>
     <div>
         <canvas id="canvas" name="canvas"></canvas>
 
-    </div>
-    <div>
         <article>
             <form name="tabelas">
 
@@ -127,10 +129,11 @@
 
             </form>
         </article>
-        <h1>Autor: Adriano Eiterer Oliveira</h1>
-        <h1>Orientador: Igor de Oliveira Knop</h1>
 
     </div>
+    </div>
+    <h1>Autor: Adriano Eiterer Oliveira</h1>
+    <h1>Orientador: Igor de Oliveira Knop</h1>
 
 </body>
 
