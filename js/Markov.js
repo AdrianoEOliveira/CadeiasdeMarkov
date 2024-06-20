@@ -29,6 +29,8 @@ export default class Markov {
 
     this.dados = [];
 
+    this.tiles =[];
+
     this.dadosBacktracking = [];
     this.backVezes = [];
 

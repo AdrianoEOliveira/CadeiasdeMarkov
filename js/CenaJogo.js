@@ -295,30 +295,7 @@ export default class CenaJogo extends Cena {
   }
 
   modeloPadraoComAleatorio(mapa) {
-    for (let l = 0; l < this.LINHAS; l++) {
-      mapa.tiles[l] = [];
-      for (let c = 0; c < this.COLUNAS; c++) {
-        //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
-        mapa.tiles[l][c] = Piso;
-      }
-    }
-    for (let l = 0; l < this.LINHAS; l++) {
-      for (let c = 0; c < this.COLUNAS; c++) {
-        if (l == 1 || l == this.LINHAS - 2 || c == 1 || c == this.COLUNAS - 2) {
-          mapa.tiles[l][c] = Parede;
-          continue;
-        }
-
-        if (l == 0 || l == this.LINHAS - 1 || c == 0 || c == this.COLUNAS - 1) {
-          mapa.tiles[l][c] = Pedra;
-          continue;
-        }
-
-        if (Math.random() < 0.1) {
-          mapa.tiles[l][c] = Parede;
-        }
-      }
-    }
+    mapa.tiles = this.markov.tiles;
     mapa.cena = this;
   }
   treinarMarkov() {

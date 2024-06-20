@@ -8,6 +8,11 @@ import CenaJogo from "./CenaJogo.js";
 import CenaFim from "./CenaFim.js";
 import Markov from "./Markov.js";
 
+const Piso = 0;
+const Pedra = 1;
+const Parede = 2;
+const Bau =3;
+
 
 const assets = new AssetManager(new Mixer(10));
 assets.adicionaImagem("humano", "assets/humano.png");
@@ -89,6 +94,36 @@ game.adicionarCena("fim", fim);
 
 
 game.iniciar();
+
+function aleatorioMapa(markov,LINHAS,COLUNAS) {
+
+  markov.tiles = [];
+  for (let l = 0; l < LINHAS; l++) {
+    markov.tiles[l] = [];
+    for (let c = 0; c < COLUNAS; c++) {
+      //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+      markov.tiles[l][c] = Piso;
+    }
+  }
+  for (let l = 0; l < LINHAS; l++) {
+    for (let c = 0; c < COLUNAS; c++) {
+      if (l == 1 || l == LINHAS - 2 || c == 1 || c == COLUNAS - 2) {
+        markov.tiles[l][c] = Parede;
+        continue;
+      }
+
+      if (l == 0 || l == LINHAS - 1 || c == 0 || c == COLUNAS - 1) {
+        markov.tiles[l][c] = Pedra;
+        continue;
+      }
+
+      if (Math.random() < 0.1) {
+        markov.tiles[l][c] = Parede;
+      }
+    }
+  }
+  console.log(markov.tiles)
+}
 
 // Dados da tabela (exemplo)
 
@@ -248,6 +283,10 @@ document.inicial.iniciar.addEventListener("click", function(event) {
   LINHAS = document.inicial.linhas.valueAsNumber;
   COLUNAS = document.inicial.colunas.valueAsNumber
   modelo = document.inicial.modelo.value;
+  if(modelo=="aleatorio")
+  {
+    aleatorioMapa(markov,LINHAS,COLUNAS)
+  }
 
   canvas.width = COLUNAS * 32;
   canvas.height = LINHAS * 32;
