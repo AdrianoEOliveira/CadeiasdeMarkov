@@ -11,7 +11,7 @@
 
     <style>
         :root {
-            --pico-font-size: 50%;
+            --pico-font-size: 55%;
         }
     </style>
 
@@ -25,13 +25,14 @@
 
                 <h2>Mapa Inicial</h2>
                 <form name="inicial">
-
+                <div class="grid">
                 <h4 for="linhas ">linhas:
                     <input type="number" id="linhas" name="linhas" value="20">
                 </h4>
                 <h4 for="colunas">colunas:
                     <input type="number" id="colunas" name="colunas" value="20">
                 </h4>
+                
                 <h4 for="treino">Modelo Inicial:
                     <select id="modelo" name="modelo">
                         <option value="padrao">Padrao</option>
@@ -40,6 +41,7 @@
                         <option value="usuario">Usuario</option>
                     </select>
                 </h4>
+            </div>
                 <button type="button" name="iniciar">Iniciar</button>
             </form>
         </article>
@@ -73,6 +75,8 @@
 
                 <h2>treinamento</h2>
 
+                <div class="grid">
+
                 <h4 for="highOrLow">Metodo:
                     <select id="highOrLow" name="highOrLow">
                         <option value="high">High</option>
@@ -83,6 +87,7 @@
                 <h4 for="grid">grid para treinamento:
                     <input type="number" id="grid" name="grid" value="5">
                 </h4>
+                </div>
 
                 <button type="button" name="treinar">treinar</button><br>
                 <canvas id="canvasTreinamento" name="canvasTreinamento"></canvas>
@@ -95,6 +100,8 @@
         <article>
             <form name="teste">
                 <h2>Testar</h2>
+
+                <div class="grid">
                 <h4 for="iteracoes">iteracoes:
                     <input type="number" id="iteracoes" name="iteracoes" value="10">
                 </h4>
@@ -105,6 +112,7 @@
                         <option value="nao">não</option>
                     </select>
                 </h4>
+                </div>
                 <button type="button" name="gerar">gerar</button>
             </form>
         </article>

@@ -313,7 +313,6 @@ document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
   assets.adicionaImagem("treino",localizacao);
   game.selecionaCena("carregando")
 
-  markov.TAMANHOIMAGEM = tamanhoMapa
   cena.Markov = markov
 
   game.adicionarCena("teste", cena);
@@ -322,6 +321,7 @@ document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
   img.src = localizacao;
   img.onload = function(){
     tamanhoMapa =  img.naturalWidth;
+    markov.TAMANHOIMAGEM = tamanhoMapa
     redimensionarImagem(img,canvasVisual ,tamanhoMapa/9);
   }
 }
