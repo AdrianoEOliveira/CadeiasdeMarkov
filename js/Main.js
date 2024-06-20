@@ -49,7 +49,7 @@ let LINHAS = document.inicial.linhas.valueAsNumber;
 let COLUNAS = document.inicial.colunas.valueAsNumber
 let modelo = document.inicial.modelo.value;
 let localizacao = document.mapaTreinamento.localizacao.value;
-let tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
+let tamanhoMapa = 0;
 let grid = document.metodo.grid.valueAsNumber;
 let metodo = document.metodo.highOrLow.value;
 let iteracoes = document.teste.iteracoes.valueAsNumber;
@@ -308,7 +308,7 @@ document.inicial.iniciar.addEventListener("click", function(event) {
 document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
   
   localizacao = document.mapaTreinamento.localizacao.value;
-  tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
+  //tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
 
   assets.adicionaImagem("treino",localizacao);
   game.selecionaCena("carregando")
@@ -321,6 +321,7 @@ document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
   const img = new Image();
   img.src = localizacao;
   img.onload = function(){
+    tamanhoMapa =  img.naturalWidth;
     redimensionarImagem(img,canvasVisual ,tamanhoMapa/9);
   }
 }
