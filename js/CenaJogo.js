@@ -191,6 +191,16 @@ export default class CenaJogo extends Cena {
     let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
     this.iniciaMapa(mapa);
     this.mapa = mapa;
+    mapa.tiles[0][1] = Pedra;
+    mapa.tiles[0][this.COLUNAS-2] = Pedra;
+    mapa.tiles[1][0] = Pedra;
+    mapa.tiles[1][this.COLUNAS-1] = Pedra;
+
+    mapa.tiles[this.LINHAS-1][1] = Pedra;
+    mapa.tiles[this.LINHAS-2][0] = Pedra;
+    mapa.tiles[this.LINHAS-1][this.COLUNAS-2] = Pedra;
+    mapa.tiles[this.LINHAS-2][this.COLUNAS-1] = Pedra;
+    mapa.cena = this
 
     let z = this.markov.iteracoes;
     if(z>0)
@@ -291,6 +301,7 @@ export default class CenaJogo extends Cena {
         }
       }
     }
+
     mapa.cena = this;
   }
 
