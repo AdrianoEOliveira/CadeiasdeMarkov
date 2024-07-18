@@ -669,6 +669,7 @@ export default class Markov {
       this.porcentagemDeUso[ordemInicial.toString()]++;
       return 8;
     }
+
     let anteriores = this.getVizinho(tile, l, c, ordemInicial);
     let indice = [];
     for (let i = 0; i < anteriores.length; i++) {

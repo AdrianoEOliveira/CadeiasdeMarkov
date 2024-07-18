@@ -8,14 +8,14 @@ export default class CenaCarregando extends Cena {
     this.ctx.fillStyle = "yellow";
     this.ctx.textAlign = "center";
     this.ctx.fillText(
-      `Carregamento ${this.assets?.progresso()}`,
+      `carregando assets ${this.assets?.progresso()}`,
       this.canvas.width / 2,
       this.canvas.height / 2
     );
     if (this.assets.acabou()) {
 
       this.ctx.fillText(
-        "Aperte esc para iniciar",
+        "",
         this.canvas.width / 2,
         this.canvas.height / 2 + 80
       );
