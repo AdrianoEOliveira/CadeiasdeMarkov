@@ -401,5 +401,3 @@ document.teste.gerar.addEventListener("click", function(event) {
 
 });
 
-
-

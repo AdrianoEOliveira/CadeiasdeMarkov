@@ -500,9 +500,10 @@ export default class Markov {
       for (let i = 0; i < this.estados.length; i++) {
         probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
       }
-      if (this.metodo == "high") {
+      if (this.metodo == "high" || this.metodo == "highComCantos" ) {
         this.adicionaDadosNaTabelaHigh(vizinhosTabela, probabilidades, vizinho);
       } else {
+
         this.adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho);
       }
     }
@@ -881,6 +882,7 @@ export default class Markov {
   }
 
   treino() {
+
     this.iniciaPorcentagem([8, 4, 3, 2, 1, 0]);
 
     for (let i = 0; i < this.estados.length; i++) {
@@ -895,7 +897,7 @@ export default class Markov {
 
     //img.style.display = "none";
     let posicao;
-    if(this.metodo =="highComDiagonal")
+    if(this.metodo =="highComCantos")
     {
       posicao = this.treinoHighMarkovGrids();
     }
@@ -958,12 +960,10 @@ export default class Markov {
           }
           gi++;
         } else {
-          if (this.metodo == "highComDiagonal") {
+          if (this.metodo == "highComCantos") {
             for (let l = 1; l < this.GRID - 1; l++) {
               for (let c = 1; c < this.GRID - 1; c++) {
-
                 let gri = posicao[gridJ][gridJ]
-
                 let vizinhos = this.getVizinhoHigh(imagemTile, l, c, 8, gri);
                 let atual = imagemTile[l][c];
                 this.soma(vizinhos, atual);
