@@ -8,6 +8,9 @@ export default class Mapa {
     this.tiles = [];
   }
   desenhar(ctx) {
+
+    ctx.save()
+    ctx.scale(this.cena.zoomValue, this.cena.zoomValue)
     let img = new Image();
     img = this.cena.assets.Img("terreno"); // 0
     let pedra = new Image()
@@ -65,5 +68,6 @@ export default class Mapa {
         }
       }
     }
+    ctx.restore()
   }
 }

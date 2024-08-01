@@ -35,6 +35,12 @@ export default class CenaJogo extends Cena {
     this.gerar()
   }
 
+  zoom(value)
+  {
+    this.zoomValue = value
+
+  }
+
   lowMarkov(z) {
     if (this.markov.newTiles == "sim") {
       for (let k = 0; k < z; k++) 
@@ -548,4 +554,5 @@ export default class CenaJogo extends Cena {
     this.iniciaConfiguracao();
     this.markov.treino();
   }
+
 }

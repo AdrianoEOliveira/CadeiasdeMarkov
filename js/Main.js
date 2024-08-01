@@ -95,6 +95,19 @@ game.adicionarCena("fim", fim);
 
 game.iniciar();
 
+let zoomSlider = document.getElementById("zoom");
+let zoomOutput = document.getElementById("zoomValue");
+//slider.hidden = true;
+//zz.hidden = true;
+zoomOutput.innerHTML = zoomSlider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+zoomSlider.oninput = function() {
+  zoomOutput.innerHTML = this.value;
+  console.log(zoomSlider.value)
+  cena.zoom(zoomSlider.value/100)
+}
+
 function aleatorioMapa(markov,LINHAS,COLUNAS) {
 
   markov.tiles = [];
@@ -387,5 +400,6 @@ document.teste.gerar.addEventListener("click", function(event) {
 
 
 });
+
 
 

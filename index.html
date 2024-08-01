@@ -123,15 +123,35 @@
         </article>
         <canvas id="canvasMarkov" name="canvasMarkov"></canvas>
     </div>
-</div>
-    <div>
-        <canvas id="canvas" name="canvas"></canvas>
+    <div class="grid">
 
         <article>
+            <div class="slidecontainer">
+
+                <h4> canvas zoom </h4>
+                <input type="range" min="20" max="100" value="100" class="slider" id="zoom">
+
+                <h4  id="zoomValue" >Value: <span ></span></h4>
+              <div class="slidecontainer">
+                <h4 id = "gridiescrito" hidden = "True"> grid i para cantos da diagonal </h4>
+                <input type="range" min="1" max="100" value="50" class="slider" id="gridi"  hidden = "True">
+                
+                <h4 id="gridivalue" hidden = "True">Value: <span></span></h4>
+              </div>
+              <div class="slidecontainer">
+                <h4 id = "gridjescrito" hidden = "True"> grid j para cantos da diagonal </h4>
+                <input type="range" min="1" max="100" value="50" class="slider" id="gridj"  hidden = "True">
+                
+                <h4 id="gridjvalue" hidden = "True" >Value: <span ></span></h4>
+              </div>
+     
+        </article>
+     
+        <article>
             <form name="tabelas">
-
+     
                 <h2>Ver Tabelas</h2>
-
+     
                 <h4 for="alvo">A primeira tabela possui as probabilidades geradas pelo treino:</h4>
                 <h4 for="alvo">A segunda possui possui a quantidade de vezes que foram sorteados:</h4>
                 <h4 for="alvo">A terceira possui os backtracking realizados a partir dos vizinhos em relaçao a ordem:</h4>
@@ -140,15 +160,23 @@
                 
                 <div id="tabela-container" name="tabela-container">
                 </div>
-
+     
             </form>
         </article>
-
-    </div>
-    </div>
-    <h1>Autor: Adriano Eiterer Oliveira</h1>
-    <h1>Orientador: Igor de Oliveira Knop</h1>
-
-</body>
-
-</html>
+        </div>
+     
+     </div>
+     
+        <div>
+     
+            <canvas id="canvas" name="canvas"></canvas>
+     
+        </div>
+        </div>
+        <h1>Autor: Adriano Eiterer Oliveira</h1>
+        <h1>Orientador: Igor de Oliveira Knop</h1>
+     
+     </body>
+     
+     </html>
+     

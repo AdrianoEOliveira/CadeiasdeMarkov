@@ -15,6 +15,8 @@ export default class Cena {
     this.markov = markov;
     this.LINHAS = linhas;
     this.COLUNAS = colunas;
+
+    this.zoomValue = 1;
     //this.preparar();
   }
   desenhar() {
