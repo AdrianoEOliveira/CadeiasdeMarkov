@@ -42,6 +42,8 @@ export default class Markov {
     this.probabilidades = [];
     this.probabilidadesGlobal = [];
     this.porcentagemDeUso = [];
+
+    this.porcentagem = 0.20;
     this.totalGlobal = 0;
     this.assets = assets;
     this.canvas = canvas;
@@ -803,6 +805,81 @@ export default class Markov {
     return x;
   }
 
+  treinoHighMarkovGrids()
+  {
+
+    let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
+    tamanhoGrid = Math.floor(tamanhoGrid);
+
+    let canto = Math.floor(tamanhoGrid * this.porcentagem);
+
+    let gi = []
+    for (let i = 0; i < tamanhoGrid; i++) {
+      gi[i] = []; // Inicializa a linha
+      
+      for (let j = 0; j < tamanhoGrid; j++) {
+
+        gi[i][j] = "Meio"
+
+      }
+    }
+
+       // Canto superior esquerdo (diagonal principal)
+    for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+          gi[i][j] = "Superior esquerdo";
+      }
+  }
+  
+  // Canto superior direito (diagonal secundária)
+  for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+          gi[i][tamanhoGrid - canto + j] = "Superior direito";
+      }
+  }
+
+  // Canto inferior esquerdo (diagonal principal)
+  for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+          gi[tamanhoGrid - canto + i][j] = "Inferior esquerdo";
+      }
+  }
+
+  // Canto inferior direito (diagonal secundária)
+  for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+          gi[tamanhoGrid - canto + i][tamanhoGrid - canto + j] = "Inferior direito";
+      }
+  }
+
+
+  for (let i = 0; i < canto; i++) {
+    for (let j = canto; j < tamanhoGrid - canto; j++) {
+      gi[i][j] = "Cima";
+    }
+  }
+
+  for (let i = canto; i < tamanhoGrid - canto; i++) {
+    for (let j = 0; j < canto; j++) {
+      gi[i][j] = "Direita";
+    }
+  }
+
+  for (let i = tamanhoGrid - canto; i < tamanhoGrid; i++) {
+    for (let j = canto; j < tamanhoGrid - canto; j++) {
+       gi[i][j] = "Baixo";
+      }
+    }
+    for (let i = canto; i < tamanhoGrid - canto; i++) {
+      for (let j = tamanhoGrid - canto; j < tamanhoGrid; j++) {
+         gi[i][j] = "Esquerda";
+        }
+      }
+
+      return gi;
+
+  }
+
   treino() {
     this.iniciaPorcentagem([8, 4, 3, 2, 1, 0]);
 
@@ -811,8 +888,17 @@ export default class Markov {
     }
     let img = new Image();
     img = this.assets.Img(this.IMAGEM);
+    this.canvas.width = img.width;
+    this.canvas.height = img.height;
+
     this.ctx.drawImage(img, 0, 0);
+
     //img.style.display = "none";
+    let posicao;
+    if(this.metodo =="highComDiagonal")
+    {
+      posicao = this.treinoHighMarkovGrids();
+    }
     let gi = 0;
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
     tamanhoGrid = Math.floor(tamanhoGrid);
@@ -854,6 +940,7 @@ export default class Markov {
         if (this.metodo == "high") {
           for (let l = 1; l < this.GRID - 1; l++) {
             for (let c = 1; c < this.GRID - 1; c++) {
+
               let vizinhos = this.getVizinhoHigh(imagemTile, l, c, 8, gi);
               let atual = imagemTile[l][c];
               this.soma(vizinhos, atual);
@@ -871,6 +958,29 @@ export default class Markov {
           }
           gi++;
         } else {
+          if (this.metodo == "highComDiagonal") {
+            for (let l = 1; l < this.GRID - 1; l++) {
+              for (let c = 1; c < this.GRID - 1; c++) {
+
+                let gri = posicao[gridJ][gridJ]
+
+                let vizinhos = this.getVizinhoHigh(imagemTile, l, c, 8, gri);
+                let atual = imagemTile[l][c];
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 4, gri);
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 3, gri);
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 2, gri);
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 1, gri);
+                this.soma(vizinhos, atual);
+                this.totalGlobal++;
+                this.probabilidadesGlobal[atual]++;
+              }
+            }
+          }
+          else {
           for (let l = 1; l < this.GRID - 1; l++) {
             for (let c = 1; c < this.GRID - 1; c++) {
               let vizinhos = this.getVizinho(imagemTile, l, c, 8);
@@ -888,6 +998,7 @@ export default class Markov {
               this.probabilidadesGlobal[atual]++;
             }
           }
+        }
         }
       }
     }
