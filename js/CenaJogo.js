@@ -7,7 +7,7 @@ import Sprite from "./Sprite.js";
 const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
-const Bau =3;
+const Bau = 3;
 
 export default class CenaJogo extends Cena {
   quandoColidir(a, b) {
@@ -31,20 +31,18 @@ export default class CenaJogo extends Cena {
 
   preparar() {
     super.preparar();
-    
+
     this.gerar()
   }
 
-  zoom(value)
-  {
+  zoom(value) {
     this.zoomValue = value
 
   }
 
   lowMarkov(z) {
     if (this.markov.newTiles == "sim") {
-      for (let k = 0; k < z; k++) 
-      {
+      for (let k = 0; k < z; k++) {
         const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(this.mapa.tiles);
 
@@ -67,7 +65,7 @@ export default class CenaJogo extends Cena {
         }
         this.mapa.tiles = newTiles;
       }
-    } 
+    }
     else {
       for (let k = 0; k < z; k++) {
         const oldTiles = structuredClone(this.mapa.tiles);
@@ -98,6 +96,7 @@ export default class CenaJogo extends Cena {
 
   highMarkov(z) {
     if (this.markov.newTiles == "sim") {
+
       for (let k = 0; k < z; k++) {
         //const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(this.mapa.tiles);
@@ -106,91 +105,280 @@ export default class CenaJogo extends Cena {
         tamanhoGrid = Math.floor(tamanhoGrid);
         let separadorl = Math.floor((this.LINHAS - 4) / tamanhoGrid);
         let separadorC = Math.floor((this.COLUNAS - 4) / tamanhoGrid);
-        let gi = 0;
+        let gi = -1;
+
         for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
-          for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) 
-          {
-            for (
-              let l = gridI * separadorl + 2;
-              l < (gridI + 1) * separadorl + 2;
-              l++
-            ) {
+          for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+            gi++;
+            if (gridI == tamanhoGrid - 1 && gridJ < tamanhoGrid - 1) {
               for (
-                let c = gridJ * separadorC + 2;
-                c < (gridJ + 1) * separadorC + 2;
-                c++
+                let l = gridI * separadorl + 2;
+                l < this.LINHAS - 2;
+                l++
               ) {
-                let ordem = this.markov.verificaBacktrackingHigh(
-                  newTiles,
-                  l,
-                  c,
-                  8,
-                  gi,
-                  " "
-                );
-                console.log(l,c,gi)
-                let proximo = this.markov.proximoHigh(
-                  this.markov.getVizinho(newTiles, l, c, ordem,
-                  ),gi
-                );
-                if (proximo >= 0) {
-                  newTiles[l][c] = proximo;
+                for (
+                  let c = gridJ * separadorC + 2;
+                  c < (gridJ + 1) * separadorC + 2;
+                  c++
+                ) {
+                  let ordem = this.markov.verificaBacktrackingHigh(
+                    newTiles,
+                    l,
+                    c,
+                    8,
+                    gi,
+                    " "
+                  );
+                  let proximo = this.markov.proximoHigh(
+                    this.markov.getVizinho(newTiles, l, c, ordem,
+                    ), gi
+                  );
+                  if (proximo >= 0) {
+                    newTiles[l][c] = proximo;
+                  }
                 }
               }
             }
-            gi++;
+            else {
+
+              if (gridJ == tamanhoGrid - 1 && gridI < tamanhoGrid - 1) {
+                for (
+                  let l = gridI * separadorl + 2;
+                  l < (gridI + 1) * separadorl + 2;
+                  l++
+                ) {
+                  for (
+                    let c = gridJ * separadorC + 2;
+                    c < this.COLUNAS - 2;
+                    c++
+                  ) {
+                    let ordem = this.markov.verificaBacktrackingHigh(
+                      newTiles,
+                      l,
+                      c,
+                      8,
+                      gi,
+                      " "
+                    );
+                    let proximo = this.markov.proximoHigh(
+                      this.markov.getVizinho(newTiles, l, c, ordem,
+                      ), gi
+                    );
+                    if (proximo >= 0) {
+                      newTiles[l][c] = proximo;
+                    }
+                  }
+                }
+              }
+              else {
+
+                if (gridJ == tamanhoGrid - 1 && gridI == tamanhoGrid - 1) {
+                  for (
+                    let l = gridI * separadorl + 2;
+                    l < (gridI + 1) * separadorl + 2;
+                    l++
+                  ) {
+                    for (
+                      let c = gridJ * separadorC + 2;
+                      c < this.COLUNAS - 2;
+                      c++
+                    ) {
+                      let ordem = this.markov.verificaBacktrackingHigh(
+                        newTiles,
+                        l,
+                        c,
+                        8,
+                        gi,
+                        " "
+                      );
+                      let proximo = this.markov.proximoHigh(
+                        this.markov.getVizinho(newTiles, l, c, ordem,
+                        ), gi
+                      );
+                      if (proximo >= 0) {
+                        newTiles[l][c] = proximo;
+                      }
+                    }
+                  }
+                }
+                else {
+                  for (
+                    let l = gridI * separadorl + 2;
+                    l < (gridI + 1) * separadorl + 2;
+                    l++
+                  ) {
+                    for (
+                      let c = gridJ * separadorC + 2;
+                      c < (gridJ + 1) * separadorC + 2;
+                      c++
+                    ) {
+                      let ordem = this.markov.verificaBacktrackingHigh(
+                        newTiles,
+                        l,
+                        c,
+                        8,
+                        gi,
+                        " "
+                      );
+                      let proximo = this.markov.proximoHigh(
+                        this.markov.getVizinho(newTiles, l, c, ordem,
+                        ), gi
+                      );
+                      if (proximo >= 0) {
+                        newTiles[l][c] = proximo;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            this.mapa.tiles = newTiles;
           }
         }
-        this.mapa.tiles = newTiles;
       }
-    } 
-    else 
-    {
+    }
+    else {
       for (let k = 0; k < z; k++) {
         const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(this.mapa.tiles);
 
         let tamanhoGrid = this.markov.TAMANHOIMAGEM / this.markov.GRID;
         tamanhoGrid = Math.floor(tamanhoGrid);
-        let separadorl = (this.LINHAS - 4) / tamanhoGrid;
-        let separadorC = (this.COLUNAS - 4) / tamanhoGrid;
-        let gi = 0;
+        let separadorl = Math.floor((this.LINHAS - 4) / tamanhoGrid);
+        let separadorC = Math.floor((this.COLUNAS - 4) / tamanhoGrid);
+        let gi = -1;
+
         for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
           for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
-            for (
-              let l = gridI * separadorl + 2;
-              l < (gridI + 1) * separadorl + 2;
-              l++
-            ) {
+            gi++;
+            if (gridI == tamanhoGrid - 1 && gridJ < tamanhoGrid - 1) {
               for (
-                let c = gridJ * separadorC + 2;
-                c < (gridJ + 1) * separadorC + 2;
-                c++
+                let l = gridI * separadorl + 2;
+                l < this.LINHAS - 2;
+                l++
               ) {
-                let ordem = this.markov.verificaBacktrackingHigh(
-                  oldTiles,
-                  l,
-                  c,
-                  8,
-                  gi,
-                  " "
-                );
-                let proximo = this.markov.proximoHigh(
-                  this.markov.getVizinho(oldTiles, l, c, ordem),
-                  gi
-                );
-                if (proximo >= 0) {
-                  newTiles[l][c] = proximo;
+                for (
+                  let c = gridJ * separadorC + 2;
+                  c < (gridJ + 1) * separadorC + 2;
+                  c++
+                ) {
+                  let ordem = this.markov.verificaBacktrackingHigh(
+                    oldTiles,
+                    l,
+                    c,
+                    8,
+                    gi,
+                    " "
+                  );
+                  let proximo = this.markov.proximoHigh(
+                    this.markov.getVizinho(oldTiles, l, c, ordem),
+                    gi
+                  );
+                  if (proximo >= 0) {
+                    newTiles[l][c] = proximo;
+                  }
                 }
               }
             }
+            else {
+
+              if (gridJ == tamanhoGrid - 1 && gridI < tamanhoGrid - 1) {
+                for (
+                  let l = gridI * separadorl + 2;
+                  l < (gridI + 1) * separadorl + 2;
+                  l++
+                ) {
+                  for (
+                    let c = gridJ * separadorC + 2;
+                    c < this.COLUNAS - 2;
+                    c++
+                  ) {
+                    let ordem = this.markov.verificaBacktrackingHigh(
+                      oldTiles,
+                      l,
+                      c,
+                      8,
+                      gi,
+                      " "
+                    );
+                    let proximo = this.markov.proximoHigh(
+                      this.markov.getVizinho(oldTiles, l, c, ordem),
+                      gi
+                    );
+                    if (proximo >= 0) {
+                      newTiles[l][c] = proximo;
+                    }
+                  }
+                }
+              }
+              else {
+
+                if (gridJ == tamanhoGrid - 1 && gridI == tamanhoGrid - 1) {
+                  for (
+                    let l = gridI * separadorl + 2;
+                    l < (gridI + 1) * separadorl + 2;
+                    l++
+                  ) {
+                    for (
+                      let c = gridJ * separadorC + 2;
+                      c < this.COLUNAS - 2;
+                      c++
+                    ) {
+                      let ordem = this.markov.verificaBacktrackingHigh(
+                        oldTiles,
+                        l,
+                        c,
+                        8,
+                        gi,
+                        " "
+                      );
+                      let proximo = this.markov.proximoHigh(
+                        this.markov.getVizinho(oldTiles, l, c, ordem),
+                        gi
+                      );
+                      if (proximo >= 0) {
+                        newTiles[l][c] = proximo;
+                      }
+                    }
+                  }
+                }
+                else {
+                  for (
+                    let l = gridI * separadorl + 2;
+                    l < (gridI + 1) * separadorl + 2;
+                    l++
+                  ) {
+                    for (
+                      let c = gridJ * separadorC + 2;
+                      c < (gridJ + 1) * separadorC + 2;
+                      c++
+                    ) {
+                      let ordem = this.markov.verificaBacktrackingHigh(
+                        oldTiles,
+                        l,
+                        c,
+                        8,
+                        gi,
+                        " "
+                      );
+                      let proximo = this.markov.proximoHigh(
+                        this.markov.getVizinho(oldTiles, l, c, ordem),
+                        gi
+                      );
+                      if (proximo >= 0) {
+                        newTiles[l][c] = proximo;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            this.mapa.tiles = newTiles;
           }
-          gi++;
         }
-        this.mapa.tiles = newTiles;
       }
     }
-    
+
     return this.mapa.tiles;
   }
 
@@ -199,24 +387,23 @@ export default class CenaJogo extends Cena {
     this.iniciaMapa(mapa);
     this.mapa = mapa;
     mapa.tiles[0][1] = Pedra;
-    mapa.tiles[0][this.COLUNAS-2] = Pedra;
+    mapa.tiles[0][this.COLUNAS - 2] = Pedra;
     mapa.tiles[1][0] = Pedra;
-    mapa.tiles[1][this.COLUNAS-1] = Pedra;
+    mapa.tiles[1][this.COLUNAS - 1] = Pedra;
 
-    mapa.tiles[this.LINHAS-1][1] = Pedra;
-    mapa.tiles[this.LINHAS-2][0] = Pedra;
-    mapa.tiles[this.LINHAS-1][this.COLUNAS-2] = Pedra;
-    mapa.tiles[this.LINHAS-2][this.COLUNAS-1] = Pedra;
+    mapa.tiles[this.LINHAS - 1][1] = Pedra;
+    mapa.tiles[this.LINHAS - 2][0] = Pedra;
+    mapa.tiles[this.LINHAS - 1][this.COLUNAS - 2] = Pedra;
+    mapa.tiles[this.LINHAS - 2][this.COLUNAS - 1] = Pedra;
     mapa.cena = this
 
     let z = this.markov.iteracoes;
-    if(z>0)
-    {
-    if (this.markov.metodo == "high") {
-      mapa.tiles = this.highMarkov(z);
-    } else {
-      mapa.tiles = this.lowMarkov(z);
-    }
+    if (z > 0) {
+      if (this.markov.metodo == "high") {
+        mapa.tiles = this.highMarkov(z);
+      } else {
+        mapa.tiles = this.lowMarkov(z);
+      }
     }
     this.configuraMapa(mapa);
   }
@@ -390,9 +577,9 @@ export default class CenaJogo extends Cena {
       mapa.tiles[i][this.COLUNAS - 1 - i] = Parede;
     }
     mapa.tiles[0][0] = Pedra;
-    mapa.tiles[0][this.COLUNAS-1] = Pedra;
-    mapa.tiles[this.LINHAS-1][0] = Pedra;
-    mapa.tiles[this.LINHAS-1][this.COLUNAS-1] = Pedra;
+    mapa.tiles[0][this.COLUNAS - 1] = Pedra;
+    mapa.tiles[this.LINHAS - 1][0] = Pedra;
+    mapa.tiles[this.LINHAS - 1][this.COLUNAS - 1] = Pedra;
 
     mapa.cena = this;
   }
@@ -427,9 +614,9 @@ export default class CenaJogo extends Cena {
       }
     }
     mapa.tiles[0][0] = Pedra;
-    mapa.tiles[0][this.COLUNAS-1] = Pedra;
-    mapa.tiles[this.LINHAS-1][0] = Pedra;
-    mapa.tiles[this.LINHAS-1][this.COLUNAS-1] = Pedra;
+    mapa.tiles[0][this.COLUNAS - 1] = Pedra;
+    mapa.tiles[this.LINHAS - 1][0] = Pedra;
+    mapa.tiles[this.LINHAS - 1][this.COLUNAS - 1] = Pedra;
 
     mapa.cena = this;
   }
@@ -443,8 +630,8 @@ export default class CenaJogo extends Cena {
       }
     }
 
-    let x = Math.floor(this.LINHAS/2);
-    let y = Math.floor(this.COLUNAS/2)
+    let x = Math.floor(this.LINHAS / 2);
+    let y = Math.floor(this.COLUNAS / 2)
 
     for (let l = 0; l < this.LINHAS; l++) {
       for (let c = 0; c < this.COLUNAS; c++) {
@@ -457,7 +644,7 @@ export default class CenaJogo extends Cena {
           mapa.tiles[l][c] = Pedra;
           continue;
         } else {
-          if((l >= 1 && c >=1) && (l ==x || y==c))
+          if ((l >= 1 && c >= 1) && (l == x || y == c))
             mapa.tiles[l][c] = Parede
 
         }
@@ -478,7 +665,7 @@ export default class CenaJogo extends Cena {
 
     let x = [Math.floor(this.LINHAS / 4), Math.floor(this.LINHAS / 2), Math.floor((3 * this.LINHAS) / 4)];
     let y = [Math.floor(this.COLUNAS / 4), Math.floor(this.COLUNAS / 2), Math.floor((3 * this.COLUNAS) / 4)];
-  
+
 
     for (let l = 0; l < this.LINHAS; l++) {
       for (let c = 0; c < this.COLUNAS; c++) {
@@ -491,7 +678,7 @@ export default class CenaJogo extends Cena {
           mapa.tiles[l][c] = Pedra;
           continue;
         } else {
-          if((l >= 1 && c >=1) && (l == x[0] || l ==x[1] || l==x[2] || c == y[0] || c ==y[1] || c==y[2]))
+          if ((l >= 1 && c >= 1) && (l == x[0] || l == x[1] || l == x[2] || c == y[0] || c == y[1] || c == y[2]))
             mapa.tiles[l][c] = Parede
 
         }
@@ -512,7 +699,7 @@ export default class CenaJogo extends Cena {
     let m = this.COLUNAS
     let linhasDivisoriasHorizontais = [Math.floor(n / 8), Math.floor(n / 4), Math.floor(3 * n / 8), Math.floor(n / 2), Math.floor(5 * n / 8), Math.floor(3 * n / 4), Math.floor(7 * n / 8)];
     let colunasDivisoriasVerticais = [Math.floor(m / 8), Math.floor(m / 4), Math.floor(3 * m / 8), Math.floor(m / 2), Math.floor(5 * m / 8), Math.floor(3 * m / 4), Math.floor(7 * m / 8)];
-  
+
 
     for (let l = 0; l < this.LINHAS; l++) {
       for (let c = 0; c < this.COLUNAS; c++) {
@@ -531,13 +718,13 @@ export default class CenaJogo extends Cena {
     }
 
     for (let i of linhasDivisoriasHorizontais) {
-      for (let j = 2; j <this.COLUNAS-1; j++) {
+      for (let j = 2; j < this.COLUNAS - 1; j++) {
         mapa.tiles[i][j] = Parede;
       }
     }
-  
+
     for (let j of colunasDivisoriasVerticais) {
-      for (let i = 2; i < this.LINHAS-1; i++) {
+      for (let i = 2; i < this.LINHAS - 1; i++) {
         mapa.tiles[i][j] = Parede;
       }
     }
