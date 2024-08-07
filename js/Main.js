@@ -11,7 +11,7 @@ import Markov from "./Markov.js";
 const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
-const Bau =3;
+const Bau = 3;
 
 
 const assets = new AssetManager(new Mixer(10));
@@ -42,7 +42,7 @@ input.configurarTeclado({
   ArrowRight: "MOVE_DIREITA",
   ArrowUp: "MOVE_CIMA",
   ArrowDown: "MOVE_BAIXO",
-  Escape:"TESTE"
+  Escape: "TESTE"
 });
 
 let LINHAS = document.inicial.linhas.valueAsNumber;
@@ -55,16 +55,16 @@ let metodo = document.metodo.highOrLow.value;
 let iteracoes = document.teste.iteracoes.valueAsNumber;
 let newTiles = document.teste.newTiles.value
 
-let canvasVisual= document.getElementById("canvasVisual");
+let canvasVisual = document.getElementById("canvasVisual");
 canvasVisual.width = 0;
 canvasVisual.height = 0;
 
-let canvasTreinamento= document.getElementById("canvasTreinamento");
+let canvasTreinamento = document.getElementById("canvasTreinamento");
 canvasTreinamento.width = 0;
 canvasTreinamento.height = 0;
 
 
-let  markov = new Markov(
+let markov = new Markov(
   assets,
   canvasMarkov,
   LINHAS,
@@ -79,7 +79,7 @@ let  markov = new Markov(
 );
 
 
-let cena = new CenaJogo(canvas,assets,input,markov);
+let cena = new CenaJogo(canvas, assets, input, markov);
 
 let carregando = new CenaCarregando(canvas, assets, input, markov);
 
@@ -102,13 +102,13 @@ let zoomOutput = document.getElementById("zoomValue");
 zoomOutput.innerHTML = zoomSlider.value; // Display the default slider value
 
 // Update the current slider value (each time you drag the slider handle)
-zoomSlider.oninput = function() {
+zoomSlider.oninput = function () {
   zoomOutput.innerHTML = this.value;
   console.log(zoomSlider.value)
-  cena.zoom(zoomSlider.value/100)
+  cena.zoom(zoomSlider.value / 100)
 }
 
-function aleatorioMapa(markov,LINHAS,COLUNAS) {
+function aleatorioMapa(markov, LINHAS, COLUNAS) {
 
   markov.tiles = [];
   for (let l = 0; l < LINHAS; l++) {
@@ -149,9 +149,9 @@ function criarTabela(dados) {
 
   // Adicionando os cabeçalhos das colunas
   for (let chave in dados[0]) {
-      let th = document.createElement('th');
-      th.textContent = chave.charAt(0).toUpperCase() + chave.slice(1); // Primeira letra maiúscula
-      linhaCabecalho.appendChild(th);
+    let th = document.createElement('th');
+    th.textContent = chave.charAt(0).toUpperCase() + chave.slice(1); // Primeira letra maiúscula
+    linhaCabecalho.appendChild(th);
   }
 
   // Adicionando os dados
@@ -159,67 +159,65 @@ function criarTabela(dados) {
   dados.forEach(item => {
     let linha = corpoTabela.insertRow();
     for (let chave in item) {
-        let celula = linha.insertCell();
-        // Verifica se a chave existe antes de acessá-la
-        if(chave == "vizinho")
-        {
-          //console.log(item[chave])
-          var canvasTabela = document.createElement('canvas');
-          canvasTabela.width = 3*32;
-          canvasTabela.height = 3*32;
-          var ctx = canvasTabela.getContext('2d');
-          let mapaTabela = new Mapa(3, 3, 32);
-          mapaTabela.tiles = item[chave];
-          //console.log(mapaTabela)
-          let cenaAux = new CenaJogo(
-            canvasTabela,
-            assets,
-            input,
-            markov,
-            3,
-            3
-          );
-          cenaAux.configuraMapa(mapaTabela)
-          mapaTabela.desenhar(ctx);
+      let celula = linha.insertCell();
+      // Verifica se a chave existe antes de acessá-la
+      if (chave == "vizinho") {
+        //console.log(item[chave])
+        var canvasTabela = document.createElement('canvas');
+        canvasTabela.width = 3 * 32;
+        canvasTabela.height = 3 * 32;
+        var ctx = canvasTabela.getContext('2d');
+        let mapaTabela = new Mapa(3, 3, 32);
+        mapaTabela.tiles = item[chave];
+        //console.log(mapaTabela)
+        let cenaAux = new CenaJogo(
+          canvasTabela,
+          assets,
+          input,
+          markov,
+          3,
+          3
+        );
+        cenaAux.configuraMapa(mapaTabela)
+        mapaTabela.desenhar(ctx);
 
-          
-          const imageData = ctx.getImageData(0, 0, canvasTabela.width, canvasTabela.height);
 
-          const tempCanvas = document.createElement('canvas');
-          const tempCtx = tempCanvas.getContext('2d');
-          tempCanvas.width = imageData.width;
-          tempCanvas.height = imageData.height;
-          tempCtx.putImageData(imageData, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvasTabela.width, canvasTabela.height);
 
-          const newWidth = 50; // Nova largura desejada
-          const newHeight = 50; // Nova altura desejada
-        
-          canvasTabela.width = newWidth;
-          canvasTabela.height = newHeight;
-      
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = imageData.width;
+        tempCanvas.height = imageData.height;
+        tempCtx.putImageData(imageData, 0, 0);
+
+        const newWidth = 50; // Nova largura desejada
+        const newHeight = 50; // Nova altura desejada
+
+        canvasTabela.width = newWidth;
+        canvasTabela.height = newHeight;
+
         ctx.imageSmoothingEnabled = false; // Desabilitar suavização de imagem para preservar a nitidez
         ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
 
-          celula.appendChild(canvasTabela);
-        }
-        else
-        {
-          /*
-          var canvasTabela = document.createElement('canvas');
-          canvasTabela.width = 200;
-          canvasTabela.height = 100;
-          var ctx = canvasTabela.getContext('2d');
-          var textoNumero = item[chave].toString();
-          var larguraTexto = ctx.measureText(textoNumero).width;
-          var x = (canvasTabela.width - larguraTexto) / 2;
-          var y = canvasTabela.height / 2;
-          ctx.fillText(textoNumero, x, y);
-          //celula.appendChild(textoNumero);
-          */
-          celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
-        }
+        celula.appendChild(canvasTabela);
+      }
+      else {
+        /*
+        var canvasTabela = document.createElement('canvas');
+        canvasTabela.width = 200;
+        canvasTabela.height = 100;
+        var ctx = canvasTabela.getContext('2d');
+        var textoNumero = item[chave].toString();
+        var larguraTexto = ctx.measureText(textoNumero).width;
+        var x = (canvasTabela.width - larguraTexto) / 2;
+        var y = canvasTabela.height / 2;
+        ctx.fillText(textoNumero, x, y);
+        //celula.appendChild(textoNumero);
+        */
+        celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
+      }
     }
-});
+  });
 
   // Adicionando a tabela ao container
   document.getElementById('tabela-container').appendChild(tabela);
@@ -231,74 +229,122 @@ function limparTabela() {
   document.getElementById('tabela-container').innerHTML = '';
 }
 
-function redimensionarImagem(img , canvas , taxa)
-{
+function redimensionarImagem(img, canvas, taxa) {
 
   canvas.width = tamanhoMapa;
   canvas.height = tamanhoMapa;
 
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-    const newWidth = (tamanhoMapa * 20) /taxa; // Nova largura desejada
-    const newHeight = (tamanhoMapa * 20)/ taxa; // Nova altura desejada
-  
-    canvas.width = newWidth;
-    canvas.height = newHeight;
+  const newWidth = (tamanhoMapa * 20) / taxa; // Nova largura desejada
+  const newHeight = (tamanhoMapa * 20) / taxa; // Nova altura desejada
 
-    ctx.imageSmoothingEnabled = false;
+  canvas.width = newWidth;
+  canvas.height = newHeight;
 
-    ctx.putImageData(imageData, 0, 0);
-    ctx.drawImage(canvas, 0, 0, imageData.width, imageData.height, 0, 0, newWidth, newHeight);
+  ctx.imageSmoothingEnabled = false;
+
+  ctx.putImageData(imageData, 0, 0);
+  ctx.drawImage(canvas, 0, 0, imageData.width, imageData.height, 0, 0, newWidth, newHeight);
 
 }
 
-function contornarImagem(canvas,taxa)
-{
+function contornarImagem(canvas, taxa) {
+
   const ctx = canvas.getContext('2d');
-  ctx.strokeStyle = "blue"
+  ctx.strokeStyle = "green"
 
   for (let l = 0; l < tamanhoMapa; l++) {
     for (let c = 0; c < tamanhoMapa; c++) {
-    
+
       ctx.strokeRect(
-        (c * 20) /taxa,
-        l * 20 /taxa,
-        20 /taxa,
-        20 /taxa
+        (c * 20) / taxa,
+        l * 20 / taxa,
+        20 / taxa,
+        20 / taxa
       );
     }
   }
+  if (metodo == "highComCantos") {
+    let gi = cena.markov.treinoHighMarkovGrids()
+
+    ctx.lineWidth = 2; // Largura da linha do contorno
+
+    let tamanhoGrid = tamanhoMapa / grid;
+    tamanhoGrid = Math.floor(tamanhoGrid);
+    for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+      for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+  
+        if (gi[gridI][gridJ] == "Meio") {
+          ctx.strokeStyle = "red"
+        }
+        if (gi[gridI][gridJ] == "Superior esquerdo") {
+          ctx.strokeStyle = "blue"
+        }
+        if (gi[gridI][gridJ] == "Superior direito") {
+          ctx.strokeStyle = "blue"
+        }
+        if (gi[gridI][gridJ] == "Inferior esquerdo") {
+          ctx.strokeStyle = "blue"
+        }
+        if (gi[gridI][gridJ] == "Inferior direito") {
+          ctx.strokeStyle = "blue"
+        }
+        if (gi[gridI][gridJ] == "Cima") {
+          ctx.strokeStyle = "orange"
+        }
+        if (gi[gridI][gridJ] == "Direita") {
+          ctx.strokeStyle = "orange"
+        }
+        if (gi[gridI][gridJ] == "Baixo") {
+          ctx.strokeStyle = "orange"
+        }
+        if (gi[gridI][gridJ] == "Esquerda") {
+          ctx.strokeStyle = "orange"
+        }
+        ctx.strokeRect(
+          gridI * grid * 20 / taxa,
+          gridJ * grid * 20 / taxa,
+          20 * grid / taxa,
+          20 * grid / taxa
+        );
+      }
+    }
+
+  }
+
+  else{
 
   ctx.strokeStyle = "red"
   ctx.lineWidth = 2; // Largura da linha do contorno
 
   let tamanhoGrid = tamanhoMapa / grid;
   tamanhoGrid = Math.floor(tamanhoGrid);
-    for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
-      for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+  for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+    for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
 
-        ctx.strokeRect(
-          gridI * grid * 20/taxa,
-          gridJ * grid * 20 /taxa,
-          20 *grid /taxa,
-          20 *grid /taxa
-        );
-      }
+      ctx.strokeRect(
+        gridI * grid * 20 / taxa,
+        gridJ * grid * 20 / taxa,
+        20 * grid / taxa,
+        20 * grid / taxa
+      );
+    }
+  }
   }
 }
 
 
-document.inicial.iniciar.addEventListener("click", function(event) {
+document.inicial.iniciar.addEventListener("click", function (event) {
 
   LINHAS = document.inicial.linhas.valueAsNumber;
   COLUNAS = document.inicial.colunas.valueAsNumber
   modelo = document.inicial.modelo.value;
-  if(modelo=="aleatorio")
-  {
-    aleatorioMapa(markov,LINHAS,COLUNAS)
+  if (modelo == "aleatorio") {
+    aleatorioMapa(markov, LINHAS, COLUNAS)
   }
 
   canvas.width = COLUNAS * 32;
@@ -318,12 +364,12 @@ document.inicial.iniciar.addEventListener("click", function(event) {
 });
 
 
-document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
-  
+document.mapaTreinamento.adicionar.addEventListener("click", function (event) {
+
   localizacao = document.mapaTreinamento.localizacao.value;
   //tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
 
-  assets.adicionaImagem("treino",localizacao);
+  assets.adicionaImagem("treino", localizacao);
   game.selecionaCena("carregando")
 
   cena.Markov = markov
@@ -332,19 +378,19 @@ document.mapaTreinamento.adicionar.addEventListener("click", function(event) {
 
   const img = new Image();
   img.src = localizacao;
-  img.onload = function(){
-    tamanhoMapa =  img.naturalWidth;
+  img.onload = function () {
+    tamanhoMapa = img.naturalWidth;
     markov.TAMANHOIMAGEM = tamanhoMapa
-    redimensionarImagem(img,canvasVisual ,tamanhoMapa/9);
+    redimensionarImagem(img, canvasVisual, tamanhoMapa / 9);
   }
 }
 );
 
-document.metodo.treinar.addEventListener("click", function(event) {
+document.metodo.treinar.addEventListener("click", function (event) {
 
   metodo = document.metodo.highOrLow.value;
   grid = document.metodo.grid.valueAsNumber;
-  
+
   markov.GRID = grid;
   markov.metodo = metodo
 
@@ -355,33 +401,32 @@ document.metodo.treinar.addEventListener("click", function(event) {
   let img = new Image();
   img = assets.Img("treino");
 
-  redimensionarImagem(img,canvasTreinamento,tamanhoMapa/9);
+  redimensionarImagem(img, canvasTreinamento, tamanhoMapa / 9);
 
-  contornarImagem(canvasTreinamento,tamanhoMapa/9);
-  
-  });
+  contornarImagem(canvasTreinamento, tamanhoMapa / 9);
 
-document.tabelas.tabela.addEventListener("click", function(event) {
-
-
-cena.markov.zeraTabela();
-limparTabela()
-//cena.treinarMarkov();
-let dados = cena.markov.getTabelaDados()
-console.log(dados)
-for (let i = 0 ; i< dados.length; i++)
-{
-  criarTabela(dados[i]);
-}
 });
 
-document.tabelas.limpar.addEventListener("click", function(event) {
+document.tabelas.tabela.addEventListener("click", function (event) {
+
+
+  cena.markov.zeraTabela();
+  limparTabela()
+  //cena.treinarMarkov();
+  let dados = cena.markov.getTabelaDados()
+  console.log(dados)
+  for (let i = 0; i < dados.length; i++) {
+    criarTabela(dados[i]);
+  }
+});
+
+document.tabelas.limpar.addEventListener("click", function (event) {
 
   limparTabela()
 
-  });
+});
 
-document.teste.gerar.addEventListener("click", function(event) {
+document.teste.gerar.addEventListener("click", function (event) {
 
   //game.selecionaCena("carregando")
 
@@ -394,7 +439,7 @@ document.teste.gerar.addEventListener("click", function(event) {
   game.adicionarCena("teste", cena);
 
   cena.treinarMarkov();
-  
+
 
   game.selecionaCena("teste");
 

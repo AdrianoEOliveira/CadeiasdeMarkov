@@ -8,6 +8,7 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
+const Vazio = 100;
 
 export default class CenaJogo extends Cena {
   quandoColidir(a, b) {
@@ -168,17 +169,49 @@ export default class CenaJogo extends Cena {
 
   }
 
+  ConversaoComVazio()
+  {
+    let tiles = []
+      for (let l = 0; l < this.LINHAS+2; l++) {
+    tiles[l] = [];
+    for (let c = 0; c < this.COLUNAS+2; c++) {
+      if (l == 0 || l == this.LINHAS + 1 || c == 0 || c == this.COLUNAS + 1) {
+        tiles[l][c] = Vazio;
+      }
+        else
+        {
+      //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+      tiles[l][c] = this.mapa.tiles[l-1][c-1];
+    }}
+  }
+  return tiles
+  }
+
+  ReverterTiles(antigo)
+  {
+    let mapa = new Mapa(this.LINHAS+2, this.COLUNAS+2, 32);
+      for (let l = 1; l < this.LINHAS-1; l++) {
+    mapa.tiles[l] = [];
+    for (let c = 1; c < this.COLUNAS-1; c++) {
+      //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+      this.mapa.tiles[l-1][c-1] = antigo[l][c];
+    }}
+  return this.mapa.tiles
+  }
+
   highMarkovCantos(z)
   {
+    
+    let convertido = this.ConversaoComVazio()
 
   let gi = this.cantosGi();
     if (this.markov.newTiles == "sim") {
       for (let k = 0; k < z; k++) {
         //const oldTiles = structuredClone(this.mapa.tiles);
-        const newTiles = structuredClone(this.mapa.tiles);
+        const newTiles = structuredClone(convertido);
 
-        for (let l = 2; l < this.LINHAS - 2; l++) {
-          for (let c = 2; c < this.COLUNAS - 2; c++) {
+        for (let l = 1; l < this.LINHAS - 1; l++) {
+          for (let c = 1; c < this.COLUNAS - 1; c++) {
             let ordem = this.markov.verificaBacktrackingHigh(
               newTiles,
               l,
@@ -196,13 +229,13 @@ export default class CenaJogo extends Cena {
             }
           }
         }
-        this.mapa.tiles = newTiles;
+        convertido = newTiles;
       }
     }
     else {
       for (let k = 0; k < z; k++) {
-        const oldTiles = structuredClone(this.mapa.tiles);
-        const newTiles = structuredClone(this.mapa.tiles);
+        const oldTiles = structuredClone(convertido);
+        const newTiles = structuredClone(convertido);
 
         for (let l = 2; l < this.LINHAS - 2; l++) {
           for (let c = 2; c < this.COLUNAS - 2; c++) {
@@ -223,10 +256,11 @@ export default class CenaJogo extends Cena {
             }
           }
         }
-        this.mapa.tiles = newTiles;
+        convertido = newTiles;
       }
     }
-    return this.mapa.tiles;
+
+    return this.ReverterTiles(convertido);
   }
 
 highMarkov(z) {
@@ -520,7 +554,6 @@ highMarkov(z) {
 gerar() {
   let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
   this.iniciaMapa(mapa);
-  this.mapa = mapa;
   mapa.tiles[0][1] = Pedra;
   mapa.tiles[0][this.COLUNAS - 2] = Pedra;
   mapa.tiles[1][0] = Pedra;
@@ -530,8 +563,8 @@ gerar() {
   mapa.tiles[this.LINHAS - 2][0] = Pedra;
   mapa.tiles[this.LINHAS - 1][this.COLUNAS - 2] = Pedra;
   mapa.tiles[this.LINHAS - 2][this.COLUNAS - 1] = Pedra;
+  this.mapa = mapa;
   mapa.cena = this
-
   let z = this.markov.iteracoes;
   if (z > 0) {
     if (this.markov.metodo == "high") {

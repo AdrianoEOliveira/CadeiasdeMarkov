@@ -9,8 +9,9 @@ export default class Mapa {
   }
   desenhar(ctx) {
 
-    ctx.save()
-    ctx.scale(this.cena.zoomValue, this.cena.zoomValue)
+    this.cena.canvas.style.zoom = this.cena.zoomValue
+    //ctx.save()
+    //ctx.scale(this.cena.zoomValue, this.cena.zoomValue)
     let img = new Image();
     img = this.cena.assets.Img("terreno"); // 0
     let pedra = new Image()
@@ -43,6 +44,11 @@ export default class Mapa {
             ctx.fillStyle = 'yellow'; // Cor de preenchimento
             ctx.fillRect(l*32, c*32, 32, 32); // Desenhe o retângulo
           }
+          if(this.tiles[l][c]==100)
+            {
+              ctx.fillStyle = 'black'; // Cor de preenchimento
+              ctx.fillRect(l*32, c*32, 32, 32); // Desenhe o retângulo
+            }
           if (this.tiles[l][c] == 1) { //pedra
             ctx.drawImage(pedra, 0 , 0, 32, 32, c * 32, l * 32, 32, 32);
           }
@@ -68,6 +74,6 @@ export default class Mapa {
         }
       }
     }
-    ctx.restore()
+    //ctx.restore()
   }
 }

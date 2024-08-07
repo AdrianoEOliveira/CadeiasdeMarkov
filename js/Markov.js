@@ -2,6 +2,7 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
+const Vazio = 100;
 
 export default class Markov {
   constructor(
@@ -157,6 +158,7 @@ export default class Markov {
         if (vizinhos[i][j] == "Pedra") vizinhos[i][j] = Pedra;
         if (vizinhos[i][j] == "Parede") vizinhos[i][j] = Parede;
         if (vizinhos[i][j] == "Bau") vizinhos[i][j] = Bau;
+        if (vizinhos[i][j] == "Vazio") vizinhos[i][j] = Vazio;
       }
     }
     return vizinhos;
@@ -813,7 +815,10 @@ export default class Markov {
     tamanhoGrid = Math.floor(tamanhoGrid);
 
     let canto = Math.floor(tamanhoGrid * this.porcentagem);
-
+    if (canto==0)
+    {
+      canto = 1
+    }
     let gi = []
     for (let i = 0; i < tamanhoGrid; i++) {
       gi[i] = []; // Inicializa a linha
@@ -876,7 +881,6 @@ export default class Markov {
          gi[i][j] = "Esquerda";
         }
       }
-
       return gi;
 
   }
@@ -894,6 +898,16 @@ export default class Markov {
     this.canvas.height = img.height;
 
     this.ctx.drawImage(img, 0, 0);
+
+    let tiles = []
+    for(let i = 0; i<this.TAMANHOIMAGEM+2;i++)
+    {
+      tiles[i] = [];
+      for(let j = 0;j<this.TAMANHOIMAGEM+2;j++)
+      {
+        tiles[i][j] = "Vazio";
+      }
+    }
 
     //img.style.display = "none";
     let posicao;
@@ -922,15 +936,19 @@ export default class Markov {
             let corRgb = pixel.data;
             if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
               imagemTile[i % this.GRID][j % this.GRID] = "Pedra";
+              tiles[i+1][j+1] = "Pedra"
             } else {
               if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
                 imagemTile[i % this.GRID][j % this.GRID] = "Piso";
+                tiles[i+1][j+1] = "Piso"
               } else {
                 if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
                   imagemTile[i % this.GRID][j % this.GRID] = "Parede";
+                  tiles[i+1][j+1] = "Parede"
                 } else {
                   if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
                     imagemTile[i % this.GRID][j % this.GRID] = "Bau";
+                    tiles[i+1][j+1] = "Bau"
                   } else {
                     console.log(i, j, corRgb);
                   }
@@ -961,19 +979,28 @@ export default class Markov {
           gi++;
         } else {
           if (this.metodo == "highComCantos") {
-            for (let l = 1; l < this.GRID - 1; l++) {
-              for (let c = 1; c < this.GRID - 1; c++) {
-                let gri = posicao[gridJ][gridJ]
-                let vizinhos = this.getVizinhoHigh(imagemTile, l, c, 8, gri);
-                let atual = imagemTile[l][c];
+            for (
+              let l = gridI * this.GRID ;
+              l < gridI * this.GRID + this.GRID;
+              l++
+            ) {
+              for (
+                let c= gridJ * this.GRID;
+                c < gridJ * this.GRID + this.GRID;
+                c++
+              ) 
+              {
+                let gri = posicao[gridI][gridJ]
+                let vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 8, gri);
+                let atual = tiles[l+1][c+1];
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 4, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 4, gri);
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 3, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 3, gri);
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 2, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 2, gri);
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(imagemTile, l, c, 1, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 1, gri);
                 this.soma(vizinhos, atual);
                 this.totalGlobal++;
                 this.probabilidadesGlobal[atual]++;
