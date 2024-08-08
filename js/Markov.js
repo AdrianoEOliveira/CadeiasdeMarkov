@@ -2,7 +2,7 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
-const Vazio = 100;
+const Vazio = 10;
 
 export default class Markov {
   constructor(
@@ -30,7 +30,7 @@ export default class Markov {
 
     this.dados = [];
 
-    this.tiles =[];
+    this.tiles = [];
 
     this.dadosBacktracking = [];
     this.backVezes = [];
@@ -502,7 +502,7 @@ export default class Markov {
       for (let i = 0; i < this.estados.length; i++) {
         probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
       }
-      if (this.metodo == "high" || this.metodo == "highComCantos" ) {
+      if (this.metodo == "high" || this.metodo == "highComCantos") {
         this.adicionaDadosNaTabelaHigh(vizinhosTabela, probabilidades, vizinho);
       } else {
 
@@ -808,21 +808,19 @@ export default class Markov {
     return x;
   }
 
-  treinoHighMarkovGrids()
-  {
+  treinoHighMarkovGrids() {
 
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
     tamanhoGrid = Math.floor(tamanhoGrid);
 
     let canto = Math.floor(tamanhoGrid * this.porcentagem);
-    if (canto==0)
-    {
+    if (canto == 0) {
       canto = 1
     }
     let gi = []
     for (let i = 0; i < tamanhoGrid; i++) {
       gi[i] = []; // Inicializa a linha
-      
+
       for (let j = 0; j < tamanhoGrid; j++) {
 
         gi[i][j] = "Meio"
@@ -830,58 +828,58 @@ export default class Markov {
       }
     }
 
-       // Canto superior esquerdo (diagonal principal)
+    // Canto superior esquerdo (diagonal principal)
     for (let i = 0; i < canto; i++) {
       for (let j = 0; j < canto; j++) {
-          gi[i][j] = "Superior esquerdo";
+        gi[i][j] = "Superior esquerdo";
       }
-  }
-  
-  // Canto superior direito (diagonal secundária)
-  for (let i = 0; i < canto; i++) {
-      for (let j = 0; j < canto; j++) {
-          gi[i][tamanhoGrid - canto + j] = "Superior direito";
-      }
-  }
-
-  // Canto inferior esquerdo (diagonal principal)
-  for (let i = 0; i < canto; i++) {
-      for (let j = 0; j < canto; j++) {
-          gi[tamanhoGrid - canto + i][j] = "Inferior esquerdo";
-      }
-  }
-
-  // Canto inferior direito (diagonal secundária)
-  for (let i = 0; i < canto; i++) {
-      for (let j = 0; j < canto; j++) {
-          gi[tamanhoGrid - canto + i][tamanhoGrid - canto + j] = "Inferior direito";
-      }
-  }
-
-
-  for (let i = 0; i < canto; i++) {
-    for (let j = canto; j < tamanhoGrid - canto; j++) {
-      gi[i][j] = "Cima";
     }
-  }
 
-  for (let i = canto; i < tamanhoGrid - canto; i++) {
-    for (let j = 0; j < canto; j++) {
-      gi[i][j] = "Direita";
+    // Canto superior direito (diagonal secundária)
+    for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+        gi[i][tamanhoGrid - canto + j] = "Superior direito";
+      }
     }
-  }
 
-  for (let i = tamanhoGrid - canto; i < tamanhoGrid; i++) {
-    for (let j = canto; j < tamanhoGrid - canto; j++) {
-       gi[i][j] = "Baixo";
+    // Canto inferior esquerdo (diagonal principal)
+    for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+        gi[tamanhoGrid - canto + i][j] = "Inferior esquerdo";
+      }
+    }
+
+    // Canto inferior direito (diagonal secundária)
+    for (let i = 0; i < canto; i++) {
+      for (let j = 0; j < canto; j++) {
+        gi[tamanhoGrid - canto + i][tamanhoGrid - canto + j] = "Inferior direito";
+      }
+    }
+
+
+    for (let i = 0; i < canto; i++) {
+      for (let j = canto; j < tamanhoGrid - canto; j++) {
+        gi[i][j] = "Cima";
+      }
+    }
+
+    for (let i = canto; i < tamanhoGrid - canto; i++) {
+      for (let j = 0; j < canto; j++) {
+        gi[i][j] = "Direita";
+      }
+    }
+
+    for (let i = tamanhoGrid - canto; i < tamanhoGrid; i++) {
+      for (let j = canto; j < tamanhoGrid - canto; j++) {
+        gi[i][j] = "Baixo";
       }
     }
     for (let i = canto; i < tamanhoGrid - canto; i++) {
       for (let j = tamanhoGrid - canto; j < tamanhoGrid; j++) {
-         gi[i][j] = "Esquerda";
-        }
+        gi[i][j] = "Esquerda";
       }
-      return gi;
+    }
+    return gi;
 
   }
 
@@ -900,19 +898,40 @@ export default class Markov {
     this.ctx.drawImage(img, 0, 0);
 
     let tiles = []
-    for(let i = 0; i<this.TAMANHOIMAGEM+2;i++)
-    {
-      tiles[i] = [];
-      for(let j = 0;j<this.TAMANHOIMAGEM+2;j++)
-      {
-        tiles[i][j] = "Vazio";
+    if (this.metodo == "highComCantos") {
+      for (let i = 0; i < this.TAMANHOIMAGEM + 2; i++) {
+        tiles[i] = [];
+        for (let j = 0; j < this.TAMANHOIMAGEM + 2; j++) {
+          tiles[i][j] = "Vazio";
+          if (i > 0 && j > 0 && i < this.TAMANHOIMAGEM + 1 && j < this.TAMANHOIMAGEM + 1
+          ) {
+            let pixel = this.ctx.getImageData(j - 1, i - 1, 1, 1);
+            let corRgb = pixel.data;
+            if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
+              tiles[i][j] = "Pedra"
+            } else {
+              if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
+                tiles[i][j] = "Piso"
+              } else {
+                if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
+                  tiles[i][j] = "Parede"
+                } else {
+                  if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
+                    tiles[i][j] = "Bau"
+                  } else {
+                    console.log(i, j, corRgb);
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
 
     //img.style.display = "none";
     let posicao;
-    if(this.metodo =="highComCantos")
-    {
+    if (this.metodo == "highComCantos") {
       posicao = this.treinoHighMarkovGrids();
     }
     let gi = 0;
@@ -936,19 +955,15 @@ export default class Markov {
             let corRgb = pixel.data;
             if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
               imagemTile[i % this.GRID][j % this.GRID] = "Pedra";
-              tiles[i+1][j+1] = "Pedra"
             } else {
               if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
                 imagemTile[i % this.GRID][j % this.GRID] = "Piso";
-                tiles[i+1][j+1] = "Piso"
               } else {
                 if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
                   imagemTile[i % this.GRID][j % this.GRID] = "Parede";
-                  tiles[i+1][j+1] = "Parede"
                 } else {
                   if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
                     imagemTile[i % this.GRID][j % this.GRID] = "Bau";
-                    tiles[i+1][j+1] = "Bau"
                   } else {
                     console.log(i, j, corRgb);
                   }
@@ -980,27 +995,26 @@ export default class Markov {
         } else {
           if (this.metodo == "highComCantos") {
             for (
-              let l = gridI * this.GRID ;
+              let l = gridI * this.GRID;
               l < gridI * this.GRID + this.GRID;
               l++
             ) {
               for (
-                let c= gridJ * this.GRID;
+                let c = gridJ * this.GRID;
                 c < gridJ * this.GRID + this.GRID;
                 c++
-              ) 
-              {
+              ) {
                 let gri = posicao[gridI][gridJ]
-                let vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 8, gri);
-                let atual = tiles[l+1][c+1];
+                let vizinhos = this.getVizinhoHigh(tiles, l + 1, c + 1, 8, gri);
+                let atual = tiles[l + 1][c + 1];
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 4, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l + 1, c + 1, 4, gri);
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 3, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l + 1, c + 1, 3, gri);
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 2, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l + 1, c + 1, 2, gri);
                 this.soma(vizinhos, atual);
-                vizinhos = this.getVizinhoHigh(tiles, l+1, c+1, 1, gri);
+                vizinhos = this.getVizinhoHigh(tiles, l + 1, c + 1, 1, gri);
                 this.soma(vizinhos, atual);
                 this.totalGlobal++;
                 this.probabilidadesGlobal[atual]++;
@@ -1008,28 +1022,29 @@ export default class Markov {
             }
           }
           else {
-          for (let l = 1; l < this.GRID - 1; l++) {
-            for (let c = 1; c < this.GRID - 1; c++) {
-              let vizinhos = this.getVizinho(imagemTile, l, c, 8);
-              let atual = imagemTile[l][c];
-              this.soma(vizinhos, atual);
-              vizinhos = this.getVizinho(imagemTile, l, c, 4);
-              this.soma(vizinhos, atual);
-              vizinhos = this.getVizinho(imagemTile, l, c, 3);
-              this.soma(vizinhos, atual);
-              vizinhos = this.getVizinho(imagemTile, l, c, 2);
-              this.soma(vizinhos, atual);
-              vizinhos = this.getVizinho(imagemTile, l, c, 1);
-              this.soma(vizinhos, atual);
-              this.totalGlobal++;
-              this.probabilidadesGlobal[atual]++;
+            for (let l = 1; l < this.GRID - 1; l++) {
+              for (let c = 1; c < this.GRID - 1; c++) {
+                let vizinhos = this.getVizinho(imagemTile, l, c, 8);
+                let atual = imagemTile[l][c];
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinho(imagemTile, l, c, 4);
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinho(imagemTile, l, c, 3);
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinho(imagemTile, l, c, 2);
+                this.soma(vizinhos, atual);
+                vizinhos = this.getVizinho(imagemTile, l, c, 1);
+                this.soma(vizinhos, atual);
+                this.totalGlobal++;
+                this.probabilidadesGlobal[atual]++;
+              }
             }
           }
-        }
         }
       }
     }
     this.calculate();
+    console.log(tiles)
     console.log(this.probabilidades);
   }
 }

@@ -181,7 +181,6 @@ function criarTabela(dados) {
         cenaAux.configuraMapa(mapaTabela)
         mapaTabela.desenhar(ctx);
 
-
         const imageData = ctx.getImageData(0, 0, canvasTabela.width, canvasTabela.height);
 
         const tempCanvas = document.createElement('canvas');
@@ -214,7 +213,7 @@ function criarTabela(dados) {
         ctx.fillText(textoNumero, x, y);
         //celula.appendChild(textoNumero);
         */
-        celula.textContent = item[chave] !== undefined ? item[chave] : 'vv';
+        celula.textContent = item[chave] !== undefined ? item[chave] : 'falha';
       }
     }
   });

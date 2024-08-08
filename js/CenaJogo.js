@@ -8,7 +8,7 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
-const Vazio = 100;
+const Vazio = 10;
 
 export default class CenaJogo extends Cena {
   quandoColidir(a, b) {

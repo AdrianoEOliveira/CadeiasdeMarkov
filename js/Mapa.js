@@ -8,7 +8,6 @@ export default class Mapa {
     this.tiles = [];
   }
   desenhar(ctx) {
-
     this.cena.canvas.style.zoom = this.cena.zoomValue
     //ctx.save()
     //ctx.scale(this.cena.zoomValue, this.cena.zoomValue)
@@ -28,6 +27,8 @@ export default class Mapa {
       for (let c = 0; c < this.COLUNAS; c++) {
         if(this.tiles[l][c]>=0)
         {
+          if(this.tiles[l][c]==0)
+          {
           ctx.drawImage(
             img,
             coluna * 32,
@@ -39,15 +40,16 @@ export default class Mapa {
             32,
             32
           );
+        }
           if(this.tiles[l][c]==1000)
           {
             ctx.fillStyle = 'yellow'; // Cor de preenchimento
-            ctx.fillRect(l*32, c*32, 32, 32); // Desenhe o retângulo
+            ctx.fillRect(c*32, l*32, 32, 32); // Desenhe o retângulo
           }
-          if(this.tiles[l][c]==100)
+          if(this.tiles[l][c]==10)
             {
-              ctx.fillStyle = 'black'; // Cor de preenchimento
-              ctx.fillRect(l*32, c*32, 32, 32); // Desenhe o retângulo
+              ctx.fillStyle = 'white'; // Cor de preenchimento
+              ctx.fillRect(c*32, l*32, 32, 32); // Desenhe o retângulo
             }
           if (this.tiles[l][c] == 1) { //pedra
             ctx.drawImage(pedra, 0 , 0, 32, 32, c * 32, l * 32, 32, 32);
