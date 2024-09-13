@@ -98,8 +98,8 @@ export default class CenaJogo extends Cena {
     cantosGi() {
 
 
-    let cantoI = Math.floor(this.LINHAS * this.markov.porcentagem);
-    let cantoJ = Math.floor(this.COLUNAS * this.markov.porcentagem);
+    let cantoI = Math.floor(this.LINHAS * this.markov.corte);
+    let cantoJ = Math.floor(this.COLUNAS * this.markov.corte);
 
     let gi = []
     for (let i = 0; i < this.LINHAS; i++) {
@@ -164,7 +164,6 @@ export default class CenaJogo extends Cena {
       }
     }
 
-    console.log(gi)
     return gi;
 
   }
