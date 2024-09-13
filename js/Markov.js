@@ -44,7 +44,7 @@ export default class Markov {
     this.probabilidadesGlobal = [];
     this.porcentagemDeUso = [];
 
-    this.porcentagem = 0.20;
+    this.corte = 0.25;
     this.totalGlobal = 0;
     this.assets = assets;
     this.canvas = canvas;
@@ -76,6 +76,11 @@ export default class Markov {
     for (let i = 0; i < ordems.length; i++) {
       this.porcentagemDeUso[ordems[i].toString()] = 0;
     }
+  }
+
+  Porcentagem(value)
+  {
+    this.corte = value
   }
 
   getPorcentagem() {
@@ -813,7 +818,7 @@ export default class Markov {
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
     tamanhoGrid = Math.floor(tamanhoGrid);
 
-    let canto = Math.floor(tamanhoGrid * this.porcentagem);
+    let canto = Math.floor(tamanhoGrid * this.corte);
     if (canto == 0) {
       canto = 1
     }
@@ -865,7 +870,7 @@ export default class Markov {
 
     for (let i = canto; i < tamanhoGrid - canto; i++) {
       for (let j = 0; j < canto; j++) {
-        gi[i][j] = "Direita";
+        gi[i][j] = "Esquerda";
       }
     }
 
@@ -876,9 +881,10 @@ export default class Markov {
     }
     for (let i = canto; i < tamanhoGrid - canto; i++) {
       for (let j = tamanhoGrid - canto; j < tamanhoGrid; j++) {
-        gi[i][j] = "Esquerda";
+        gi[i][j] = "Direita";
       }
     }
+    console.log(gi)
     return gi;
 
   }

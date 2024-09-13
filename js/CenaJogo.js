@@ -36,7 +36,7 @@ export default class CenaJogo extends Cena {
     this.gerar()
   }
 
-  zoom(value) {
+  Zoom(value) {
     this.zoomValue = value
 
   }
@@ -149,7 +149,7 @@ export default class CenaJogo extends Cena {
 
     for (let i = cantoI; i < this.LINHAS - cantoI; i++) {
       for (let j = 0; j < cantoJ; j++) {
-        gi[i][j] = "Direita";
+        gi[i][j] = "Esquerda";
       }
     }
 
@@ -160,7 +160,7 @@ export default class CenaJogo extends Cena {
     }
     for (let i = cantoI; i < this.LINHAS - cantoI; i++) {
       for (let j = this.COLUNAS - cantoJ; j < this.COLUNAS; j++) {
-        gi[i][j] = "Esquerda";
+        gi[i][j] = "Direita";
       }
     }
 
@@ -189,10 +189,10 @@ export default class CenaJogo extends Cena {
 
   ReverterTiles(antigo)
   {
-    let mapa = new Mapa(this.LINHAS+2, this.COLUNAS+2, 32);
-      for (let l = 1; l < this.LINHAS-1; l++) {
+    let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
+      for (let l = 1; l < this.LINHAS+1; l++) {
     mapa.tiles[l] = [];
-    for (let c = 1; c < this.COLUNAS-1; c++) {
+    for (let c = 1; c < this.COLUNAS+1; c++) {
       //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
       this.mapa.tiles[l-1][c-1] = antigo[l][c];
     }}
@@ -205,30 +205,32 @@ export default class CenaJogo extends Cena {
     let convertido = this.ConversaoComVazio()
 
   let gi = this.cantosGi();
+  console.log(convertido)
     if (this.markov.newTiles == "sim") {
       for (let k = 0; k < z; k++) {
         //const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(convertido);
 
-        for (let l = 1; l < this.LINHAS - 1; l++) {
-          for (let c = 1; c < this.COLUNAS - 1; c++) {
+        for (let l = 1; l < this.LINHAS + 1; l++) {
+          for (let c = 1; c < this.COLUNAS +1; c++) {
             let ordem = this.markov.verificaBacktrackingHigh(
               newTiles,
               l,
               c,
               8,
-              gi[l][c],
+              gi[l-1][c-1],
               " "
             );
             let proximo = this.markov.proximoHigh(
               this.markov.getVizinho(newTiles, l, c, ordem,
-              ), gi[l][c]
+              ), gi[l-1][c-1]
             );
             if (proximo >= 0) {
               newTiles[l][c] = proximo;
             }
           }
         }
+        console.log(newTiles)
         convertido = newTiles;
       }
     }
@@ -237,19 +239,20 @@ export default class CenaJogo extends Cena {
         const oldTiles = structuredClone(convertido);
         const newTiles = structuredClone(convertido);
 
-        for (let l = 2; l < this.LINHAS - 2; l++) {
-          for (let c = 2; c < this.COLUNAS - 2; c++) {
+        for (let l = 1; l < this.LINHAS + 1; l++) {
+          for (let c = 1; c < this.COLUNAS + 1; c++) {
+            console.log(l)
             let ordem = this.markov.verificaBacktrackingHigh(
               oldTiles,
               l,
               c,
               8,
-              gi[l][c],
+              gi[l-1][c-1],
               " "
             );
             let proximo = this.markov.proximoHigh(
               this.markov.getVizinho(oldTiles, l, c, ordem,
-              ), gi[l][c]
+              ), gi[l-1][c-1]
             );
             if (proximo >= 0) {
               newTiles[l][c] = proximo;
@@ -554,6 +557,7 @@ highMarkov(z) {
 gerar() {
   let mapa = new Mapa(this.LINHAS, this.COLUNAS, 32);
   this.iniciaMapa(mapa);
+  if (this.markov.modelo != "vazio") {
   mapa.tiles[0][1] = Pedra;
   mapa.tiles[0][this.COLUNAS - 2] = Pedra;
   mapa.tiles[1][0] = Pedra;
@@ -563,6 +567,7 @@ gerar() {
   mapa.tiles[this.LINHAS - 2][0] = Pedra;
   mapa.tiles[this.LINHAS - 1][this.COLUNAS - 2] = Pedra;
   mapa.tiles[this.LINHAS - 2][this.COLUNAS - 1] = Pedra;
+  }
   this.mapa = mapa;
   mapa.cena = this
   let z = this.markov.iteracoes;
@@ -615,6 +620,9 @@ iniciaMapa(mapa) {
   if (this.markov.modelo == "padrao8partes") {
     return this.modeloDivide8partes(mapa)
   }
+  if (this.markov.modelo == "vazio") {
+    return this.modeloVazio(mapa);
+  }
   //if(this.markov.modelo == "usuario")
   //{
   //return this.modeloUsuario(mapa)
@@ -652,6 +660,17 @@ modeloXadrez(mapa) {
         }
         */
       }
+    }
+  }
+  mapa.cena = this;
+}
+
+modeloVazio(mapa) {
+  for (let l = 0; l < this.LINHAS; l++) {
+    mapa.tiles[l] = [];
+    for (let c = 0; c < this.COLUNAS; c++) {
+      //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+      mapa.tiles[l][c] =  Vazio;
     }
   }
   mapa.cena = this;

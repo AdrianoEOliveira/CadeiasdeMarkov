@@ -27,8 +27,6 @@ export default class Mapa {
       for (let c = 0; c < this.COLUNAS; c++) {
         if(this.tiles[l][c]>=0)
         {
-          if(this.tiles[l][c]==0)
-          {
           ctx.drawImage(
             img,
             coluna * 32,
@@ -38,11 +36,10 @@ export default class Mapa {
             c * 32,
             l * 32,
             32,
-            32
-          );
-        }
+            32);
           if(this.tiles[l][c]==1000)
           {
+
             ctx.fillStyle = 'yellow'; // Cor de preenchimento
             ctx.fillRect(c*32, l*32, 32, 32); // Desenhe o retângulo
           }

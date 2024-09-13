@@ -31,8 +31,8 @@ export default class Cena {
         sprite.AplicaRestrições();
       }
     }
-    this.ctx.fillStyle = "yellow";
-    this.ctx.fillText(this.assets?.progresso(), 10, 20);
+    //this.ctx.fillStyle = "yellow";
+    //this.ctx.fillText(this.assets?.progresso(), 10, 20);
   }
   adicionarSprite(sprite) {
     sprite.cena = this;
