@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <title>Geracao Procedural com Cadeia de Markov</title>
     <script src="js/Main.js" type="module"></script>
 
@@ -17,7 +18,26 @@
 
 </head>
 
-<body>
+<header class="container">
+    <nav>
+      <ul>
+        <li>
+            <h1>Escolha o tema:</h1>
+          <details class="dropdown">
+            <summary role="button" class="secondary">Tema</summary>
+            <ul>
+              <li><a href="#" data-theme-switcher="auto">Auto</a></li>
+              <li><a href="#" data-theme-switcher="light">Claro</a></li>
+              <li><a href="#" data-theme-switcher="dark">Escuro</a></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+<body class="container">
+
     <div class ="grid">
     <div class="">
         <div class="grid">
@@ -26,10 +46,10 @@
                 <h2>Mapa Inicial</h2>
                 <form name="inicial">
                 <div class="grid">
-                <h4 for="linhas ">linhas:
+                <h4 for="linhas ">Linhas:
                     <input type="number" id="linhas" name="linhas" value="20">
                 </h4>
-                <h4 for="colunas">colunas:
+                <h4 for="colunas">Colunas:
                     <input type="number" id="colunas" name="colunas" value="20">
                 </h4>
                 
@@ -37,13 +57,14 @@
                     <select id="modelo" name="modelo">
                         <option value="padrao">Padrao</option>
                         <option value="padraoPedra">Padrao Pedras</option>
-                        <option value="padrao2partes">padrao 2 partes</option>
-                        <option value="padrao4partes">padrao 4 partes</option>
-                        <option value="padrao8partes">padrao 8 partes</option>
+                        <option value="padrao2partes">Padrao 2 partes</option>
+                        <option value="padrao4partes">Padrao 4 partes</option>
+                        <option value="padrao8partes">Padrao 8 partes</option>
                         <option value="xadrez">Xadrez</option>
                         <option value="aleatorio">Aleatorio</option>
-                        <option value="X">padrao X</option>
-                        <option value="Xpedra">padrao X com pedra</option>
+                        <option value="X">Padrao X</option>
+                        <option value="vazio">Vazio</option>
+                        <option value="Xpedra">Padrao X com pedra</option>
                     </select>
                 </h4>
             </div>
@@ -54,21 +75,23 @@
         <article>
             <form name="mapaTreinamento">
 
-                <h2>Adiciona Mapa de treinamento</h2>
+                <h2>Seleção do Mapa de treinamento</h2>
 
                 <h4 for="localizacao">Mapa de treino:
                     <select id="localizacao" name="localizacao">
-                        <option value="assets/xadrez.bmp">xadrez</option>
-                        <option value="assets/xadrezcomcobertura.bmp">xadrez com cobertura</option>
-                        <option value="assets/xadrezcompletocomcobertura.bmp">xadrez maior com cobertura</option>
-                        <option value="assets/xadrezcompedras.bmp">xadrez com pedras</option>
-                        <option value="assets/corredores.bmp">corredores</option>
-                        <option value="assets/maior.bmp"> diversidade mapa grande</option>
+                        <option value="assets/xadrez.bmp">Xadrez</option>
+                        <option value="assets/xadrezcomcobertura.bmp">Xadrez com cobertura</option>
+                        <option value="assets/xadrezcompletocomcobertura.bmp">Xadrez maior com cobertura</option>
+                        <option value="assets/xadrezcompedras.bmp">Xadrez com pedras</option>
+                        <option value="assets/corredores.bmp">Corredores pequenos</option>
+                        <option value="assets/maior.bmp"> Diversidade mapa grande</option>
+                        <option value="assets/mapa10.bmp"> mapa10e</option>    
+                    </option>
                     </select>
                 </h4>
 
 
-                <button type="button" name="adicionar">adicionar</button>
+                <button type="button" name="adicionar">Selecionar</button>
                 <canvas id="canvasVisual" name="canvasVisual"></canvas>
 
             </form>
@@ -78,24 +101,29 @@
         <article>
             <form name="metodo">
 
-                <h2>treinamento</h2>
+                <h2>Escolha do Método de Treinamento</h2>
 
                 <div class="grid">
 
-                <h4 for="highOrLow">Metodo:
+                <h4 for="highOrLow">Cadeias de Markov:
                     <select id="highOrLow" name="highOrLow">
                         <option value="high">High</option>
-                        <option value="highComCantos">high Com Cantos</option>
+                        <option value="highComCantos">Hierárquica</option>
                         <option value="low">Low</option>
                     </select>
                 </h4>
 
-                <h4 for="grid">grid para treinamento:
+                <h4 for="grid">Tamanho do grid:
                     <input type="number" id="grid" name="grid" value="5">
                 </h4>
                 </div>
 
-                <button type="button" name="treinar">treinar</button><br>
+                <h4> Corte Hierárquico </h4>
+                <input type="range" min="10" max="40" value="25" class="slider" id="corte">
+
+                <h4  id="corteValue" >Value: <span ></span></h4>
+
+                <button type="button" name="treinar">Treinar</button><br>
                 <canvas id="canvasTreinamento" name="canvasTreinamento"></canvas>
 
             </form>
@@ -108,18 +136,18 @@
                 <h2>Testar</h2>
 
                 <div class="grid">
-                <h4 for="iteracoes">iteracoes:
+                <h4 for="iteracoes">Numero de Iteracoes:
                     <input type="number" id="iteracoes" name="iteracoes" value="10">
                 </h4>
 
-                <h4 for="iteracão Distinta">mesma iteracão :
+                <h4 for="iteracão Distinta">Iteracão Imediata :
                     <select id="newTiles" name="newTiles">
                         <option value="sim">sim</option>
                         <option value="nao">não</option>
                     </select>
                 </h4>
                 </div>
-                <button type="button" name="gerar">gerar</button>
+                <button type="button" name="gerar">Gerar</button>
             </form>
         </article>
         <canvas id="canvasMarkov" name="canvasMarkov"></canvas>
@@ -129,13 +157,13 @@
         <article>
             <div class="slidecontainer">
 
-                <h4> canvas zoom </h4>
-                <input type="range" min="20" max="100" value="100" class="slider" id="zoom">
+                <h4> Zoom da Cena </h4>
+                <input type="range" min="10" max="100" value="100" class="slider" id="zoom">
 
                 <h4  id="zoomValue" >Value: <span ></span></h4>
               <div class="slidecontainer">
                 <h4 id = "gridiescrito" hidden = "True"> grid i para cantos da diagonal </h4>
-                <input type="range" min="1" max="100" value="50" class="slider" id="gridi"  hidden = "True">
+                <input type="range" min="1" max="40" value="20" class="slider" id="gridi"  hidden = "True">
                 
                 <h4 id="gridivalue" hidden = "True">Value: <span></span></h4>
               </div>
@@ -151,13 +179,13 @@
         <article>
             <form name="tabelas">
      
-                <h2>Ver Tabelas</h2>
+                <h2>Gerar Tabelas</h2>
      
-                <h4 for="alvo">A primeira tabela possui as probabilidades geradas pelo treino:</h4>
-                <h4 for="alvo">A segunda possui possui a quantidade de vezes que foram sorteados:</h4>
-                <h4 for="alvo">A terceira possui os backtracking realizados a partir dos vizinhos em relaçao a ordem:</h4>
-                <button type="button" name="tabela">mostrar Tabela</button>
-                <button type="button" name="limpar">Limpar Tabela</button>
+                <h4 for="alvo">A primeira tabela exibe as probabilidades geradas pelo treino.</h4>
+                <h4 for="alvo">A segunda tabela exibe o número de vezes que cada vizinho apareceu e a frequência dos escolhidos.</h4>
+                <h4 for="alvo">A terceira tabela apresenta os backtrackings realizados com base na ordem dos vizinhos.</h4>
+                <button type="button" name="tabela">Mostrar Tabelas</button>
+                <button type="button" name="limpar">Limpar Tabelas</button>
                 
                 <div id="tabela-container" name="tabela-container">
                 </div>
