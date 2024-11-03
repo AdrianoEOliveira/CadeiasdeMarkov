@@ -6,6 +6,9 @@ import Game from "./Game.js";
 import CenaCarregando from "./CenaCarregando.js";
 import CenaJogo from "./CenaJogo.js";
 import CenaFim from "./CenaFim.js";
+import LowMarkov from "./LowMarkov.js";
+import HighMarkov from "./HighMarkov.js";
+import HierarquicoMarkov from "./HierarquicoMarkov.js";
 import Markov from "./Markov.js";
 
 const Piso = 0;
@@ -63,7 +66,6 @@ let canvasTreinamento = document.getElementById("canvasTreinamento");
 canvasTreinamento.width = 0;
 canvasTreinamento.height = 0;
 
-
 let markov = new Markov(
   assets,
   canvasMarkov,
@@ -77,6 +79,11 @@ let markov = new Markov(
   newTiles,
   metodo
 );
+
+let hierarquico = new HierarquicoMarkov(markov);
+let lowmarkov = new LowMarkov(markov);
+let highMarkov = new HighMarkov(markov);
+
 
 
 let cena = new CenaJogo(canvas, assets, input, markov);
@@ -281,7 +288,7 @@ function contornarImagem(canvas, taxa) {
     }
   }
   if (metodo == "highComCantos") {
-    let gi = cena.markov.treinoHighMarkovGrids()
+    let gi = cena.markov.treinoGrids()
 
     ctx.lineWidth = 2; // Largura da linha do contorno
 
@@ -349,6 +356,28 @@ function contornarImagem(canvas, taxa) {
   }
 }
 
+function atualizaMarkov()
+{
+  if(metodo == "high")
+  {
+    highMarkov = new HighMarkov(markov)
+    cena.markov = highMarkov
+    console.log(markov)
+    console.log(highMarkov)
+    console.log("aqui")
+  }
+  if(metodo == "low")
+  {
+    lowmarkov = new LowMarkov(markov)
+    cena.markov = lowmarkov
+  }
+  if(metodo == "highComCantos")
+  {
+    hierarquico = new HierarquicoMarkov(markov)
+    cena.markov = hierarquico;
+  }
+}
+
 
 document.inicial.iniciar.addEventListener("click", function (event) {
 
@@ -368,7 +397,7 @@ document.inicial.iniciar.addEventListener("click", function (event) {
 
   cena.LINHAS = LINHAS;
   cena.COLUNAS = COLUNAS;
-  cena.Markov = markov;
+  cena.markov = markov;
 
   game.adicionarCena("teste", cena);
   game.selecionaCena("teste");
@@ -384,7 +413,7 @@ document.mapaTreinamento.adicionar.addEventListener("click", function (event) {
   assets.adicionaImagem("treino", localizacao);
   game.selecionaCena("carregando")
 
-  cena.Markov = markov
+  atualizaMarkov()
 
   game.adicionarCena("teste", cena);
 
@@ -405,8 +434,7 @@ document.metodo.treinar.addEventListener("click", function (event) {
 
   markov.GRID = grid;
   markov.metodo = metodo
-
-  cena.Markov = markov
+  atualizaMarkov()
 
   game.adicionarCena("teste", cena);
 
@@ -446,7 +474,8 @@ document.teste.gerar.addEventListener("click", function (event) {
   newTiles = document.teste.newTiles.value
   markov.iteracoes = iteracoes;
   markov.newTiles = newTiles
-  cena.markov = markov
+  atualizaMarkov();
+  console.log(cena)
 
   game.adicionarCena("teste", cena);
 

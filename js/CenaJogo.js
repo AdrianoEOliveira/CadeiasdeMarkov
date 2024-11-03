@@ -212,7 +212,7 @@ export default class CenaJogo extends Cena {
 
         for (let l = 1; l < this.LINHAS + 1; l++) {
           for (let c = 1; c < this.COLUNAS +1; c++) {
-            let ordem = this.markov.verificaBacktrackingHigh(
+            let ordem = this.markov.verificaBacktracking(
               newTiles,
               l,
               c,
@@ -220,7 +220,7 @@ export default class CenaJogo extends Cena {
               gi[l-1][c-1],
               " "
             );
-            let proximo = this.markov.proximoHigh(
+            let proximo = this.markov.proximo(
               this.markov.getVizinho(newTiles, l, c, ordem,
               ), gi[l-1][c-1]
             );
@@ -241,7 +241,7 @@ export default class CenaJogo extends Cena {
         for (let l = 1; l < this.LINHAS + 1; l++) {
           for (let c = 1; c < this.COLUNAS + 1; c++) {
             console.log(l)
-            let ordem = this.markov.verificaBacktrackingHigh(
+            let ordem = this.markov.verificaBacktracking(
               oldTiles,
               l,
               c,
@@ -249,7 +249,7 @@ export default class CenaJogo extends Cena {
               gi[l-1][c-1],
               " "
             );
-            let proximo = this.markov.proximoHigh(
+            let proximo = this.markov.proximo(
               this.markov.getVizinho(oldTiles, l, c, ordem,
               ), gi[l-1][c-1]
             );
@@ -292,7 +292,7 @@ highMarkov(z) {
                 c < (gridJ + 1) * separadorC + 2;
                 c++
               ) {
-                let ordem = this.markov.verificaBacktrackingHigh(
+                let ordem = this.markov.verificaBacktracking(
                   newTiles,
                   l,
                   c,
@@ -300,7 +300,7 @@ highMarkov(z) {
                   gi,
                   " "
                 );
-                let proximo = this.markov.proximoHigh(
+                let proximo = this.markov.proximo(
                   this.markov.getVizinho(newTiles, l, c, ordem,
                   ), gi
                 );
@@ -323,7 +323,7 @@ highMarkov(z) {
                   c < this.COLUNAS - 2;
                   c++
                 ) {
-                  let ordem = this.markov.verificaBacktrackingHigh(
+                  let ordem = this.markov.verificaBacktracking(
                     newTiles,
                     l,
                     c,
@@ -331,7 +331,7 @@ highMarkov(z) {
                     gi,
                     " "
                   );
-                  let proximo = this.markov.proximoHigh(
+                  let proximo = this.markov.proximo(
                     this.markov.getVizinho(newTiles, l, c, ordem,
                     ), gi
                   );
@@ -354,7 +354,7 @@ highMarkov(z) {
                     c < this.COLUNAS - 2;
                     c++
                   ) {
-                    let ordem = this.markov.verificaBacktrackingHigh(
+                    let ordem = this.markov.verificaBacktracking(
                       newTiles,
                       l,
                       c,
@@ -362,7 +362,7 @@ highMarkov(z) {
                       gi,
                       " "
                     );
-                    let proximo = this.markov.proximoHigh(
+                    let proximo = this.markov.proximo(
                       this.markov.getVizinho(newTiles, l, c, ordem,
                       ), gi
                     );
@@ -383,7 +383,7 @@ highMarkov(z) {
                     c < (gridJ + 1) * separadorC + 2;
                     c++
                   ) {
-                    let ordem = this.markov.verificaBacktrackingHigh(
+                    let ordem = this.markov.verificaBacktracking(
                       newTiles,
                       l,
                       c,
@@ -391,7 +391,7 @@ highMarkov(z) {
                       gi,
                       " "
                     );
-                    let proximo = this.markov.proximoHigh(
+                    let proximo = this.markov.proximo(
                       this.markov.getVizinho(newTiles, l, c, ordem,
                       ), gi
                     );
@@ -433,7 +433,7 @@ highMarkov(z) {
                 c < (gridJ + 1) * separadorC + 2;
                 c++
               ) {
-                let ordem = this.markov.verificaBacktrackingHigh(
+                let ordem = this.markov.verificaBacktracking(
                   oldTiles,
                   l,
                   c,
@@ -441,7 +441,7 @@ highMarkov(z) {
                   gi,
                   " "
                 );
-                let proximo = this.markov.proximoHigh(
+                let proximo = this.markov.proximo(
                   this.markov.getVizinho(oldTiles, l, c, ordem),
                   gi
                 );
@@ -472,7 +472,7 @@ highMarkov(z) {
                     gi,
                     " "
                   );
-                  let proximo = this.markov.proximoHigh(
+                  let proximo = this.markov.proximo(
                     this.markov.getVizinho(oldTiles, l, c, ordem),
                     gi
                   );
@@ -495,7 +495,7 @@ highMarkov(z) {
                     c < this.COLUNAS - 2;
                     c++
                   ) {
-                    let ordem = this.markov.verificaBacktrackingHigh(
+                    let ordem = this.markov.verificaBacktracking(
                       oldTiles,
                       l,
                       c,
@@ -503,7 +503,7 @@ highMarkov(z) {
                       gi,
                       " "
                     );
-                    let proximo = this.markov.proximoHigh(
+                    let proximo = this.markov.proximo(
                       this.markov.getVizinho(oldTiles, l, c, ordem),
                       gi
                     );
@@ -524,7 +524,7 @@ highMarkov(z) {
                     c < (gridJ + 1) * separadorC + 2;
                     c++
                   ) {
-                    let ordem = this.markov.verificaBacktrackingHigh(
+                    let ordem = this.markov.verificaBacktracking(
                       oldTiles,
                       l,
                       c,
@@ -532,7 +532,7 @@ highMarkov(z) {
                       gi,
                       " "
                     );
-                    let proximo = this.markov.proximoHigh(
+                    let proximo = this.markov.proximo(
                       this.markov.getVizinho(oldTiles, l, c, ordem),
                       gi
                     );
@@ -929,6 +929,6 @@ modeloPadraoComAleatorio(mapa) {
 treinarMarkov() {
   this.markov.zeraTreino();
   this.iniciaConfiguracao();
-  this.markov.treino();
+  this.markov.treino()
 }
 }
