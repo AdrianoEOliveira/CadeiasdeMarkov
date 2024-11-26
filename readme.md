@@ -2,6 +2,9 @@
 Uma versão online pode ser acessada [diretamente pelo navegador](https://adrianoeoliveira.github.io/CadeiasdeMarkov/)
 
 npm install -D vitest
+npm install vite --save-dev
+
+
 
 para testar digite no powershell npm run test
 
