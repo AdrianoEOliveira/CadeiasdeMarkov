@@ -176,7 +176,6 @@ export default class Markov {
     }
     let img = new Image();
     img = this.assets.Img(this.IMAGEM);
-    console.log(this)
     this.canvas.width = img.width;
     this.canvas.height = img.height;
 
@@ -207,6 +206,7 @@ export default class Markov {
         }
       }
     }
+    console.log("tiles",tiles)
     return tiles
   }
 }
