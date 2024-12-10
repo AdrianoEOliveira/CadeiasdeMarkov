@@ -356,6 +356,7 @@ export default class HighMarkov extends Markov {
         let vizinho = indice.join("");
         let x = 0;
         let limite = this.myrng();
+        console.log(limite)
         let total = 0;
         for (let i = 0; i < this.estados.length; i++) {
           total += this.getProbabilidades(vizinho, this.estados[i]);
