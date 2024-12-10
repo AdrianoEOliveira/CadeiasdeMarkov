@@ -51,6 +51,8 @@ export default class Markov {
     this.assets = assets;
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    this. myrng = new Math.seedrandom('hello.');
   }
 
   zeraTreino() {

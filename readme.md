@@ -3,6 +3,7 @@ Uma versão online pode ser acessada [diretamente pelo navegador](https://adrian
 
 npm install -D vitest
 npm install vite --save-dev
+npm install seedrandom
 
 
 

@@ -319,7 +319,7 @@ export default class LowMarkov extends Markov {
         }
         let vizinho = indice.join("");
         let x = 0;
-        let limite = Math.random();
+        let limite = myrng()
         let total = 0;
         for (let i = 0; i < this.estados.length; i++) {
             total += this.getProbabilidades(vizinho, this.estados[i]);

@@ -51,7 +51,7 @@ let markov = new Markov(
   );
 
   const img = new Image();
-  img.src = "assets/xadrez.bmp";
+  img.src = "../../assets/xadrez.bmp";
   img.onload = function () {
 
   let mapalido = markov.converterImagem()

@@ -16,6 +16,10 @@ const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
 
+var myrng = new Math.seedrandom('hello.');
+console.log(myrng());                // Always 0.9282578795792454
+console.log(myrng());                // Always 0.3752569768646784  
+
 
 const assets = new AssetManager(new Mixer(10));
 assets.adicionaImagem("humano", "assets/humano.png");
@@ -559,4 +563,6 @@ const themeSwitcher = {
 
 // Init
 themeSwitcher.init();
+
+
 
