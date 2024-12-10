@@ -9,6 +9,9 @@ describe("LowMarkov", () => {
   
     beforeEach(() => {
       const mockCanvas = document.createElement("canvas");
+      var seedrandom = require('seedrandom');
+      var rng = seedrandom('hello.');
+      console.log(rng());                  // Always 0.9282578795792454
   
       markovInstance = new Markov(
         [], // assets
@@ -21,10 +24,11 @@ describe("LowMarkov", () => {
         10, // iteracoes
         {}, // modelo
         [], // newTiles
-        "mockMethod" // metodo
+        "low" // metodo
       );
   
       lowMarkov = new LowMarkov(markovInstance);
+      lowMarkov.AdicionaSemente(rng)
     });
 
   it("deve adicionar dados na tabela corretamente", () => {

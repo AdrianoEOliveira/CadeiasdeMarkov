@@ -15,10 +15,7 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
-
-var myrng = new Math.seedrandom('hello.');
-console.log(myrng());                // Always 0.9282578795792454
-console.log(myrng());                // Always 0.3752569768646784  
+ 
 
 
 const assets = new AssetManager(new Mixer(10));
@@ -362,22 +359,23 @@ function contornarImagem(canvas, taxa) {
 
 function atualizaMarkov()
 {
+  var myrng = new Math.seedrandom('hello.');
   if(metodo == "high")
   {
     highMarkov = new HighMarkov(markov)
+    highMarkov.AdicionaSemente(myrng)
     cena.markov = highMarkov
-    console.log(markov)
-    console.log(highMarkov)
-    console.log("aqui")
   }
   if(metodo == "low")
   {
     lowmarkov = new LowMarkov(markov)
+    lowmarkov.AdicionaSemente(myrng)
     cena.markov = lowmarkov
   }
   if(metodo == "highComCantos")
   {
     hierarquico = new HierarquicoMarkov(markov)
+    hierarquico.AdicionaSemente(myrng)
     cena.markov = hierarquico;
   }
 }
