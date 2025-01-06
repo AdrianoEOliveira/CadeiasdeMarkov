@@ -46,18 +46,19 @@ export default class Markov {
     this.probabilidadesGlobal = [];
     this.porcentagemDeUso = [];
 
-    this.corte = 0.25;
+    this.corte;
     this.totalGlobal = 0;
     this.assets = assets;
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d", { willReadFrequently: true });
-    this. myrng = ""
+    this.myrng;
   }
 
   AdicionaSemente(semente)
   {
     this.myrng = semente
   }
+
 
   zeraTreino() {
     this.backVezes = [];
@@ -187,23 +188,23 @@ export default class Markov {
 
     this.ctx.drawImage(img, 0, 0);
 
-    let tiles = []
+    let tiles = [];
     for (let i = 0; i < this.TAMANHOIMAGEM; i++) {
       tiles[i] = [];
       for (let j = 0; j < this.TAMANHOIMAGEM; j++) {
         let pixel = this.ctx.getImageData(j - 1, i - 1, 1, 1);
         let corRgb = pixel.data;
         if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
-          tiles[i][j] = "Pedra"
+          tiles[i][j] = "Pedra";
         } else {
           if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
-            tiles[i][j] = "Piso"
+            tiles[i][j] = "Piso";
           } else {
             if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
-              tiles[i][j] = "Parede"
+              tiles[i][j] = "Parede";
             } else {
               if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
-                tiles[i][j] = "Bau"
+                tiles[i][j] = "Bau";
               } else {
                 console.log(i, j, corRgb);
               }
@@ -212,7 +213,8 @@ export default class Markov {
         }
       }
     }
-    console.log("tiles",tiles)
-    return tiles
+    console.log("tiles", tiles);
+    return tiles;
   }
+
 }

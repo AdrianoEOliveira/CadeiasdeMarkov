@@ -1,44 +1,45 @@
 import Markov from "./Markov.js";
 
-export default class HierarquicoMarkov extends Markov
-{
-    constructor(markovInstance) {
-        // Usa os atributos da instância de Markov passada
-        super(
-          markovInstance.assets,
-          markovInstance.canvas,
-          markovInstance.LINHAS,
-          markovInstance.COLUNAS,
-          markovInstance.GRID,
-          markovInstance.TAMANHOIMAGEM,
-          markovInstance.IMAGEM,
-          markovInstance.iteracoes,
-          markovInstance.modelo,
-          markovInstance.newTiles,
-          markovInstance.metodo
-        );
-    }
+export default class HierarquicoMarkov extends Markov {
+  constructor(markovInstance) {
+    // Usa os atributos da instância de Markov passada
+    super(markovInstance.assets,
+      markovInstance.canvas,
+      markovInstance.LINHAS,
+      markovInstance.COLUNAS,
+      markovInstance.GRID,
+      markovInstance.TAMANHOIMAGEM,
+      markovInstance.IMAGEM,
+      markovInstance.iteracoes,
+      markovInstance.modelo,
+      markovInstance.newTiles,
+      markovInstance.metodo
+    )
 
-adicionaDadosBack(vizinhosTabela, vizinho) {
+
+
+  }
+
+  adicionaDadosBack(vizinhosTabela, vizinho) {
     let vizinhos = [
-        [vizinhosTabela[1], vizinhosTabela[2], vizinhosTabela[3]],
-        [vizinhosTabela[0], 1000, vizinhosTabela[4]],
-        [vizinhosTabela[7], vizinhosTabela[6], vizinhosTabela[5]],
+      [vizinhosTabela[1], vizinhosTabela[2], vizinhosTabela[3]],
+      [vizinhosTabela[0], 1000, vizinhosTabela[4]],
+      [vizinhosTabela[7], vizinhosTabela[6], vizinhosTabela[5]],
     ];
     vizinhos = this.converterEstado(vizinhos);
 
     let aux = {
-        vizinho: vizinhos,
-        Grade: vizinhosTabela[8],
-        "Ordem 4": this.backVezes[vizinho][3],
-        "Ordem 3": this.backVezes[vizinho][2],
-        "Ordem 2": this.backVezes[vizinho][1],
-        "Ordem 1": this.backVezes[vizinho][0],
+      vizinho: vizinhos,
+      Grade: vizinhosTabela[8],
+      "Ordem 4": this.backVezes[vizinho][3],
+      "Ordem 3": this.backVezes[vizinho][2],
+      "Ordem 2": this.backVezes[vizinho][1],
+      "Ordem 1": this.backVezes[vizinho][0],
     };
     this.dadosBacktracking.push(aux);
-}
+  }
 
-adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
+  adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
     if (vizinhosTabela.length == 9) {
       let vizinhos = [
         [vizinhosTabela[1], vizinhosTabela[2], vizinhosTabela[3]],
@@ -200,8 +201,8 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
       for (let i = 0; i < this.estados.length; i++) {
         probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
       }
-    this.adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho);
-      }
+      this.adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho);
+    }
     vizinhos = Object.keys(this.backVezes);
     for (const vizinho of vizinhos) {
       const vizinhosTabela = this.separarPorNumerosEMaiusculas(vizinho);
@@ -307,14 +308,7 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
       let proximaOrdem = 0;
       if (ordemInicial == 8) {
         proximaOrdem = 4;
-        return this.verificaBacktracking(
-          tile,
-          l,
-          c,
-          proximaOrdem,
-          gi,
-          indice
-        );
+        return this.verificaBacktracking(tile, l, c, proximaOrdem, gi, indice);
       }
       if (ordemInicial == 4) {
         proximaOrdem = 3;
@@ -329,14 +323,7 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
         proximaOrdem = 0;
       }
 
-      return this.verificaBacktracking(
-        tile,
-        l,
-        c,
-        proximaOrdem,
-        gi,
-        original
-      ); //realiza backtarcking
+      return this.verificaBacktracking(tile, l, c, proximaOrdem, gi, original); //realiza backtarcking
     } else {
       if (ordemInicial < 8) {
         this.adicionaBacktracking(original, ordemInicial);
@@ -354,8 +341,8 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
     }
     let vizinho = indice.join("");
     let x = 0;
-    let limite = this.myrng()
-    console.log(limite)
+    let limite = this.myrng();
+    console.log(limite);
     let total = 0;
     for (let i = 0; i < this.estados.length; i++) {
       total += this.getProbabilidades(vizinho, this.estados[i]);
@@ -369,26 +356,20 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
     return x;
   }
 
-  
- 
-
   treinoGrids() {
-
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
     tamanhoGrid = Math.floor(tamanhoGrid);
 
     let canto = Math.floor(tamanhoGrid * this.corte);
     if (canto == 0) {
-      canto = 1
+      canto = 1;
     }
-    let gi = []
+    let gi = [];
     for (let i = 0; i < tamanhoGrid; i++) {
       gi[i] = []; // Inicializa a linha
 
       for (let j = 0; j < tamanhoGrid; j++) {
-
-        gi[i][j] = "Meio"
-
+        gi[i][j] = "Meio";
       }
     }
 
@@ -416,10 +397,10 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
     // Canto inferior direito (diagonal secundária)
     for (let i = 0; i < canto; i++) {
       for (let j = 0; j < canto; j++) {
-        gi[tamanhoGrid - canto + i][tamanhoGrid - canto + j] = "Inferior direito";
+        gi[tamanhoGrid - canto + i][tamanhoGrid - canto + j] =
+          "Inferior direito";
       }
     }
-
 
     for (let i = 0; i < canto; i++) {
       for (let j = canto; j < tamanhoGrid - canto; j++) {
@@ -443,92 +424,93 @@ adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
         gi[i][j] = "Direita";
       }
     }
-    console.log(gi)
+    console.log(gi);
     return gi;
-
   }
 
-  converterImagem()
-  {
-    let tiles = []
+  converterImagem() {
+    let tiles = [];
     for (let i = 0; i < this.TAMANHOIMAGEM + 2; i++) {
-        tiles[i] = [];
-        for (let j = 0; j < this.TAMANHOIMAGEM + 2; j++) {
-          tiles[i][j] = "Vazio";
-          if (i > 0 && j > 0 && i < this.TAMANHOIMAGEM + 1 && j < this.TAMANHOIMAGEM + 1
-          ) {
-            let pixel = this.ctx.getImageData(j - 1, i - 1, 1, 1);
-            let corRgb = pixel.data;
-            if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
-              tiles[i][j] = "Pedra"
+      tiles[i] = [];
+      for (let j = 0; j < this.TAMANHOIMAGEM + 2; j++) {
+        tiles[i][j] = "Vazio";
+        if (
+          i > 0 &&
+          j > 0 &&
+          i < this.TAMANHOIMAGEM + 1 &&
+          j < this.TAMANHOIMAGEM + 1
+        ) {
+          let pixel = this.ctx.getImageData(j - 1, i - 1, 1, 1);
+          let corRgb = pixel.data;
+          if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
+            tiles[i][j] = "Pedra";
+          } else {
+            if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
+              tiles[i][j] = "Piso";
             } else {
-              if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
-                tiles[i][j] = "Piso"
+              if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
+                tiles[i][j] = "Parede";
               } else {
-                if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
-                  tiles[i][j] = "Parede"
+                if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
+                  tiles[i][j] = "Bau";
                 } else {
-                  if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
-                    tiles[i][j] = "Bau"
-                  } else {
-                    console.log(i, j, corRgb);
-                  }
+                  console.log(i, j, corRgb);
                 }
               }
             }
           }
         }
+      }
     }
-    return tiles
-}
-  treino() {
+    return tiles;
+  }
 
+  iniciaTreino() {
+    let tiles = this.converterImagem();
+    this.treino(tiles);
+  }
+  treino(tiles) {
     this.iniciaPorcentagem([8, 4, 3, 2, 1, 0]);
 
     for (let i = 0; i < this.estados.length; i++) {
-        this.probabilidadesGlobal[this.estados[i]] = 0;
+      this.probabilidadesGlobal[this.estados[i]] = 0;
     }
 
-    let tiles = this.converterImagem();
-
-    let posicao = this.treinoGrids(); 
+    let posicao = this.treinoGrids();
     let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
     tamanhoGrid = Math.floor(tamanhoGrid);
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
-        for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
-            for (
-                let l = gridI * this.GRID;
-                l < gridI * this.GRID + this.GRID;
-                l++
-              ) {
-                for (
-                  let c = gridJ * this.GRID;
-                  c < gridJ * this.GRID + this.GRID;
-                  c++
-                ) {
-                  let gri = posicao[gridI][gridJ]
-                  console.log(tiles)
-                  let vizinhos = this.getVizinho(tiles, l + 1, c + 1, 8, gri);
-                  let atual = tiles[l + 1][c + 1];
-                  this.soma(vizinhos, atual);
-                  vizinhos = this.getVizinho(tiles, l + 1, c + 1, 4, gri);
-                  this.soma(vizinhos, atual);
-                  vizinhos = this.getVizinho(tiles, l + 1, c + 1, 3, gri);
-                  this.soma(vizinhos, atual);
-                  vizinhos = this.getVizinho(tiles, l + 1, c + 1, 2, gri);
-                  this.soma(vizinhos, atual);
-                  vizinhos = this.getVizinho(tiles, l + 1, c + 1, 1, gri);
-                  this.soma(vizinhos, atual);
-                  this.totalGlobal++;
-                  this.probabilidadesGlobal[atual]++;
-                }
-              }
-            }
+      for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+        for (
+          let l = gridI * this.GRID;
+          l < gridI * this.GRID + this.GRID;
+          l++
+        ) {
+          for (
+            let c = gridJ * this.GRID;
+            c < gridJ * this.GRID + this.GRID;
+            c++
+          ) {
+            let gri = posicao[gridI][gridJ];
+            let vizinhos = this.getVizinho(tiles, l + 1, c + 1, 8, gri);
+            let atual = tiles[l + 1][c + 1];
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 4, gri);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 3, gri);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 2, gri);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 1, gri);
+            this.soma(vizinhos, atual);
+            this.totalGlobal++;
+            this.probabilidadesGlobal[atual]++;
+          }
         }
+      }
+    }
     this.calculate();
-    console.log(tiles)
-    console.log(this.probabilidades);
-
-}
-
+    console.log("Imagem treinamento:", tiles);
+    console.log("Resultado treinamento:", this.probabilidades);
+  }
 }

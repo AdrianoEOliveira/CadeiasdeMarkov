@@ -204,11 +204,11 @@ export default class CenaJogo extends Cena {
     let convertido = this.ConversaoComVazio()
 
   let gi = this.cantosGi();
-  console.log(convertido)
     if (this.markov.newTiles == "sim") {
       for (let k = 0; k < z; k++) {
         //const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(convertido);
+        console.log(k)
 
         for (let l = 1; l < this.LINHAS + 1; l++) {
           for (let c = 1; c < this.COLUNAS +1; c++) {
@@ -578,7 +578,9 @@ gerar() {
       {
         mapa.tiles = this.highMarkovCantos(z)
       }
+      else{
       mapa.tiles = this.lowMarkov(z);
+      }
     }
   }
   this.configuraMapa(mapa);
@@ -929,6 +931,6 @@ modeloPadraoComAleatorio(mapa) {
 treinarMarkov() {
   this.markov.zeraTreino();
   this.iniciaConfiguracao();
-  this.markov.treino()
+  this.markov.iniciaTreino()
 }
 }

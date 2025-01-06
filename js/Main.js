@@ -359,7 +359,7 @@ function contornarImagem(canvas, taxa) {
 
 function atualizaMarkov()
 {
-  var myrng = new Math.seedrandom('hello.');
+  var myrng = new Math.seedrandom('markov.');
   if(metodo == "high")
   {
     highMarkov = new HighMarkov(markov)
