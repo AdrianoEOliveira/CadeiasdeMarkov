@@ -1,24 +1,6 @@
 import Markov from "./Markov.js";
 
 export default class HierarquicoMarkov extends Markov {
-  constructor(markovInstance) {
-    // Usa os atributos da instância de Markov passada
-    super(markovInstance.assets,
-      markovInstance.canvas,
-      markovInstance.LINHAS,
-      markovInstance.COLUNAS,
-      markovInstance.GRID,
-      markovInstance.TAMANHOIMAGEM,
-      markovInstance.IMAGEM,
-      markovInstance.iteracoes,
-      markovInstance.modelo,
-      markovInstance.newTiles,
-      markovInstance.metodo
-    )
-
-
-
-  }
 
   adicionaDadosBack(vizinhosTabela, vizinho) {
     let vizinhos = [
@@ -342,7 +324,7 @@ export default class HierarquicoMarkov extends Markov {
     let vizinho = indice.join("");
     let x = 0;
     let limite = this.myrng();
-    console.log(limite);
+    //console.log(limite);
     let total = 0;
     for (let i = 0; i < this.estados.length; i++) {
       total += this.getProbabilidades(vizinho, this.estados[i]);
@@ -429,41 +411,24 @@ export default class HierarquicoMarkov extends Markov {
   }
 
   converterImagem() {
-    let tiles = [];
-    for (let i = 0; i < this.TAMANHOIMAGEM + 2; i++) {
-      tiles[i] = [];
-      for (let j = 0; j < this.TAMANHOIMAGEM + 2; j++) {
-        tiles[i][j] = "Vazio";
-        if (
-          i > 0 &&
-          j > 0 &&
-          i < this.TAMANHOIMAGEM + 1 &&
-          j < this.TAMANHOIMAGEM + 1
-        ) {
-          let pixel = this.ctx.getImageData(j - 1, i - 1, 1, 1);
-          let corRgb = pixel.data;
-          if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
-            tiles[i][j] = "Pedra";
-          } else {
-            if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
-              tiles[i][j] = "Piso";
-            } else {
-              if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
-                tiles[i][j] = "Parede";
-              } else {
-                if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
-                  tiles[i][j] = "Bau";
-                } else {
-                  console.log(i, j, corRgb);
-                }
-              }
-            }
-          }
+    let tiles = super.converterImagem()
+
+    console.table(tiles)
+
+    let convertido = []
+    for (let l = 0; l < this.TAMANHOIMAGEM + 2; l++) {
+      convertido[l] = [];
+      for (let c = 0; c < this.TAMANHOIMAGEM + 2; c++) {
+        if (l == 0 || l == this.TAMANHOIMAGEM + 1 || c == 0 || c == this.TAMANHOIMAGEM + 1) {
+          convertido[l][c] = "Vazio";
+        } else {
+          //mapa.tiles[l][c] = Math.floor(Math.random() * 4)
+          convertido[l][c] = tiles[l - 1][c - 1];
         }
       }
     }
-    return tiles;
-  }
+  return convertido;
+}
 
   iniciaTreino() {
     let tiles = this.converterImagem();
@@ -510,7 +475,9 @@ export default class HierarquicoMarkov extends Markov {
       }
     }
     this.calculate();
-    console.log("Imagem treinamento:", tiles);
-    console.log("Resultado treinamento:", this.probabilidades);
+    console.log("Imagem treinamento:");
+    console.table(tiles)
+    console.log("Resultado treinamento:")
+    console.table(this.probabilidades);
   }
 }
