@@ -1,22 +1,6 @@
 import Markov from "./Markov.js";
 
 export default class HighMarkov extends Markov {
-  constructor(markovInstance) {
-    // Usa os atributos da instância de Markov passada
-    super(
-      markovInstance.assets,
-      markovInstance.canvas,
-      markovInstance.LINHAS,
-      markovInstance.COLUNAS,
-      markovInstance.GRID,
-      markovInstance.TAMANHOIMAGEM,
-      markovInstance.IMAGEM,
-      markovInstance.iteracoes,
-      markovInstance.modelo,
-      markovInstance.newTiles,
-      markovInstance.metodo
-    );
-  }
 
   adicionaDadosBack(vizinhosTabela, vizinho) {
     let vizinhos = [
