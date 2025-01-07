@@ -46,7 +46,7 @@ export default class Markov {
     this.probabilidadesGlobal = [];
     this.porcentagemDeUso = [];
 
-    this.corte;
+    this.corte =0.25;
     this.totalGlobal = 0;
     this.assets = assets;
     this.canvas = canvas;
@@ -215,7 +215,7 @@ export default class Markov {
     for (let i = 0; i < this.TAMANHOIMAGEM; i++) {
       tiles[i] = [];
       for (let j = 0; j < this.TAMANHOIMAGEM; j++) {
-        let pixel = this.ctx.getImageData(j - 1, i - 1, 1, 1);
+        let pixel = this.ctx.getImageData(j, i, 1, 1);
         let corRgb = pixel.data;
         if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
           tiles[i][j] = "Pedra";
@@ -236,7 +236,7 @@ export default class Markov {
         }
       }
     }
-    console.log("tiles", tiles);
+
     return tiles;
   }
 

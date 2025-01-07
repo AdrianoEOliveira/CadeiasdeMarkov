@@ -550,6 +550,7 @@ export default class CenaJogo extends Cena {
       }
     }
     this.configuraMapa(mapa);
+    console.log(mapa.tiles)
   }
 
   iniciaConfiguracao() {

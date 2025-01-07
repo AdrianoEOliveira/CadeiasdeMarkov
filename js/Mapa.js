@@ -5,7 +5,7 @@ export default class Mapa {
     this.LINHAS = linhas;
     this.COLUNAS = colunas;
     this.TAMANHO = tamanho;
-    this.tiles = [];
+    this.tiles = Array.from({ length: linhas }, () => Array(colunas).fill(null));
   }
   desenhar(ctx) {
     this.cena.canvas.style.zoom = this.cena.zoomValue
