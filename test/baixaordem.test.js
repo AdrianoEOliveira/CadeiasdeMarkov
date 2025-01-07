@@ -22,8 +22,8 @@ describe("LowMarkov", () => {
     const rng = seedrandom("markov.");
 
 
-    // Inicializar o Markov com os parâmetros necessários
-    markovInstance = new Markov(
+    // Inicializar o LowMarkov
+    lowMarkov = new LowMarkov(
       assets, // assets
       canvas, // canvas
       20, // LINHAS
@@ -33,12 +33,9 @@ describe("LowMarkov", () => {
       "treino", // IMAGEM
       0, // iteracoes
       "xadrez", // modelo
-      "true", // newTiles
+      "sim", // newTiles
       "low" // metodo
     );
-
-    // Inicializar o LowMarkov
-    lowMarkov = new LowMarkov(markovInstance);
 
     // Adicionar a semente ao LowMarkov
     lowMarkov.AdicionaSemente(rng);

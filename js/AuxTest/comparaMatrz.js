@@ -3,6 +3,11 @@
 export function compareMatrices(matrix1, matrix2) {
     // Verifica se ambas as matrizes têm o mesmo número de linhas
     if (matrix1.length !== matrix2.length) {
+        console.log("linhas diferentes")
+        console.log(matrix1.length)
+        console.log(matrix1)
+        console.log(matrix2.length)
+        console.log(matrix2)
         return false;
     }
 

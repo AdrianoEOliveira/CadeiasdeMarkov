@@ -8,11 +8,13 @@ const Bau = 3;
 
 describe("Markov Class Tests", () => {
   let markov;
+  const canvas = document.createElement("canvas");
+
 
   beforeEach(() => {
     markov = new Markov(
       null, // assets
-      { getContext: () => ({}) }, // canvas mock
+      canvas, // canvas mock
       10, // linhas
       10, // colunas
       [], // grid
@@ -74,16 +76,6 @@ describe("Markov Class Tests", () => {
   });
 
   it("should convert a valid image correctly with converterImagem", () => {
-    // Mock getImageData to simulate pixel data
-    const canvasMock = {
-      getContext: () => ({
-        drawImage: () => {},
-        getImageData: () => ({
-          data: [255, 255, 255, 255], // Simulate white (Piso)
-        }),
-      }),
-    };
-    markov.canvas = canvasMock;
 
     const tiles = markov.converterImagem();
     expect(tiles).toBeTruthy();

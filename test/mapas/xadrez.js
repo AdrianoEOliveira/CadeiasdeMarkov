@@ -1,8 +1,8 @@
-const mapaTeste = [
-[0,1,0,1,0],
-[1,0,1,0,1],
-[0,1,0,1,0],
-[1,0,1,0,1],
-[0,1,0,1,0]
+const xadrez = [
+[0,2,0,2,0],
+[2,0,2,0,2],
+[0,2,0,2,0],
+[2,0,2,0,2],
+[0,2,0,2,0]
 ];
-export default mapaTeste;
+export default xadrez;
