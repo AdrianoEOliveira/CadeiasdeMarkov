@@ -15,8 +15,8 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
- 
 
+let myrng = new Math.seedrandom(document.teste.seed.value);
 
 const assets = new AssetManager(new Mixer(10));
 assets.adicionaImagem("humano", "assets/humano.png");
@@ -27,9 +27,9 @@ assets.adicionaImagem("chest", "assets/Chest.png");
 assets.adicionaImagem("coin", "assets/coin.jpg");
 
 assets.adicionaAudio("hurt", "assets/hurt.wav");
-let canvas = document.getElementById("canvas")
+let canvas = document.getElementById("canvas");
 
-let canvasMarkov = document.getElementById("canvasMarkov")
+let canvasMarkov = document.getElementById("canvasMarkov");
 canvasMarkov.setAttribute("hidden", "hidden");
 
 canvas.width = 10 * 32;
@@ -38,7 +38,6 @@ canvas.height = 10 * 32;
 canvasMarkov.width = 50;
 canvasMarkov.height = 50;
 
-
 const input = new inputManager();
 
 input.configurarTeclado({
@@ -46,18 +45,18 @@ input.configurarTeclado({
   ArrowRight: "MOVE_DIREITA",
   ArrowUp: "MOVE_CIMA",
   ArrowDown: "MOVE_BAIXO",
-  Escape: "TESTE"
+  Escape: "TESTE",
 });
 
 let LINHAS = document.inicial.linhas.valueAsNumber;
-let COLUNAS = document.inicial.colunas.valueAsNumber
+let COLUNAS = document.inicial.colunas.valueAsNumber;
 let modelo = document.inicial.modelo.value;
 let localizacao = document.mapaTreinamento.localizacao.value;
 let tamanhoMapa = 0;
 let grid = document.metodo.grid.valueAsNumber;
 let metodo = document.metodo.highOrLow.value;
 let iteracoes = document.teste.iteracoes.valueAsNumber;
-let newTiles = document.teste.newTiles.value
+let newTiles = document.teste.newTiles.value;
 
 let canvasVisual = document.getElementById("canvasVisual");
 canvasVisual.width = 0;
@@ -81,11 +80,45 @@ let markov = new Markov(
   metodo
 );
 
-let hierarquico = new HierarquicoMarkov(markov);
-let lowmarkov = new LowMarkov(markov);
-let highMarkov = new HighMarkov(markov);
-
-
+let hierarquico = new HierarquicoMarkov(
+  assets,
+  canvasMarkov,
+  LINHAS,
+  COLUNAS,
+  grid,
+  tamanhoMapa,
+  "treino",
+  0,
+  modelo,
+  newTiles,
+  metodo
+);
+let lowmarkov = new LowMarkov(
+  assets,
+  canvasMarkov,
+  LINHAS,
+  COLUNAS,
+  grid,
+  tamanhoMapa,
+  "treino",
+  0,
+  modelo,
+  newTiles,
+  metodo
+);
+let highMarkov = new HighMarkov(
+  assets,
+  canvasMarkov,
+  LINHAS,
+  COLUNAS,
+  grid,
+  tamanhoMapa,
+  "treino",
+  0,
+  modelo,
+  newTiles,
+  metodo
+);
 
 let cena = new CenaJogo(canvas, assets, input, markov);
 
@@ -95,11 +128,9 @@ let game = new Game(canvas, assets, input);
 
 let fim = new CenaFim(canvas, assets, input);
 
-
 game.adicionarCena("carregando", carregando);
 game.adicionarCena("teste", cena);
 game.adicionarCena("fim", fim);
-
 
 game.iniciar();
 
@@ -112,9 +143,9 @@ zoomOutput.innerHTML = zoomSlider.value; // Display the default slider value
 // Update the current slider value (each time you drag the slider handle)
 zoomSlider.oninput = function () {
   zoomOutput.innerHTML = this.value;
-  console.log(zoomSlider.value)
-  cena.Zoom(zoomSlider.value / 100)
-}
+  console.log(zoomSlider.value);
+  cena.Zoom(zoomSlider.value / 100);
+};
 
 let corteSlider = document.getElementById("corte");
 let corteOutput = document.getElementById("corteValue");
@@ -125,12 +156,11 @@ corteOutput.innerHTML = corteSlider.value; // Display the default slider value
 // Update the current slider value (each time you drag the slider handle)
 corteSlider.oninput = function () {
   corteOutput.innerHTML = this.value;
-  console.log(corteSlider.value)
-  markov.Porcentagem(corteSlider.value / 100)
-}
+  console.log(corteSlider.value);
+  hierarquico.atualizaCorte(corteSlider.value / 100);
+};
 
 function aleatorioMapa(markov, LINHAS, COLUNAS) {
-
   markov.tiles = [];
   for (let l = 0; l < LINHAS; l++) {
     markov.tiles[l] = [];
@@ -156,7 +186,7 @@ function aleatorioMapa(markov, LINHAS, COLUNAS) {
       }
     }
   }
-  console.log(markov.tiles)
+  console.log(markov.tiles);
 }
 
 // Dados da tabela (exemplo)
@@ -164,48 +194,46 @@ function aleatorioMapa(markov, LINHAS, COLUNAS) {
 // Função para criar a tabela
 function criarTabela(dados) {
   // Criando a tabela e o cabeçalho
-  let tabela = document.createElement('table');
+  let tabela = document.createElement("table");
   let cabecalho = tabela.createTHead();
   let linhaCabecalho = cabecalho.insertRow();
 
   // Adicionando os cabeçalhos das colunas
   for (let chave in dados[0]) {
-    let th = document.createElement('th');
+    let th = document.createElement("th");
     th.textContent = chave.charAt(0).toUpperCase() + chave.slice(1); // Primeira letra maiúscula
     linhaCabecalho.appendChild(th);
   }
 
   // Adicionando os dados
   let corpoTabela = tabela.createTBody();
-  dados.forEach(item => {
+  dados.forEach((item) => {
     let linha = corpoTabela.insertRow();
     for (let chave in item) {
       let celula = linha.insertCell();
       // Verifica se a chave existe antes de acessá-la
       if (chave == "vizinho") {
         //console.log(item[chave])
-        var canvasTabela = document.createElement('canvas');
+        var canvasTabela = document.createElement("canvas");
         canvasTabela.width = 3 * 32;
         canvasTabela.height = 3 * 32;
-        var ctx = canvasTabela.getContext('2d');
+        var ctx = canvasTabela.getContext("2d");
         let mapaTabela = new Mapa(3, 3, 32);
         mapaTabela.tiles = item[chave];
         //console.log(mapaTabela)
-        let cenaAux = new CenaJogo(
-          canvasTabela,
-          assets,
-          input,
-          markov,
-          3,
-          3
-        );
-        cenaAux.configuraMapa(mapaTabela)
+        let cenaAux = new CenaJogo(canvasTabela, assets, input, markov, 3, 3);
+        cenaAux.configuraMapa(mapaTabela);
         mapaTabela.desenhar(ctx);
 
-        const imageData = ctx.getImageData(0, 0, canvasTabela.width, canvasTabela.height);
+        const imageData = ctx.getImageData(
+          0,
+          0,
+          canvasTabela.width,
+          canvasTabela.height
+        );
 
-        const tempCanvas = document.createElement('canvas');
-        const tempCtx = tempCanvas.getContext('2d');
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d");
         tempCanvas.width = imageData.width;
         tempCanvas.height = imageData.height;
         tempCtx.putImageData(imageData, 0, 0);
@@ -217,11 +245,20 @@ function criarTabela(dados) {
         canvasTabela.height = newHeight;
 
         ctx.imageSmoothingEnabled = false; // Desabilitar suavização de imagem para preservar a nitidez
-        ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
+        ctx.drawImage(
+          tempCanvas,
+          0,
+          0,
+          tempCanvas.width,
+          tempCanvas.height,
+          0,
+          0,
+          newWidth,
+          newHeight
+        );
 
         celula.appendChild(canvasTabela);
-      }
-      else {
+      } else {
         /*
         var canvasTabela = document.createElement('canvas');
         canvasTabela.width = 200;
@@ -234,27 +271,25 @@ function criarTabela(dados) {
         ctx.fillText(textoNumero, x, y);
         //celula.appendChild(textoNumero);
         */
-        celula.textContent = item[chave] !== undefined ? item[chave] : 'falha';
+        celula.textContent = item[chave] !== undefined ? item[chave] : "falha";
       }
     }
   });
 
   // Adicionando a tabela ao container
-  document.getElementById('tabela-container').appendChild(tabela);
-
+  document.getElementById("tabela-container").appendChild(tabela);
 }
 
 function limparTabela() {
   // Define o innerHTML do elemento da tabela como uma string vazia
-  document.getElementById('tabela-container').innerHTML = '';
+  document.getElementById("tabela-container").innerHTML = "";
 }
 
 function redimensionarImagem(img, canvas, taxa) {
-
   canvas.width = tamanhoMapa;
   canvas.height = tamanhoMapa;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   ctx.drawImage(img, 0, 0);
 
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -268,28 +303,30 @@ function redimensionarImagem(img, canvas, taxa) {
   ctx.imageSmoothingEnabled = false;
 
   ctx.putImageData(imageData, 0, 0);
-  ctx.drawImage(canvas, 0, 0, imageData.width, imageData.height, 0, 0, newWidth, newHeight);
-
+  ctx.drawImage(
+    canvas,
+    0,
+    0,
+    imageData.width,
+    imageData.height,
+    0,
+    0,
+    newWidth,
+    newHeight
+  );
 }
 
 function contornarImagem(canvas, taxa) {
-
-  const ctx = canvas.getContext('2d');
-  ctx.strokeStyle = "green"
+  const ctx = canvas.getContext("2d");
+  ctx.strokeStyle = "green";
 
   for (let l = 0; l < tamanhoMapa; l++) {
     for (let c = 0; c < tamanhoMapa; c++) {
-
-      ctx.strokeRect(
-        (c * 20) / taxa,
-        l * 20 / taxa,
-        20 / taxa,
-        20 / taxa
-      );
+      ctx.strokeRect((c * 20) / taxa, (l * 20) / taxa, 20 / taxa, 20 / taxa);
     }
   }
   if (metodo == "highComCantos") {
-    let gi = cena.markov.treinoGrids()
+    let gi = cena.markov.treinoGrids();
 
     ctx.lineWidth = 2; // Largura da linha do contorno
 
@@ -297,125 +334,150 @@ function contornarImagem(canvas, taxa) {
     tamanhoGrid = Math.floor(tamanhoGrid);
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
-  
         if (gi[gridI][gridJ] == "Meio") {
-          ctx.strokeStyle = "red"
+          ctx.strokeStyle = "red";
         }
         if (gi[gridI][gridJ] == "Superior esquerdo") {
-          ctx.strokeStyle = "blue"
+          ctx.strokeStyle = "blue";
         }
         if (gi[gridI][gridJ] == "Superior direito") {
-          ctx.strokeStyle = "blue"
+          ctx.strokeStyle = "blue";
         }
         if (gi[gridI][gridJ] == "Inferior esquerdo") {
-          ctx.strokeStyle = "blue"
+          ctx.strokeStyle = "blue";
         }
         if (gi[gridI][gridJ] == "Inferior direito") {
-          ctx.strokeStyle = "blue"
+          ctx.strokeStyle = "blue";
         }
         if (gi[gridI][gridJ] == "Cima") {
-          ctx.strokeStyle = "orange"
+          ctx.strokeStyle = "orange";
         }
         if (gi[gridI][gridJ] == "Direita") {
-          ctx.strokeStyle = "orange"
+          ctx.strokeStyle = "orange";
         }
         if (gi[gridI][gridJ] == "Baixo") {
-          ctx.strokeStyle = "orange"
+          ctx.strokeStyle = "orange";
         }
         if (gi[gridI][gridJ] == "Esquerda") {
-          ctx.strokeStyle = "orange"
+          ctx.strokeStyle = "orange";
         }
         ctx.strokeRect(
-          gridI * grid * 20 / taxa,
-          gridJ * grid * 20 / taxa,
-          20 * grid / taxa,
-          20 * grid / taxa
+          (gridI * grid * 20) / taxa,
+          (gridJ * grid * 20) / taxa,
+          (20 * grid) / taxa,
+          (20 * grid) / taxa
         );
       }
     }
+  } else {
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 2; // Largura da linha do contorno
 
-  }
-
-  else{
-
-  ctx.strokeStyle = "red"
-  ctx.lineWidth = 2; // Largura da linha do contorno
-
-  let tamanhoGrid = tamanhoMapa / grid;
-  tamanhoGrid = Math.floor(tamanhoGrid);
-  for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
-    for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
-
-      ctx.strokeRect(
-        gridI * grid * 20 / taxa,
-        gridJ * grid * 20 / taxa,
-        20 * grid / taxa,
-        20 * grid / taxa
-      );
+    let tamanhoGrid = tamanhoMapa / grid;
+    tamanhoGrid = Math.floor(tamanhoGrid);
+    for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+      for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+        ctx.strokeRect(
+          (gridI * grid * 20) / taxa,
+          (gridJ * grid * 20) / taxa,
+          (20 * grid) / taxa,
+          (20 * grid) / taxa
+        );
+      }
     }
   }
-  }
 }
 
-function atualizaMarkov()
+function setSeed() {
+  myrng = new Math.seedrandom(document.teste.seed.value);
+  hierarquico.AdicionaSemente(myrng);
+  lowmarkov.AdicionaSemente(myrng);
+  highMarkov.AdicionaSemente(myrng);
+}
+
+function atualizaMarkov1(LINHAS,COLUNAS,metodo) {
+
+  markov.atualizaParte1(LINHAS, COLUNAS, modelo);
+  lowmarkov.atualizaParte1(LINHAS, COLUNAS, modelo);
+  hierarquico.atualizaParte1(LINHAS, COLUNAS, modelo);
+  highMarkov.atualizaParte1(LINHAS, COLUNAS, modelo);
+  setSeed();
+  lowmarkov.tiles = markov.tiles
+  hierarquico.tiles = markov.tiles
+  highMarkov.tiles = markov.tiles
+
+}
+function atualizaMarkov2(tamanhoMapa) {
+
+  markov.atualizaParte2(tamanhoMapa);
+  lowmarkov.atualizaParte2(tamanhoMapa);
+  hierarquico.atualizaParte2(tamanhoMapa);
+  highMarkov.atualizaParte2(tamanhoMapa);
+  setSeed();
+}
+function atualizaMarkov3(grid,metodo) {
+
+  markov.atualizaParte3(grid,metodo);
+  lowmarkov.atualizaParte3(grid,metodo);
+  hierarquico.atualizaParte3(grid,metodo);
+  highMarkov.atualizaParte3(grid,metodo);
+  setSeed();
+  if (metodo == "high") {
+    cena.markov = highMarkov;
+  } else {
+    if (metodo == "low") {
+      cena.markov = lowmarkov;
+    } else {
+      cena.markov = hierarquico;
+    }
+  }
+  console.log(cena.markov)
+}
+function atualizaMarkov4(iteracoes,newTiles,metodo)
 {
-  var myrng = new Math.seedrandom('markov.');
-  if(metodo == "high")
-  {
-    highMarkov = new HighMarkov(markov)
-    highMarkov.AdicionaSemente(myrng)
-    cena.markov = highMarkov
+  markov.atualizaParte4(iteracoes,newTiles)
+  lowmarkov.atualizaParte4(iteracoes,newTiles)
+  hierarquico.atualizaParte4(iteracoes,newTiles)
+  highMarkov.atualizaParte4(iteracoes,newTiles)
+  setSeed();
+  if (metodo == "high") {
+    cena.markov = highMarkov;
+  } else {
+    if (metodo == "low") {
+      cena.markov = lowmarkov;
+    } else {
+      cena.markov = hierarquico;
+    }
   }
-  if(metodo == "low")
-  {
-    lowmarkov = new LowMarkov(markov)
-    lowmarkov.AdicionaSemente(myrng)
-    cena.markov = lowmarkov
-  }
-  if(metodo == "highComCantos")
-  {
-    hierarquico = new HierarquicoMarkov(markov)
-    hierarquico.AdicionaSemente(myrng)
-    cena.markov = hierarquico;
-  }
-}
 
+}
 
 document.inicial.iniciar.addEventListener("click", function (event) {
-
   LINHAS = document.inicial.linhas.valueAsNumber;
-  COLUNAS = document.inicial.colunas.valueAsNumber
+  COLUNAS = document.inicial.colunas.valueAsNumber;
   modelo = document.inicial.modelo.value;
   if (modelo == "aleatorio") {
-    aleatorioMapa(markov, LINHAS, COLUNAS)
+    aleatorioMapa(markov, LINHAS, COLUNAS);
   }
 
-  canvas.width = COLUNAS * 32;
-  canvas.height = LINHAS * 32;
-  markov.LINHAS = LINHAS;
-  markov.COLUNAS = COLUNAS;
-  markov.modelo = modelo;
-  markov.iteracoes = 0;
+
+  atualizaMarkov1(LINHAS,COLUNAS,modelo);
 
   cena.LINHAS = LINHAS;
   cena.COLUNAS = COLUNAS;
-  cena.markov = markov;
+  canvas.width = COLUNAS * 32;
+  canvas.height = LINHAS * 32;
 
   game.adicionarCena("teste", cena);
   game.selecionaCena("teste");
-
 });
 
-
 document.mapaTreinamento.adicionar.addEventListener("click", function (event) {
-
   localizacao = document.mapaTreinamento.localizacao.value;
   //tamanhoMapa = document.mapaTreinamento.tamanho.valueAsNumber;
 
   assets.adicionaImagem("treino", localizacao);
-  game.selecionaCena("carregando")
-
-  atualizaMarkov()
+  game.selecionaCena("carregando");
 
   game.adicionarCena("teste", cena);
 
@@ -423,20 +485,16 @@ document.mapaTreinamento.adicionar.addEventListener("click", function (event) {
   img.src = localizacao;
   img.onload = function () {
     tamanhoMapa = img.naturalWidth;
-    markov.TAMANHOIMAGEM = tamanhoMapa
+    atualizaMarkov2(tamanhoMapa);
     redimensionarImagem(img, canvasVisual, tamanhoMapa / 9);
-  }
-}
-);
+  };
+});
 
 document.metodo.treinar.addEventListener("click", function (event) {
-
   metodo = document.metodo.highOrLow.value;
   grid = document.metodo.grid.valueAsNumber;
 
-  markov.GRID = grid;
-  markov.metodo = metodo
-  atualizaMarkov()
+  atualizaMarkov3(grid,metodo);
 
   game.adicionarCena("teste", cena);
 
@@ -446,48 +504,40 @@ document.metodo.treinar.addEventListener("click", function (event) {
   redimensionarImagem(img, canvasTreinamento, tamanhoMapa / 9);
 
   contornarImagem(canvasTreinamento, tamanhoMapa / 9);
-
 });
 
 document.tabelas.tabela.addEventListener("click", function (event) {
-
-
   cena.markov.zeraTabela();
-  limparTabela()
+  limparTabela();
   //cena.treinarMarkov();
-  let dados = cena.markov.getTabelaDados()
-  console.log(dados)
+  let dados = cena.markov.getTabelaDados();
+  console.log(dados);
   for (let i = 0; i < dados.length; i++) {
     criarTabela(dados[i]);
   }
 });
 
 document.tabelas.limpar.addEventListener("click", function (event) {
-
-  limparTabela()
-
+  limparTabela();
 });
 
 document.teste.gerar.addEventListener("click", function (event) {
-
   //game.selecionaCena("carregando")
 
   iteracoes = document.teste.iteracoes.valueAsNumber;
-  newTiles = document.teste.newTiles.value
-  markov.iteracoes = iteracoes;
-  markov.newTiles = newTiles
-  atualizaMarkov();
-  console.log(cena)
+  newTiles = document.teste.newTiles.value;
+
+  atualizaMarkov4(iteracoes,newTiles,metodo);
+  console.log(cena);
 
   game.adicionarCena("teste", cena);
 
   cena.treinarMarkov();
 
-
   game.selecionaCena("teste");
-
-
 });
+
+
 
 const themeSwitcher = {
   // Config
@@ -511,7 +561,9 @@ const themeSwitcher = {
 
   // Preferred color scheme
   get preferredColorScheme() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   },
 
   // Init switchers
@@ -550,7 +602,9 @@ const themeSwitcher = {
 
   // Apply scheme
   applyScheme() {
-    document.querySelector("html")?.setAttribute(this.rootAttribute, this.scheme);
+    document
+      .querySelector("html")
+      ?.setAttribute(this.rootAttribute, this.scheme);
   },
 
   // Store scheme to local storage
@@ -561,6 +615,3 @@ const themeSwitcher = {
 
 // Init
 themeSwitcher.init();
-
-
-

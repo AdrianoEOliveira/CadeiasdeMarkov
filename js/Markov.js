@@ -59,6 +59,32 @@ export default class Markov {
     this.myrng = semente
   }
 
+  atualizaParte1(LINHAS, COLUNAS , modelo)
+  {
+    this.LINHAS = LINHAS;
+    this.COLUNAS = COLUNAS;
+    this.modelo = modelo;
+    this.iteracoes = 0;
+  }
+  atualizaParte2(tamanhoMapa)
+  {
+    this.TAMANHOIMAGEM = tamanhoMapa
+  }
+  atualizaParte3(grid,metodo)
+  {
+    this.GRID = grid;
+    this.metodo = metodo
+  }
+  atualizaParte4(iteracoes,newTiles)
+  {
+    this.iteracoes = iteracoes;
+    this.newTiles = newTiles
+  }
+  atualizaCorte(corte)
+  {
+    this.corte = corte;
+  }
+
 
   zeraTreino() {
     this.backVezes = [];
@@ -87,9 +113,6 @@ export default class Markov {
     }
   }
 
-  Porcentagem(value) {
-    this.corte = value
-  }
 
   getPorcentagem() {
     return this.porcentagemDeUso;
