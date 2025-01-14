@@ -1,87 +1,113 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import Markov from "../js/Markov"
+import Markov from "../js/CompartilhadoMarkov.js";
+import LowMarkov from "../js/Markov.js";
+import seedrandom from "seedrandom";
 
-const Piso = 0;
-const Pedra = 1;
-const Parede = 2;
-const Bau = 3;
-
-describe("Markov Class Tests", () => {
-  let markov;
-  const canvas = document.createElement("canvas");
+import AssetManager from "../js/AssetManager.js";
+import Mixer from "../js/Mixer.js";
+import mapaTeste from "./mapas/xadrez.js"
 
 
-  beforeEach(() => {
-    markov = new Markov(
-      null, // assets
-      canvas, // canvas mock
-      10, // linhas
-      10, // colunas
-      [], // grid
-      16, // tamanhoimagem
-      "dummyImage", // imagem
-      100, // numero_de_iteracoes
-      {}, // modelo
-      [], // newTiles
-      null // metodo
+describe("LowMarkov", () => {
+  let markovInstance;
+  let lowMarkov;
+  let mapa = mapaTeste;
+
+  beforeEach(async () => {
+    // Criar um elemento canvas (mock)
+    const canvas = document.createElement("canvas");
+    const assets = new AssetManager(new Mixer(10))
+
+    // Inicializar o gerador de números aleatórios (seeded)
+    const rng = seedrandom("markov.");
+
+
+    // Inicializar o LowMarkov
+    lowMarkov = new LowMarkov(
+      assets, // assets
+      canvas, // canvas
+      20, // LINHAS
+      20, // COLUNAS
+      5, // GRID
+      5, // TAMANHOIMAGEM
+      "treino", // IMAGEM
+      0, // iteracoes
+      "xadrez", // modelo
+      "sim", // newTiles
+      "low" // metodo
     );
+
+    // Adicionar a semente ao LowMarkov
+    lowMarkov.AdicionaSemente(rng);
   });
 
-  it("should reset training data with zeraTreino", () => {
-    markov.adicionaEstado(1);
-    markov.adicionaEstado(2);
-    markov.zeraTreino();
+  it("deve adicionar dados na tabela corretamente", () => {
+    const vizinhosTabela = [1, 2, 3, 4, 5, 6, 7, 8];
+    const probabilidades = [0.3, 0.3, 0.2, 0.2];
+    const vizinho = "12345678";
 
-    expect(markov.estados).toEqual([]);
-    expect(markov.probabilidades).toEqual([]);
-    expect(markov.totalGlobal).toBe(0);
+    lowMarkov.adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho);
+
+    expect(lowMarkov.dados).toHaveLength(1);
+    expect(lowMarkov.dados[0]).toEqual({
+      vizinho: expect.any(Array),
+      Piso: 0.3,
+      Pedra: 0.3,
+      Parede: 0.2,
+      Bau: 0.2,
+    });
   });
 
-  it("should reset table data with zeraTabela", () => {
-    markov.dados = [1, 2, 3];
-    markov.zeraTabela();
+  it("deve retornar a tabela de dados corretamente", () => {
+    // Simulando contagem no objeto base
+    lowMarkov.contagem = {
+      "12345678": 1,
+      "23456789": 1,
+    };
 
-    expect(markov.dados).toEqual([]);
-    expect(markov.dadosBacktracking).toEqual([]);
-    expect(markov.dadosEscolhidos).toEqual([]);
+    const tabelaDados = lowMarkov.getTabelaDados();
+
+    expect(tabelaDados[0]).toHaveLength(2); // Dois vizinhos processados
   });
 
-  it("should add a new state with adicionaEstado", () => {
-    markov.adicionaEstado(1);
-    markov.adicionaEstado(2);
+  it("deve calcular vizinhos corretamente para ordem 8", () => {
+    const tile = [
+      [1, 1, 1],
+      [1, 0, 1],
+      [1, 1, 1],
+    ];
+    const vizinhos = lowMarkov.getVizinho(tile, 1, 1, 8);
 
-    expect(markov.estados).toEqual([1, 2]);
+    expect(vizinhos).toEqual([1, 1, 1, 1, 1, 1, 1, 1]);
   });
 
-  it("should calculate probabilities correctly", () => {
-    markov.adicionaEstado(Piso);
-    markov.adicionaEstado(Pedra);
+  it("deve realizar backtracking corretamente", () => {
+    const tile = [
+      [1, 1, 1],
+      [1, 0, 1],
+      [1, 1, 1],
+    ];
+    const ordemInicial = 8;
 
-    markov.soma(["Piso", "Pedra"], Piso);
-    markov.soma(["Piso", "Pedra"], Piso);
-    markov.soma(["Piso", "Pedra"], Pedra);
+    const ordem = lowMarkov.verificaBacktracking(tile, 1, 1, ordemInicial, [0, 0, 0]);
 
-    markov.calculate();
-
-    const probabilities = markov.getProbabilidades("PisoPedra", Piso);
-    expect(probabilities).toBeCloseTo(2 / 3);
+    expect(ordem).toBe(8); // Esperado que o backtracking retorne para a ordem correta
   });
 
-  it("should handle undefined probabilities in getProbabilidades", () => {
-    markov.adicionaEstado(Piso);
-    markov.adicionaEstado(Pedra);
+  it("deve treinar corretamente os dados", () => {
+    lowMarkov.treino(mapaTeste);
+    console.log("aqui:",lowMarkov.probabilidades)
 
-    const probability = markov.getProbabilidades("undefinedKey", Piso);
-    expect(probability).toBeUndefined();
+    expect(lowMarkov.totalGlobal).toBeGreaterThan(0); // O total global deve ser maior que 0 após o treino
+    expect(Object.keys(lowMarkov.probabilidades)).not.toHaveLength(0); // As probabilidades devem estar definidas
   });
 
-  it("should convert a valid image correctly with converterImagem", () => {
+  it("deve determinar o próximo estado corretamente", () => {
+    const anteriores = [0, 1, 2, 3, 4, 5, 6, 7];
+    const proximoEstado = lowMarkov.proximo(anteriores);
 
-    const tiles = markov.converterImagem();
-    expect(tiles).toBeTruthy();
-    expect(tiles.length).toBe(markov.TAMANHOIMAGEM);
+    expect(typeof proximoEstado).toBe("number");
+    expect(proximoEstado).toBeGreaterThanOrEqual(0);
+    //expect(proximoEstado).toBeLessThan(lowMarkov.estados.length);
   });
 });
-//random seed number
-//numeros aleatorios javascript
-//terminar os testes

@@ -1,251 +1,369 @@
+import Markov from "./CompartilhadoMarkov.js";
 
+export default class LowMarkov extends Markov {
 
-const Piso = 0;
-const Pedra = 1;
-const Parede = 2;
-const Bau = 3;
-const Enemy = 4;
-const Vazio = 10;
-
-export default class Markov {
-  constructor(
-    assets,
-    canvas,
-    linhas,
-    colunas,
-    grid,
-    tamanhoimagem,
-    imagem,
-    numero_de_iteracoes,
-    modelo,
-    newTiles,
-    metodo
-  ) {
-    this.LINHAS = linhas;
-    this.COLUNAS = colunas;
-    this.GRID = grid;
-    this.TAMANHOIMAGEM = tamanhoimagem;
-    this.IMAGEM = imagem;
-    this.iteracoes = numero_de_iteracoes;
-    this.modelo = modelo;
-    this.newTiles = newTiles;
-    this.metodo = metodo;
-
-    this.dados = [];
-
-    this.tiles = [];
-
-    this.dadosBacktracking = [];
-    this.backVezes = [];
-
-    this.escolhidos = [];
-    this.dadosEscolhidos = [];
-
-    this.contagem = [];
-    this.estados = [];
-    this.probabilidades = [];
-    this.probabilidadesGlobal = [];
-    this.porcentagemDeUso = [];
-
-    this.corte =0.25;
-    this.totalGlobal = 0;
-    this.assets = assets;
-    this.canvas = canvas;
-    this.ctx = canvas.getContext("2d", { willReadFrequently: true });
-    this.myrng;
-  }
-
-  AdicionaSemente(semente)
-  {
-    this.myrng = semente
-  }
-
-  atualizaParte1(LINHAS, COLUNAS , modelo)
-  {
-    this.LINHAS = LINHAS;
-    this.COLUNAS = COLUNAS;
-    this.modelo = modelo;
-    this.iteracoes = 0;
-  }
-  atualizaParte2(tamanhoMapa)
-  {
-    this.TAMANHOIMAGEM = tamanhoMapa
-  }
-  atualizaParte3(grid,metodo)
-  {
-    this.GRID = grid;
-    this.metodo = metodo
-  }
-  atualizaParte4(iteracoes,newTiles)
-  {
-    this.iteracoes = iteracoes;
-    this.newTiles = newTiles
-  }
-  atualizaCorte(corte)
-  {
-    this.corte = corte;
-  }
-
-
-  zeraTreino() {
-    this.backVezes = [];
-    this.escolhidos = [];
-    this.contagem = [];
-    this.estados = [];
-    this.probabilidades = [];
-    this.probabilidadesGlobal = [];
-    this.porcentagemDeUso = [];
-    this.totalGlobal = 0;
-  }
-
-  zeraTabela() {
-    this.dados = [];
-    this.dadosBacktracking = [];
-    this.dadosEscolhidos = [];
-  }
-
-  adicionaEstado(estado) {
-    this.estados.push(estado);
-  }
-
-  iniciaPorcentagem(ordems) {
-    for (let i = 0; i < ordems.length; i++) {
-      this.porcentagemDeUso[ordems[i].toString()] = 0;
-    }
-  }
-
-
-  getPorcentagem() {
-    return this.porcentagemDeUso;
-  }
-
-  adicionaVezesEscolhidos(vizinhos, alvo) {
-    const chave = vizinhos.join("");
-    if (this.escolhidos[chave] === undefined) {
-      this.escolhidos[chave] = [];
-
-      for (let i = 0; i < this.estados.length; i++) {
-        this.escolhidos[chave][this.estados[i]] = 0;
+  adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho) {
+    if (vizinhosTabela.length == 8) {
+      let vizinhos = [
+        [vizinhosTabela[1], vizinhosTabela[2], vizinhosTabela[3]],
+        [vizinhosTabela[0], 1000, vizinhosTabela[4]],
+        [vizinhosTabela[7], vizinhosTabela[6], vizinhosTabela[5]],
+      ];
+      vizinhos = this.converterEstado(vizinhos);
+      let aux = {
+        vizinho: vizinhos,
+        Piso: probabilidades[0],
+        Pedra: probabilidades[1],
+        Parede: probabilidades[2],
+        Bau: probabilidades[3],
+      };
+      this.dados.push(aux);
+      if (this.escolhidos[vizinho] === undefined) {
+        return;
+      } else {
+        let aux = {
+          vizinho: vizinhos,
+          Piso: this.escolhidos[vizinho]["Piso"],
+          Pedra: this.escolhidos[vizinho]["Pedra"],
+          Parede: this.escolhidos[vizinho]["Parede"],
+          Bau: this.escolhidos[vizinho]["Bau"],
+        };
+        this.dadosEscolhidos.push(aux);
       }
     }
-    this.escolhidos[chave][alvo]++;
-  }
-
-  adicionaBacktracking(vizinhos, ordem) {
-    const chave = vizinhos.join("");
-    if (this.backVezes[chave] === undefined) {
-      this.backVezes[chave] = [];
-
-      for (let i = 0; i < 4; i++) {
-        this.backVezes[chave][i] = 0;
+    if (vizinhosTabela.length == 4) {
+      let vizinhos = [
+        [-1, vizinhosTabela[1], -1],
+        [vizinhosTabela[0], 1000, vizinhosTabela[2]],
+        [-1, vizinhosTabela[3], -1],
+      ];
+      vizinhos = this.converterEstado(vizinhos);
+      let aux = {
+        vizinho: vizinhos,
+        Piso: probabilidades[0],
+        Pedra: probabilidades[1],
+        Parede: probabilidades[2],
+        Bau: probabilidades[3],
+      };
+      this.dados.push(aux);
+      if (this.escolhidos[vizinho] === undefined) {
+        return;
+      } else {
+        let aux = {
+          vizinho: vizinhos,
+          Piso: this.escolhidos[vizinho]["Piso"],
+          Pedra: this.escolhidos[vizinho]["Pedra"],
+          Parede: this.escolhidos[vizinho]["Parede"],
+          Bau: this.escolhidos[vizinho]["Bau"],
+        };
+        this.dadosEscolhidos.push(aux);
       }
     }
-    this.backVezes[chave][ordem - 1]++;
-  }
+    if (vizinhosTabela.length == 3) {
+      let vizinhos = [
+        [vizinhosTabela[1], vizinhosTabela[2], -1],
+        [vizinhosTabela[0], 1000, -1],
+        [-1, -1, -1],
+      ];
 
-  soma(vizinhos, alvo) {
-    const chave = vizinhos.join("");
-    if (this.contagem[chave] === undefined) {
-      this.contagem[chave] = [];
-      this.probabilidades[chave] = [];
+      vizinhos = this.converterEstado(vizinhos);
+      let aux = {
+        vizinho: vizinhos,
+        Piso: probabilidades[0],
+        Pedra: probabilidades[1],
+        Parede: probabilidades[2],
+        Bau: probabilidades[3],
+      };
+      this.dados.push(aux);
 
-      for (let i = 0; i < this.estados.length; i++) {
-        this.contagem[chave][this.estados[i]] = 0;
-        this.probabilidades[chave][this.estados[i]] = 0;
+      if (this.escolhidos[vizinho] === undefined) {
+        return;
+      } else {
+        aux = {
+          vizinho: vizinhos,
+          Piso: this.escolhidos[vizinho]["Piso"],
+          Pedra: this.escolhidos[vizinho]["Pedra"],
+          Parede: this.escolhidos[vizinho]["Parede"],
+          Bau: this.escolhidos[vizinho]["Bau"],
+        };
+        this.dadosEscolhidos.push(aux);
       }
     }
-
-    this.contagem[chave][alvo]++;
+    if (vizinhosTabela.length == 2) {
+      let vizinhos = [
+        [-1, vizinhosTabela[1], -1],
+        [vizinhosTabela[0], 1000, -1],
+        [-1, -1, -1],
+      ];
+      vizinhos = this.converterEstado(vizinhos);
+      let aux = {
+        vizinho: vizinhos,
+        Piso: probabilidades[0],
+        Pedra: probabilidades[1],
+        Parede: probabilidades[2],
+        Bau: probabilidades[3],
+      };
+      this.dados.push(aux);
+      if (this.escolhidos[vizinho] === undefined) {
+        return;
+      } else {
+        let aux = {
+          vizinho: vizinhos,
+          Piso: this.escolhidos[vizinho]["Piso"],
+          Pedra: this.escolhidos[vizinho]["Pedra"],
+          Parede: this.escolhidos[vizinho]["Parede"],
+          Bau: this.escolhidos[vizinho]["Bau"],
+        };
+        this.dadosEscolhidos.push(aux);
+      }
+    }
+    if (vizinhosTabela.length == 1) {
+      let vizinhos = [
+        [-1, -1, -1],
+        [vizinhosTabela[0], 1000, -1],
+        [-1, -1, -1],
+      ];
+      vizinhos = this.converterEstado(vizinhos);
+      let aux = {
+        vizinho: vizinhos,
+        Piso: probabilidades[0],
+        Pedra: probabilidades[1],
+        Parede: probabilidades[2],
+        Bau: probabilidades[3],
+      };
+      this.dados.push(aux);
+      if (this.escolhidos[vizinhosTabela] === undefined) {
+        return;
+      } else {
+        let aux = {
+          vizinho: vizinhos,
+          Piso: this.escolhidos[vizinho]["Piso"],
+          Pedra: this.escolhidos[vizinho]["Pedra"],
+          Parede: this.escolhidos[vizinho]["Parede"],
+          Bau: this.escolhidos[vizinho]["Bau"],
+        };
+        this.dadosEscolhidos.push(aux);
+      }
+    }
   }
-  calculate() {
+  adicionaDadosBack(vizinhosTabela, vizinho) {
+    let vizinhos = [
+      [vizinhosTabela[1], vizinhosTabela[2], vizinhosTabela[3]],
+      [vizinhosTabela[0], 1000, vizinhosTabela[4]],
+      [vizinhosTabela[7], vizinhosTabela[6], vizinhosTabela[5]],
+    ];
+    vizinhos = this.converterEstado(vizinhos);
+
+    let aux = {
+      vizinho: vizinhos,
+      "Ordem 4": this.backVezes[vizinho][3],
+      "Ordem 3": this.backVezes[vizinho][2],
+      "Ordem 2": this.backVezes[vizinho][1],
+      "Ordem 1": this.backVezes[vizinho][0],
+    };
+    this.dadosBacktracking.push(aux);
+  }
+
+  getTabelaDados() {
     let vizinhos = Object.keys(this.contagem);
     for (const vizinho of vizinhos) {
-      let total = 0;
-      let chaves = Object.keys(this.contagem[vizinho]);
-      for (const chave of chaves) {
-        total = total + this.contagem[vizinho][chave];
+      const vizinhosTabela = this.separarPorNumerosEMaiusculas(vizinho);
+      let probabilidades = [];
+      for (let i = 0; i < this.estados.length; i++) {
+        probabilidades[i] = this.getProbabilidades(vizinho, this.estados[i]);
       }
-      for (const chave of chaves) {
-        this.probabilidades[vizinho][chave] =
-          this.contagem[vizinho][chave] / total;
-      }
+      this.adicionaDadosNaTabela(vizinhosTabela, probabilidades, vizinho);
     }
-    for (let i = 0; i < this.estados.length; i++) {
-      this.probabilidadesGlobal[this.estados[i]] =
-        this.probabilidadesGlobal[this.estados[i]] / this.totalGlobal;
+    vizinhos = Object.keys(this.backVezes);
+    for (const vizinho of vizinhos) {
+      const vizinhosTabela = this.separarPorNumerosEMaiusculas(vizinho);
+      this.adicionaDadosBack(vizinhosTabela, vizinho);
     }
-    //console.log(this.probabilidadesGlobal)
+    console.log(this.backVezes);
+    console.log(this.dadosBacktracking);
+    console.log(this.dadosEscolhidos);
+    return [this.dados, this.dadosEscolhidos, this.dadosBacktracking];
   }
 
-  getProbabilidades(vizinho, alvo) {
-    if (this.probabilidades[vizinho] === undefined) {
-      return this.probabilidadesGlobal[alvo];
-    }
-    return this.probabilidades[vizinho][alvo];
-  }
-
-  separarPorNumerosEMaiusculas(string) {
-    return string.split(/(?=\d)|(?=[A-Z])/);
-  }
-
-  converterEstado(vizinhos) {
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (vizinhos[i][j] == "Piso") vizinhos[i][j] = Piso;
-        if (vizinhos[i][j] == "Pedra") vizinhos[i][j] = Pedra;
-        if (vizinhos[i][j] == "Parede") vizinhos[i][j] = Parede;
-        if (vizinhos[i][j] == "Bau") vizinhos[i][j] = Bau;
-        if (vizinhos[i][j] == "Enemy") vizinhos[i][j] = Enemy;
-        if (vizinhos[i][j] == "Vazio") vizinhos[i][j] = Vazio;
-      }
-    }
-    return vizinhos;
-  }
-
-  converterImagem() {
-    for (let i = 0; i < this.estados.length; i++) {
-      this.probabilidadesGlobal[this.estados[i]] = 0;
-    }
-    let img = new Image();
-    img = this.assets.Img(this.IMAGEM);
-    this.canvas.width = img.width;
-    this.canvas.height = img.height;
-
-    this.ctx.drawImage(img, 0, 0);
-
-    let tiles = [];
-    for (let i = 0; i < this.TAMANHOIMAGEM; i++) {
-      tiles[i] = [];
-      for (let j = 0; j < this.TAMANHOIMAGEM; j++) {
-        let pixel = this.ctx.getImageData(j, i, 1, 1);
-        let corRgb = pixel.data;
-        if (corRgb[0] == 0 && corRgb[1] == 0 && corRgb[2] == 0) {
-          tiles[i][j] = "Pedra";
+  getVizinho(tile, l, c, ordem) {
+    if (ordem == 8) {
+      let vizinho = [
+        tile[l][c - 1],
+        tile[l - 1][c - 1],
+        tile[l - 1][c],
+        tile[l - 1][c + 1],
+        tile[l][c + 1],
+        tile[l + 1][c + 1],
+        tile[l + 1][c],
+        tile[l + 1][c - 1],
+      ];
+      return vizinho;
+    } else {
+      if (ordem == 4) {
+        let vizinho = [
+          tile[l][c - 1],
+          //tile[l - 1][c - 1],
+          tile[l - 1][c],
+          //tile[l - 1][c + 1],
+          tile[l][c + 1],
+          //tile[l + 1][c + 1],
+          tile[l + 1][c],
+          //tile[l + 1][c - 1],
+        ];
+        return vizinho;
+      } else {
+        if (ordem == 3) {
+          let vizinho = [
+            tile[l][c - 1],
+            tile[l - 1][c - 1],
+            tile[l - 1][c],
+            //tile[l - 1][c + 1],
+            //tile[l][c + 1],
+            //tile[l + 1][c + 1],
+            //tile[l + 1][c],
+            //tile[l + 1][c - 1],
+          ];
+          return vizinho;
         } else {
-          if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
-            tiles[i][j] = "Piso";
+          if (ordem == 2) {
+            let vizinho = [
+              tile[l][c - 1],
+              //tile[l - 1][c - 1],
+              tile[l - 1][c],
+              //tile[l - 1][c + 1],
+              //tile[l][c + 1],
+              //tile[l + 1][c + 1],
+              //tile[l + 1][c],
+              //tile[l + 1][c - 1],
+            ];
+            return vizinho;
           } else {
-            if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
-              tiles[i][j] = "Parede";
-            } else {
-              if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
-                tiles[i][j] = "Bau";
-              } else {
-                if (corRgb[0] == 255 && corRgb[1] == 0 && corRgb[2] == 0) {
-                  tiles[i][j] = "Enemy";
-                }
-                else
-                {
-                console.log(i, j, corRgb);
-                }
-              }
+            if (ordem == 1) {
+              let vizinho = [
+                tile[l][c - 1],
+                //tile[l - 1][c - 1],
+                //tile[l - 1][c],
+                //tile[l - 1][c + 1],
+                //tile[l][c + 1],
+                //tile[l + 1][c + 1],
+                //tile[l + 1][c],
+                //tile[l + 1][c - 1],
+              ];
+              return vizinho;
             }
           }
         }
       }
     }
+  }
+  verificaBacktracking(tile, l, c, ordemInicial, original) {
+    if (ordemInicial == 0) {
+      this.porcentagemDeUso[ordemInicial.toString()]++;
+      return 8;
+    }
+    let anteriores = this.getVizinho(tile, l, c, ordemInicial);
+    let indice = [];
+    for (let i = 0; i < anteriores.length; i++) {
+      indice[i] = this.estados[anteriores[i]];
+    }
+    let vizinho = indice.join("");
+    if (this.probabilidades[vizinho] === undefined) {
+      let proximaOrdem = 0;
+      if (ordemInicial == 8) {
+        proximaOrdem = 4;
+        return this.verificaBacktracking(tile, l, c, proximaOrdem, indice); //realiza backtarcking
+      }
+      if (ordemInicial == 4) {
+        proximaOrdem = 3;
+      }
+      if (ordemInicial == 3) {
+        proximaOrdem = 2;
+      }
+      if (ordemInicial == 2) {
+        proximaOrdem = 1;
+      }
+      if (ordemInicial == 1) {
+        proximaOrdem = 0;
+      }
 
-    return tiles;
+      return this.verificaBacktracking(tile, l, c, proximaOrdem, original); //realiza backtarcking
+    } else {
+      if (ordemInicial < 8) {
+        this.adicionaBacktracking(original, ordemInicial);
+      }
+      this.porcentagemDeUso[ordemInicial.toString()]++;
+      return ordemInicial;
+    }
   }
 
+  proximo(anteriores) {
+    let indice = [];
+    for (let i = 0; i < anteriores.length; i++) {
+      indice[i] = this.estados[anteriores[i]];
+    }
+    let vizinho = indice.join("");
+    let x = 0;
+    let limite = this.myrng();
+    console.log(limite);
+    let total = 0;
+    for (let i = 0; i < this.estados.length; i++) {
+      total += this.getProbabilidades(vizinho, this.estados[i]);
+      if (total >= limite) {
+        x = i;
+        break;
+      }
+    }
+
+    this.adicionaVezesEscolhidos(indice, this.estados[x]);
+    return x;
+  }
+
+
+  iniciaTreino() {
+    let tiles = this.converterImagem();
+    this.treino(tiles);
+  }
+
+  treino(tilesImagem) {
+    this.iniciaPorcentagem([8, 4, 3, 2, 1, 0]);
+
+    for (let i = 0; i < this.estados.length; i++) {
+      this.probabilidadesGlobal[this.estados[i]] = 0;
+    }
+
+    let tamanhoGrid = this.TAMANHOIMAGEM / this.GRID;
+    tamanhoGrid = Math.floor(tamanhoGrid);
+    for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
+      for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+        for (
+          let l = gridI * this.GRID + 1;
+          l < gridI * this.GRID + this.GRID - 1;
+          l++
+        ) {
+          for (
+            let c = gridJ * this.GRID + 1;
+            c < gridJ * this.GRID + this.GRID - 1;
+            c++
+          ) {
+            let vizinhos = this.getVizinho(tilesImagem, l, c, 8);
+            let atual = tilesImagem[l][c];
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tilesImagem, l, c, 4);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tilesImagem, l, c, 3);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tilesImagem, l, c, 2);
+            this.soma(vizinhos, atual);
+            vizinhos = this.getVizinho(tilesImagem, l, c, 1);
+            this.soma(vizinhos, atual);
+            this.totalGlobal++;
+            this.probabilidadesGlobal[atual]++;
+          }
+        }
+      }
+    }
+    this.calculate();
+    console.log("Imagem treinamento :", tilesImagem);
+    console.log("resultado treinamento: ", this.probabilidades);
+  }
 }

@@ -1,4 +1,4 @@
-import Markov from "./Markov.js";
+import Markov from "./CompartilhadoMarkov.js";
 
 export default class Mapa {
   constructor(linhas = 21, colunas = 21, tamanho = 32) {

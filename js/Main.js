@@ -6,10 +6,10 @@ import Game from "./Game.js";
 import CenaCarregando from "./CenaCarregando.js";
 import CenaJogo from "./CenaJogo.js";
 import CenaFim from "./CenaFim.js";
-import LowMarkov from "./LowMarkov.js";
-import HighMarkov from "./HighMarkov.js";
+import LowMarkov from "./Markov.js";
+import HighMarkov from "./MultiDimensionalMarkov.js";
 import HierarquicoMarkov from "./HierarquicoMarkov.js";
-import Markov from "./Markov.js";
+import Markov from "./CompartilhadoMarkov.js";
 
 const Piso = 0;
 const Pedra = 1;

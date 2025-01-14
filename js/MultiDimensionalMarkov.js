@@ -1,4 +1,4 @@
-import Markov from "./Markov.js";
+import Markov from "./CompartilhadoMarkov.js";
 
 export default class HighMarkov extends Markov {
 
