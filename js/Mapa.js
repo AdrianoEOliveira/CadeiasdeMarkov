@@ -21,6 +21,8 @@ export default class Mapa {
     chest = this.cena.assets.Img("chest"); //3
     let coin = new Image();
     coin = this.cena.assets.Img("coin");
+    let enemy = new Image();
+    enemy = this.cena.assets.Img("enemy");
     let linha = 20;
     let coluna = 8;
     for (let l = 0; l < this.LINHAS; l++) {
@@ -57,12 +59,17 @@ export default class Mapa {
           if (this.tiles[l][c] == 2) { // parede
             ctx.drawImage(parede, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
           }
-          if (this.tiles[l][c] == 4) {
-            ctx.drawImage(img, 22 * 32, 21 * 32, 32, 32, c * 32, l * 32, 32, 32);
+          //if (this.tiles[l][c] == 4) {
+            //ctx.drawImage(img, 22 * 32, 21 * 32, 32, 32, c * 32, l * 32, 32, 32);
+          //}
+          if(this.tiles[l][c]==4)
+          {
+            ctx.drawImage(enemy, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
           }
-          if (this.tiles[l][c] == 5) {
-            ctx.drawImage(coin, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
-          }
+        
+          //if (this.tiles[l][c] == 5) {
+            //ctx.drawImage(coin, 0, 0, 32, 32, c * 32, l * 32, 32, 32);
+          //}
           ctx.strokeRect(
             c * this.TAMANHO,
             l * this.TAMANHO,

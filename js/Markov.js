@@ -4,6 +4,7 @@ const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
 const Bau = 3;
+const Enemy = 4;
 const Vazio = 10;
 
 export default class Markov {
@@ -194,6 +195,7 @@ export default class Markov {
         if (vizinhos[i][j] == "Pedra") vizinhos[i][j] = Pedra;
         if (vizinhos[i][j] == "Parede") vizinhos[i][j] = Parede;
         if (vizinhos[i][j] == "Bau") vizinhos[i][j] = Bau;
+        if (vizinhos[i][j] == "Enemy") vizinhos[i][j] = Enemy;
         if (vizinhos[i][j] == "Vazio") vizinhos[i][j] = Vazio;
       }
     }
@@ -229,7 +231,13 @@ export default class Markov {
               if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {
                 tiles[i][j] = "Bau";
               } else {
+                if (corRgb[0] == 255 && corRgb[1] == 0 && corRgb[2] == 0) {
+                  tiles[i][j] = "Enemy";
+                }
+                else
+                {
                 console.log(i, j, corRgb);
+                }
               }
             }
           }

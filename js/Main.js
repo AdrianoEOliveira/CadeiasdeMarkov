@@ -25,6 +25,7 @@ assets.adicionaImagem("pedra", "assets/rock.png");
 assets.adicionaImagem("parede", "assets/brick_gray.png");
 assets.adicionaImagem("chest", "assets/Chest.png");
 assets.adicionaImagem("coin", "assets/coin.jpg");
+assets.adicionaImagem("enemy", "assets/enemy.png");
 
 assets.adicionaAudio("hurt", "assets/hurt.wav");
 let canvas = document.getElementById("canvas");

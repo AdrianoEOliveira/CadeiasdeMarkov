@@ -558,6 +558,7 @@ export default class CenaJogo extends Cena {
     this.markov.adicionaEstado("Pedra");
     this.markov.adicionaEstado("Parede");
     this.markov.adicionaEstado("Bau");
+    this.markov.adicionaEstado("Enemy");
   }
 
   iniciaMapa(mapa) {
