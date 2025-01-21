@@ -23,6 +23,23 @@
         border: 2px solid rgb(255, 0, 0); /* Borda amarela */
         background-color: rgba(255, 253, 220, 0.822); /* Opcional: cor de fundo */
     }
+
+    .checklist {
+            list-style: none; /* Remove marcadores da lista */
+            padding: 0;
+        }
+
+        .checklist li {
+            margin-bottom: 10px; /* Espaçamento entre itens */
+        }
+
+        .checklist label {
+            cursor: pointer; /* Adiciona um cursor de "mão" ao passar por cima do texto */
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px; /* Espaçamento entre a caixa e o texto */
+        }
     </style>
 
 </head>
@@ -224,6 +241,49 @@
      
             </form>
         </article>
+        </div>
+
+        <div class="grid">
+            <form name="checklistForm">
+                <div class="checklist">
+                    <h2>Consertar Inconsitencias</h2>
+                    <h3>
+                        <h2>
+                            <input type="checkbox" name="pisoColadoComPedra" value="1">
+                            Item 1: Remover pedras colado com piso
+                        </h2>
+                    </h3>
+
+                    <h3>
+                        <h2>
+                            <input type="checkbox" name="BauColadoComPedra" value="2">
+                            Item 2: Remover Pedras Colado com Bau
+                        </h2>
+                    </h3>
+                    <h3>
+                        <h2>
+                            <input type="checkbox" name="paredeEmVoltaDePedra" value="3">
+                            Item 3: tirar paredes com pedra em volta
+                        </h2>
+                    </h3>
+                    <h3>
+                        <h2>
+                            <input type="checkbox" name="Baus" value="4">
+                            Item 4: Limpar zonas Muito povoado de baus e povoa as vazias
+                        </h2>
+                    </h3>
+                    <h3>
+                        <h2>
+                            <input type="checkbox" name="Enemy" value="5">
+                            Item 5: Limpar zonas Muito povoado de enemigos e povoa as vazias
+                        </h2>
+                    </h3>
+                </div>
+                <button type="button" name="checkButton">Enviar</button>
+            </form>
+        
+            <div name="resultadoCheck" id="resultadoCheck" style="margin-top: 20px;"></div>
+            
         </div>
      
      </div>

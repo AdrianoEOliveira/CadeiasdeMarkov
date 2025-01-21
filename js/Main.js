@@ -396,32 +396,28 @@ function setSeed() {
   highMarkov.AdicionaSemente(myrng);
 }
 
-function atualizaMarkov1(LINHAS,COLUNAS,metodo) {
-
+function atualizaMarkov1(LINHAS, COLUNAS, metodo) {
   markov.atualizaParte1(LINHAS, COLUNAS, modelo);
   lowmarkov.atualizaParte1(LINHAS, COLUNAS, modelo);
   hierarquico.atualizaParte1(LINHAS, COLUNAS, modelo);
   highMarkov.atualizaParte1(LINHAS, COLUNAS, modelo);
   setSeed();
-  lowmarkov.tiles = markov.tiles
-  hierarquico.tiles = markov.tiles
-  highMarkov.tiles = markov.tiles
-
+  lowmarkov.tiles = markov.tiles;
+  hierarquico.tiles = markov.tiles;
+  highMarkov.tiles = markov.tiles;
 }
 function atualizaMarkov2(tamanhoMapa) {
-
   markov.atualizaParte2(tamanhoMapa);
   lowmarkov.atualizaParte2(tamanhoMapa);
   hierarquico.atualizaParte2(tamanhoMapa);
   highMarkov.atualizaParte2(tamanhoMapa);
   setSeed();
 }
-function atualizaMarkov3(grid,metodo) {
-
-  markov.atualizaParte3(grid,metodo);
-  lowmarkov.atualizaParte3(grid,metodo);
-  hierarquico.atualizaParte3(grid,metodo);
-  highMarkov.atualizaParte3(grid,metodo);
+function atualizaMarkov3(grid, metodo) {
+  markov.atualizaParte3(grid, metodo);
+  lowmarkov.atualizaParte3(grid, metodo);
+  hierarquico.atualizaParte3(grid, metodo);
+  highMarkov.atualizaParte3(grid, metodo);
   setSeed();
   if (metodo == "high") {
     cena.markov = highMarkov;
@@ -432,14 +428,13 @@ function atualizaMarkov3(grid,metodo) {
       cena.markov = hierarquico;
     }
   }
-  console.log(cena.markov)
+  console.log(cena.markov);
 }
-function atualizaMarkov4(iteracoes,newTiles,metodo)
-{
-  markov.atualizaParte4(iteracoes,newTiles)
-  lowmarkov.atualizaParte4(iteracoes,newTiles)
-  hierarquico.atualizaParte4(iteracoes,newTiles)
-  highMarkov.atualizaParte4(iteracoes,newTiles)
+function atualizaMarkov4(iteracoes, newTiles, metodo) {
+  markov.atualizaParte4(iteracoes, newTiles);
+  lowmarkov.atualizaParte4(iteracoes, newTiles);
+  hierarquico.atualizaParte4(iteracoes, newTiles);
+  highMarkov.atualizaParte4(iteracoes, newTiles);
   setSeed();
   if (metodo == "high") {
     cena.markov = highMarkov;
@@ -450,7 +445,6 @@ function atualizaMarkov4(iteracoes,newTiles,metodo)
       cena.markov = hierarquico;
     }
   }
-
 }
 
 document.inicial.iniciar.addEventListener("click", function (event) {
@@ -461,8 +455,7 @@ document.inicial.iniciar.addEventListener("click", function (event) {
     aleatorioMapa(markov, LINHAS, COLUNAS);
   }
 
-
-  atualizaMarkov1(LINHAS,COLUNAS,modelo);
+  atualizaMarkov1(LINHAS, COLUNAS, modelo);
 
   cena.LINHAS = LINHAS;
   cena.COLUNAS = COLUNAS;
@@ -495,7 +488,7 @@ document.metodo.treinar.addEventListener("click", function (event) {
   metodo = document.metodo.highOrLow.value;
   grid = document.metodo.grid.valueAsNumber;
 
-  atualizaMarkov3(grid,metodo);
+  atualizaMarkov3(grid, metodo);
 
   game.adicionarCena("teste", cena);
 
@@ -528,7 +521,7 @@ document.teste.gerar.addEventListener("click", function (event) {
   iteracoes = document.teste.iteracoes.valueAsNumber;
   newTiles = document.teste.newTiles.value;
 
-  atualizaMarkov4(iteracoes,newTiles,metodo);
+  atualizaMarkov4(iteracoes, newTiles, metodo);
   console.log(cena);
 
   game.adicionarCena("teste", cena);
@@ -538,7 +531,86 @@ document.teste.gerar.addEventListener("click", function (event) {
   game.selecionaCena("teste");
 });
 
+document.checklistForm.checkButton.addEventListener("click", function (event) {
+  // Impede o envio padrão do formulário (se necessário)
+  event.preventDefault();
 
+  // Seleciona o formulário e o local para exibir os resultados
+  const checklistForm = document.checklistForm;
+
+  // Obtém os itens marcados como concluídos
+  const checkedItems = Array.from(
+    checklistForm.querySelectorAll('input[type="checkbox"]:checked')
+  ).map((checkbox) => checkbox.parentElement.textContent.trim());
+
+  document.getElementById("resultadoCheck").innerHTML = "";
+  // Exibe o resultado
+  if (checkedItems.length === 0) {
+    let escrito = document.createElement("h2");
+    escrito.textContent = "Nenhuma tarefa Marcada"; // Adiciona o texto ao elemento <p>
+    document.getElementById("resultadoCheck").appendChild(escrito);
+  } else {
+    let escrito = document.createElement("h2");
+
+    // Cria o conteúdo das tarefas concluídas, separando cada tarefa com uma quebra de linha <br>
+    escrito.innerHTML = `Tarefas concluídas:<br>${checkedItems
+      .map((item) => `${item}`)
+      .join("<br>")}`;
+
+    document.getElementById("resultadoCheck").appendChild(escrito);
+  }
+
+  const valores = Array.from(
+    checklistForm.querySelectorAll('input[type="checkbox"]:checked')
+  ).map((checkbox) => checkbox.value); // Usando o valor do checkbox
+
+  let mapa = cena.mapa.tiles;
+  let processamento = new Markov(
+    assets,
+    canvasMarkov,
+    LINHAS,
+    COLUNAS,
+    grid,
+    tamanhoMapa,
+    "teste",
+    0,
+    "aleatorio",
+    newTiles,
+    "low"
+  );
+  processamento.tiles = mapa;
+  let cena2 = new CenaJogo(canvas, assets, input, processamento, LINHAS, COLUNAS);
+  myrng = new Math.seedrandom(document.teste.seed.value);
+  processamento.AdicionaSemente(myrng);
+
+  for (let i = 0; i < valores.length; i++) {
+    if (valores[i] == "1") {
+      processamento.removePedraColadoComPiso()
+    }
+    if(valores[i] == "2") {
+      processamento.removePedraColadoComBau();
+    }
+    if(valores[i] == "3") {
+      processamento.removeParedeEnvoltaDePedra();
+    }
+    if(valores[i] == "4") {
+      processamento.removerExcessoEPovoaDeBaus();
+    }
+    if(valores[i] == "5") {
+      processamento.removerEAdicionarInimigosPorZona();
+    }
+  }
+  zoomSlider.oninput = function () {
+    zoomOutput.innerHTML = this.value;
+    console.log(zoomSlider.value);
+    cena2.Zoom(zoomSlider.value / 100);
+  };
+  game.adicionarCena("teste2", cena2);
+
+  game.selecionaCena("teste2");
+});
+
+// Adiciona o evento de submissão ao formulário quando o DOM é carregado
 
 const themeSwitcher = {
   // Config

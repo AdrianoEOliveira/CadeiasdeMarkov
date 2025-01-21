@@ -1,5 +1,6 @@
 
 
+
 const Piso = 0;
 const Pedra = 1;
 const Parede = 2;
@@ -52,12 +53,12 @@ export default class Markov {
     this.assets = assets;
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d", { willReadFrequently: true });
-    this.myrng;
+    this.semente;;
   }
 
   AdicionaSemente(semente)
   {
-    this.myrng = semente
+    this.semente = semente
   }
 
   atualizaParte1(LINHAS, COLUNAS , modelo)
@@ -248,4 +249,286 @@ export default class Markov {
     return tiles;
   }
 
+  removePedraColadoComPiso() { 
+    let end = false;
+    while (!end) {
+        end = true;  // Assume que nenhuma alteração ocorrerá a princípio
+        for (let i = 1; i < this.LINHAS - 1; i++) {
+            for (let j = 1; j < this.COLUNAS - 1; j++) {
+                // Verifica se o tile é Piso
+                if (this.tiles[i][j] == Pedra) {
+                    // Verifica as condições de colagem com Pedra (horizontal e vertical)
+                    if (
+                        this.tiles[i][j - 1] == Piso || // Vizinho à esquerda
+                        this.tiles[i][j + 1] == Piso || // Vizinho à direita
+                        this.tiles[i - 1][j] == Piso || // Vizinho acima
+                        this.tiles[i + 1][j] == Piso    // Vizinho abaixo
+                    ) {
+                        this.tiles[i][j] = Parede;  // Altera Piso para Parede
+                        end = false;  // Marca que houve alteração, para continuar o loop
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+removePedraColadoComBau() {
+  let end = false;
+  while (!end) {
+      end = true;  // Assume que nenhuma alteração ocorrerá a princípio
+      for (let i = 1; i < this.LINHAS - 1; i++) {
+          for (let j = 1; j < this.COLUNAS - 1; j++) {
+              // Verifica se o tile é Pedra
+              if (this.tiles[i][j] == Pedra) {
+                  // Verifica as condições de colagem com Baú e aplica a mudança para Parede
+                  if (this.tiles[i][j - 1] == Bau || this.tiles[i][j + 1] == Bau || 
+                      this.tiles[i - 1][j] == Bau || this.tiles[i + 1][j] == Bau) {
+                      this.tiles[i][j] = Parede;  // Altera Pedra para Parede
+                      end = false;  // Marca que houve alteração, para continuar o loop
+                  }
+              }
+          }
+      }
+  }
+}
+removeParedeEnvoltaDePedra() {
+  let end = false;
+  while (!end) {
+      end = true;  // Assume que nenhuma alteração ocorrerá a princípio
+      for (let i = 1; i < this.LINHAS - 1; i++) {
+          for (let j = 1; j < this.COLUNAS - 1; j++) {
+              // Verifica se o tile é uma Parede
+              if (this.tiles[i][j] == Parede) {
+                  // Verifica se há Piso, Bau ou Enemy nas vizinhanças horizontais ou verticais
+                  if (
+                      this.tiles[i][j - 1] == Piso ||   // Vizinho à esquerda
+                      this.tiles[i][j + 1] == Piso ||   // Vizinho à direita
+                      this.tiles[i - 1][j] == Piso ||   // Vizinho acima
+                      this.tiles[i + 1][j] == Piso ||   // Vizinho abaixo
+                      this.tiles[i][j - 1] == Bau ||    // Vizinho à esquerda (Bau)
+                      this.tiles[i][j + 1] == Bau ||    // Vizinho à direita (Bau)
+                      this.tiles[i - 1][j] == Bau ||    // Vizinho acima (Bau)
+                      this.tiles[i + 1][j] == Bau ||    // Vizinho abaixo (Bau)
+                      this.tiles[i][j - 1] == Enemy ||  // Vizinho à esquerda (Enemy)
+                      this.tiles[i][j + 1] == Enemy ||  // Vizinho à direita (Enemy)
+                      this.tiles[i - 1][j] == Enemy ||  // Vizinho acima (Enemy)
+                      this.tiles[i + 1][j] == Enemy     // Vizinho abaixo (Enemy)
+                  ) {
+                      continue;  // Não faz alterações se estiver colado com Piso, Bau ou Enemy
+                  }
+
+                  // Verifica se os vizinhos esquerdo e direito são Pedra
+                  if (
+                      (this.tiles[i][j - 1] == Pedra && this.tiles[i][j + 1] == Pedra) || 
+                      (this.tiles[i - 1][j] == Pedra && this.tiles[i + 1][j] == Pedra)
+                  ) {
+                      this.tiles[i][j] = Pedra;  // Altera Parede para Pedra
+                      end = false;  // Marca que houve alteração, para continuar o loop
+                  }
+
+                  // Verifica se o vizinho de baixo é Parede e existe uma Pedra mais abaixo
+                  let currentRow = i;
+                  while (currentRow < this.LINHAS - 1 && this.tiles[currentRow + 1][j] == Parede) {
+                      currentRow++;
+                      if (this.tiles[currentRow + 1][j] == Pedra) {
+                          this.tiles[i][j] = Pedra;  // Altera Parede para Pedra
+                          end = false;  // Marca que houve alteração, para continuar o loop
+                          break;  // Sai do loop interno quando a alteração ocorrer
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+removerExcessoEPovoaDeBaus() {
+  // Definir o número de zonas baseado no grid
+  const numeroDeZonas = this.GRID; // Este valor define a quantidade de zonas ao longo de cada dimensão (linhas e colunas)
+
+  // Calcular o tamanho de cada zona
+  const linhasPorZona = Math.floor(this.LINHAS / numeroDeZonas);
+  const colunasPorZona = Math.floor(this.COLUNAS / numeroDeZonas);
+
+  // Contém as zonas
+  let zonas = [];
+
+  // Dividindo o mapa em zonas com base no grid
+  for (let i = 0; i < numeroDeZonas; i++) {
+    for (let j = 0; j < numeroDeZonas; j++) {
+      // Calcular o início e fim das coordenadas da zona
+      const startX = i * linhasPorZona;
+      const startY = j * colunasPorZona;
+      const endX = (i + 1) * linhasPorZona;
+      const endY = (j + 1) * colunasPorZona;
+
+      // Adiciona a zona ao array de zonas
+      zonas.push({ startX, startY, endX, endY });
+    }
+  }
+
+  // Itera sobre cada zona
+  for (const zona of zonas) {
+    let baus = [];
+
+    // Contagem de todos os baús dentro da zona
+    for (let i = zona.startX; i < zona.endX; i++) {
+      for (let j = zona.startY; j < zona.endY; j++) {
+        if (this.tiles[i][j] == Bau) {
+          baus.push({ x: i, y: j }); // Armazena a posição dos baús dentro da zona
+        }
+      }
+    }
+
+    // Verifica a quantidade de baús na zona
+    const totalBaus = baus.length;
+    const bausParaManter = 3; // Mantém pelo menos 3 baús na zona
+
+    // Inicializar a variável bausParaAdicionar
+    let bausParaAdicionar = 0;
+
+    // Se houver menos de 3 baús, adiciona os faltantes
+    if (totalBaus < bausParaManter) {
+      bausParaAdicionar = bausParaManter - totalBaus; // Quantidade de baús a adicionar
+
+      // Povoar a zona com baús
+      for (let i = 0; i < bausParaAdicionar; i++) {
+        let x, y;
+        // Encontrar uma posição vazia na zona (Piso)
+        do {
+          x = Math.floor(this.semente() * (zona.endX - zona.startX) + zona.startX);
+          y = Math.floor(this.semente() * (zona.endY - zona.startY) + zona.startY);
+        } while (this.tiles[x][y] != Piso); // Garante que a posição seja Piso (vacío)
+
+        // Adiciona um baú na posição encontrada
+        this.tiles[x][y] = Bau;
+      }
+    }
+
+    // Após adicionar baús, verifica a quantidade total de baús
+    const totalBausFinal = baus.length + bausParaAdicionar;
+    if (totalBausFinal > bausParaManter) {
+      const bausParaRemover = totalBausFinal - bausParaManter; // Calcula o excesso de baús a remover
+
+      // Embaralha as posições dos baús dentro da zona para remoção aleatória
+      baus = this._embaralharArray(baus);
+
+      // Seleciona aleatoriamente os baús a remover
+      let bausRemover = baus.slice(0, bausParaRemover);
+
+      // Remove os baús selecionados dentro da zona
+      for (let i = 0; i < bausRemover.length; i++) {
+        const { x, y } = bausRemover[i];
+        this.tiles[x][y] = Piso; // Remove o baú substituindo por 0 (Piso)
+      }
+    }
+  }
+}
+
+  
+
+
+  removerEAdicionarInimigosPorZona() {
+    const numeroDeZonas = this.GRID;  // Define a quantidade de zonas ao longo de cada dimensão (linhas e colunas)
+  
+    // Calcular o tamanho de cada zona
+    const linhasPorZona = Math.floor(this.LINHAS / numeroDeZonas);
+    const colunasPorZona = Math.floor(this.COLUNAS / numeroDeZonas);
+  
+    // Contém as zonas
+    let zonas = [];
+  
+    // Criar as zonas dividindo o mapa com base no número de zonas e tamanho de cada zona
+    for (let i = 0; i < numeroDeZonas; i++) {
+      for (let j = 0; j < numeroDeZonas; j++) {
+        const startX = i * linhasPorZona;
+        const startY = j * colunasPorZona;
+        const endX = Math.min((i + 1) * linhasPorZona, this.LINHAS);
+        const endY = Math.min((j + 1) * colunasPorZona, this.COLUNAS);
+  
+        zonas.push({ startX, startY, endX, endY });
+      }
+    }
+  
+    // Itera sobre cada zona
+    for (const zona of zonas) {
+      let inimigos = [];
+      let espacosVazios = [];
+      
+      // Contagem de todos os inimigos dentro da zona e marcação das posições vazias
+      for (let i = zona.startX; i < zona.endX; i++) {
+        for (let j = zona.startY; j < zona.endY; j++) {
+          if (this.tiles[i][j] == Enemy) {
+            inimigos.push({ x: i, y: j }); // Armazena a posição dos inimigos dentro da zona
+          }
+          if (this.tiles[i][j] == Piso) {
+            espacosVazios.push({ x: i, y: j }); // Marca as áreas vazias dentro da zona
+          }
+        }
+      }
+  
+      // Verifica a quantidade de inimigos na zona
+      const totalInimigos = inimigos.length;
+      const totalEspacosVazios = espacosVazios.length;
+      
+      if (totalInimigos <= 10) {
+        // Se houver 10 ou menos inimigos, preenche as áreas vazias com inimigos aleatoriamente
+        const inimigosParaAdicionar = Math.min(10 - totalInimigos, totalEspacosVazios); // Quantos inimigos adicionar
+        if (inimigosParaAdicionar > 0) {
+          // Embaralha as áreas vazias
+          espacosVazios = this._embaralharArray(espacosVazios);
+          
+          // Adiciona inimigos nas áreas vazias
+          for (let i = 0; i < inimigosParaAdicionar; i++) {
+            const { x, y } = espacosVazios[i];
+            this.tiles[x][y] = Enemy; // Coloca um inimigo na posição vazia
+          }
+        }
+        continue;
+      }
+  
+      // Calcula o excesso de inimigos a remover
+      const inimigosParaRemover = totalInimigos - 10;
+      if (inimigosParaRemover > 0) {
+        // Embaralha as posições dos inimigos dentro da zona para remoção aleatória
+        inimigos = this._embaralharArray(inimigos);
+  
+        // Seleciona aleatoriamente os inimigos a remover
+        let inimigosRemover = inimigos.slice(0, inimigosParaRemover);
+  
+        // Remove os inimigos selecionados dentro da zona
+        for (let i = 0; i < inimigosRemover.length; i++) {
+          const { x, y } = inimigosRemover[i];
+          this.tiles[x][y] = 0; // Remove o inimigo substituindo por 0
+        }
+      }
+  
+      // Após a remoção, calcula as áreas vazias restantes e adiciona inimigos aleatoriamente
+      const totalInimigosApósRemocao = 10; // Após remoção, mantemos 10 inimigos
+      const inimigosRestantesParaAdicionar = totalInimigosApósRemocao - inimigos.length;
+  
+      if (inimigosRestantesParaAdicionar > 0 && totalEspacosVazios > 0) {
+        // Embaralha as áreas vazias para garantir distribuição aleatória
+        espacosVazios = this._embaralharArray(espacosVazios);
+  
+        // Preenche as áreas vazias com inimigos até o limite
+        const espacosParaPreencher = espacosVazios.slice(0, inimigosRestantesParaAdicionar);
+        for (let i = 0; i < espacosParaPreencher.length; i++) {
+          const { x, y } = espacosParaPreencher[i];
+          this.tiles[x][y] = Enemy; // Coloca um inimigo nas áreas vazias
+        }
+      }
+    }
+  }
+
+  _embaralharArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(this.semente() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]]; // Troca os elementos
+    }
+    return arr;
+  }
+  
 }
