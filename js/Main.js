@@ -123,6 +123,8 @@ let highMarkov = new HighMarkov(
 
 let cena = new CenaJogo(canvas, assets, input, markov);
 
+let cena2; // Variável para armazenar a segunda cena
+
 let carregando = new CenaCarregando(canvas, assets, input, markov);
 
 let game = new Game(canvas, assets, input);
@@ -144,8 +146,10 @@ zoomOutput.innerHTML = zoomSlider.value; // Display the default slider value
 // Update the current slider value (each time you drag the slider handle)
 zoomSlider.oninput = function () {
   zoomOutput.innerHTML = this.value;
-  console.log(zoomSlider.value);
   cena.Zoom(zoomSlider.value / 100);
+  if (cena2) {  // Verifica se cena2 foi inicializada
+    cena2.Zoom(this.value / 100); // Atualiza o zoom na cena2
+  }
 };
 
 let corteSlider = document.getElementById("corte");
@@ -579,7 +583,8 @@ document.checklistForm.checkButton.addEventListener("click", function (event) {
     "low"
   );
   processamento.tiles = mapa;
-  let cena2 = new CenaJogo(canvas, assets, input, processamento, LINHAS, COLUNAS);
+  cena2 = new CenaJogo(canvas, assets, input, processamento, LINHAS, COLUNAS);
+  cena2.zoomValue = cena.zoomValue;
   myrng = new Math.seedrandom(document.teste.seed.value);
   processamento.AdicionaSemente(myrng);
 
@@ -600,11 +605,6 @@ document.checklistForm.checkButton.addEventListener("click", function (event) {
       processamento.removerEAdicionarInimigosPorZona();
     }
   }
-  zoomSlider.oninput = function () {
-    zoomOutput.innerHTML = this.value;
-    console.log(zoomSlider.value);
-    cena2.Zoom(zoomSlider.value / 100);
-  };
   game.adicionarCena("teste2", cena2);
 
   game.selecionaCena("teste2");

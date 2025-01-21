@@ -190,9 +190,6 @@ export default class HierarquicoMarkov extends Markov {
       const vizinhosTabela = this.separarPorNumerosEMaiusculas(vizinho);
       this.adicionaDadosBack(vizinhosTabela, vizinho);
     }
-    console.log(this.backVezes);
-    console.log(this.dadosBacktracking);
-    console.log(this.dadosEscolhidos);
     return [this.dados, this.dadosEscolhidos, this.dadosBacktracking];
   }
 
@@ -324,7 +321,6 @@ export default class HierarquicoMarkov extends Markov {
     let vizinho = indice.join("");
     let x = 0;
     let limite = this.semente();
-    //console.log(limite);
     let total = 0;
     for (let i = 0; i < this.estados.length; i++) {
       total += this.getProbabilidades(vizinho, this.estados[i]);
@@ -406,7 +402,6 @@ export default class HierarquicoMarkov extends Markov {
         gi[i][j] = "Direita";
       }
     }
-    console.log(gi);
     return gi;
   }
 

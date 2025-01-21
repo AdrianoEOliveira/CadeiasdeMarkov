@@ -42,7 +42,6 @@ export default class CenaJogo extends Cena {
 
   lowMarkov(z) {
     if (this.markov.newTiles == "sim") {
-      console.log(z);
       for (let k = 0; k < z; k++) {
         const oldTiles = structuredClone(this.mapa.tiles);
         const newTiles = structuredClone(this.mapa.tiles);
@@ -229,7 +228,6 @@ export default class CenaJogo extends Cena {
 
         for (let l = 1; l < this.LINHAS + 1; l++) {
           for (let c = 1; c < this.COLUNAS + 1; c++) {
-            console.log(l);
             let ordem = this.markov.verificaBacktracking(
               oldTiles,
               l,
