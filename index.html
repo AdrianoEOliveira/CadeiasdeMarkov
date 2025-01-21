@@ -16,6 +16,13 @@
         :root {
             --pico-font-size: 55%;
         }
+        .scrollable {
+        overflow: auto; /* Permite rolagem automática */
+        max-height: 500px; /* Limita a altura para que a rolagem seja ativada */
+        padding: 1em;
+        border: 2px solid rgb(255, 0, 0); /* Borda amarela */
+        background-color: rgba(255, 253, 220, 0.822); /* Opcional: cor de fundo */
+    }
     </style>
 
 </head>
@@ -41,7 +48,7 @@
 <body class="container">
 
     <div class ="grid">
-    <div class="">
+    <div class="scrollable">
         <div class="grid">
             <article>
 
@@ -221,7 +228,7 @@
      
      </div>
      
-        <div>
+        <div class="scrollable">
      
             <canvas id="canvas" name="canvas"></canvas>
      
