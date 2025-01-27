@@ -535,79 +535,77 @@ document.teste.gerar.addEventListener("click", function (event) {
   game.selecionaCena("teste");
 });
 
-document.checklistForm.checkButton.addEventListener("click", function (event) {
-  // Impede o envio padrão do formulário (se necessário)
-  event.preventDefault();
 
-  // Seleciona o formulário e o local para exibir os resultados
-  const checklistForm = document.checklistForm;
+document.addEventListener("DOMContentLoaded", () => {
+  // Adicionar evento de clique para o botão "Adicionar"
+  document.getElementById("adicionarPos").addEventListener("click", () => {
+    const selectedOptions = Array.from(document.getElementById("selectDisponiveis").selectedOptions);
+    // Mover as opções selecionadas para o segundo select
+    selectedOptions.forEach((option) => {
+      document.getElementById("selectSelecionadas").appendChild(option.cloneNode(true)); // Clonando para permitir repetição
+    });
+  });
 
-  // Obtém os itens marcados como concluídos
-  const checkedItems = Array.from(
-    checklistForm.querySelectorAll('input[type="checkbox"]:checked')
-  ).map((checkbox) => checkbox.parentElement.textContent.trim());
+  // Adicionar evento de clique para o botão "Remover"
+  document.getElementById("removerPos").addEventListener("click", () => {
+    const selectedOptions = Array.from(document.getElementById("selectSelecionadas").selectedOptions);
 
-  document.getElementById("resultadoCheck").innerHTML = "";
-  // Exibe o resultado
-  if (checkedItems.length === 0) {
-    let escrito = document.createElement("h2");
-    escrito.textContent = "Nenhuma tarefa Marcada"; // Adiciona o texto ao elemento <p>
-    document.getElementById("resultadoCheck").appendChild(escrito);
-  } else {
-    let escrito = document.createElement("h2");
+    // Remover as opções selecionadas do segundo select
+    selectedOptions.forEach((option) => {
+      option.remove();  // Remover diretamente do segundo select sem mover para o primeiro
+    });
+  });
 
-    // Cria o conteúdo das tarefas concluídas, separando cada tarefa com uma quebra de linha <br>
-    escrito.innerHTML = `Tarefas concluídas:<br>${checkedItems
-      .map((item) => `${item}`)
-      .join("<br>")}`;
+  // Adicionar evento de clique para o botão "Realizar Ações"
+  document.getElementById("PosProcessamento").addEventListener("click", () => {
 
-    document.getElementById("resultadoCheck").appendChild(escrito);
-  }
+    const valores = Array.from(document.getElementById("selectSelecionadas").options).map(
+      (option) => option.value // Aqui estamos pegando o valor de cada opção selecionada
+    );
+    console.log('Tarefas selecionadas:', valores);
+    // pegar os valores selecionados
 
-  const valores = Array.from(
-    checklistForm.querySelectorAll('input[type="checkbox"]:checked')
-  ).map((checkbox) => checkbox.value); // Usando o valor do checkbox
+    let mapa = cena.mapa.tiles;
+    let processamento = new Markov(
+      assets,
+      canvasMarkov,
+      LINHAS,
+      COLUNAS,
+      grid,
+      tamanhoMapa,
+      "teste",
+      0,
+      "aleatorio",
+      newTiles,
+      "low"
+    );
+    processamento.tiles = mapa;
+    cena2 = new CenaJogo(canvas, assets, input, processamento, LINHAS, COLUNAS);
+    cena2.zoomValue = cena.zoomValue;
+    myrng = new Math.seedrandom(document.teste.seed.value);
+    processamento.AdicionaSemente(myrng);
 
-  let mapa = cena.mapa.tiles;
-  let processamento = new Markov(
-    assets,
-    canvasMarkov,
-    LINHAS,
-    COLUNAS,
-    grid,
-    tamanhoMapa,
-    "teste",
-    0,
-    "aleatorio",
-    newTiles,
-    "low"
-  );
-  processamento.tiles = mapa;
-  cena2 = new CenaJogo(canvas, assets, input, processamento, LINHAS, COLUNAS);
-  cena2.zoomValue = cena.zoomValue;
-  myrng = new Math.seedrandom(document.teste.seed.value);
-  processamento.AdicionaSemente(myrng);
-
-  for (let i = 0; i < valores.length; i++) {
-    if (valores[i] == "1") {
-      processamento.removePedraColadoComPiso()
+    for (let i = 0; i < valores.length; i++) {
+      if (valores[i] == "1") {
+        processamento.removePedraColadoComPiso()
+      }
+      if(valores[i] == "2") {
+        processamento.removePedraColadoComBau();
+      }
+      if(valores[i] == "3") {
+        processamento.removeParedeEnvoltaDePedra();
+      }
+      if(valores[i] == "4") {
+        processamento.removerExcessoEPovoaDeBaus();
+      }
+      if(valores[i] == "5") {
+        processamento.removerEAdicionarInimigosPorZona();
+      }
     }
-    if(valores[i] == "2") {
-      processamento.removePedraColadoComBau();
-    }
-    if(valores[i] == "3") {
-      processamento.removeParedeEnvoltaDePedra();
-    }
-    if(valores[i] == "4") {
-      processamento.removerExcessoEPovoaDeBaus();
-    }
-    if(valores[i] == "5") {
-      processamento.removerEAdicionarInimigosPorZona();
-    }
-  }
-  game.adicionarCena("teste2", cena2);
+    game.adicionarCena("teste2", cena2);
 
-  game.selecionaCena("teste2");
+    game.selecionaCena("teste2");
+  });
 });
 
 // Adiciona o evento de submissão ao formulário quando o DOM é carregado
