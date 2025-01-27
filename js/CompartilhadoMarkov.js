@@ -226,7 +226,7 @@ export default class Markov {
           if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 255) {
             tiles[i][j] = "Piso";
           } else {
-            if (corRgb[0] == 32 && corRgb[1] == 32 && corRgb[2] == 32) {
+            if (corRgb[0] == 180 && corRgb[1] == 180 && corRgb[2] == 180) {
               tiles[i][j] = "Parede";
             } else {
               if (corRgb[0] == 255 && corRgb[1] == 255 && corRgb[2] == 0) {

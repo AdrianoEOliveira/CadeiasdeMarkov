@@ -94,14 +94,14 @@ export default class CenaJogo extends Cena {
   }
 
   cantosGi() {
-    let cantoI = Math.floor(this.LINHAS * this.markov.corte);
-    let cantoJ = Math.floor(this.COLUNAS * this.markov.corte);
+    let cantoI = Math.floor((this.LINHAS +2) * this.markov.corte);
+    let cantoJ = Math.floor((this.COLUNAS +2) * this.markov.corte);
 
     let gi = [];
-    for (let i = 0; i < this.LINHAS; i++) {
+    for (let i = 0; i < this.LINHAS +2; i++) {
       gi[i] = []; // Inicializa a linha
 
-      for (let j = 0; j < this.COLUNAS; j++) {
+      for (let j = 0; j < this.COLUNAS +2; j++) {
         gi[i][j] = "Meio";
       }
     }
@@ -116,44 +116,44 @@ export default class CenaJogo extends Cena {
     // Canto superior direito (diagonal secundária)
     for (let i = 0; i < cantoI; i++) {
       for (let j = 0; j < cantoJ; j++) {
-        gi[i][this.COLUNAS - cantoJ + j] = "Superior direito";
+        gi[i][this.COLUNAS +2 - cantoJ + j] = "Superior direito";
       }
     }
 
     // Canto inferior esquerdo (diagonal principal)
     for (let i = 0; i < cantoI; i++) {
       for (let j = 0; j < cantoJ; j++) {
-        gi[this.LINHAS - cantoI + i][j] = "Inferior esquerdo";
+        gi[this.LINHAS +2 - cantoI + i][j] = "Inferior esquerdo";
       }
     }
 
     // Canto inferior direito (diagonal secundária)
     for (let i = 0; i < cantoI; i++) {
       for (let j = 0; j < cantoJ; j++) {
-        gi[this.LINHAS - cantoI + i][this.COLUNAS - cantoJ + j] =
+        gi[this.LINHAS + 2- cantoI + i][this.COLUNAS +2 - cantoJ + j] =
           "Inferior direito";
       }
     }
 
     for (let i = 0; i < cantoI; i++) {
-      for (let j = cantoJ; j < this.LINHAS - cantoJ; j++) {
+      for (let j = cantoJ; j < this.LINHAS +2 - cantoJ; j++) {
         gi[i][j] = "Cima";
       }
     }
 
-    for (let i = cantoI; i < this.LINHAS - cantoI; i++) {
+    for (let i = cantoI; i < this.LINHAS +2 - cantoI; i++) {
       for (let j = 0; j < cantoJ; j++) {
         gi[i][j] = "Esquerda";
       }
     }
 
-    for (let i = this.LINHAS - cantoI; i < this.LINHAS; i++) {
-      for (let j = cantoI; j < this.COLUNAS - cantoJ; j++) {
+    for (let i = this.LINHAS +2 - cantoI; i < this.LINHAS +2; i++) {
+      for (let j = cantoI; j < this.COLUNAS +2 - cantoJ; j++) {
         gi[i][j] = "Baixo";
       }
     }
-    for (let i = cantoI; i < this.LINHAS - cantoI; i++) {
-      for (let j = this.COLUNAS - cantoJ; j < this.COLUNAS; j++) {
+    for (let i = cantoI; i < this.LINHAS +2 - cantoI; i++) {
+      for (let j = this.COLUNAS +2 - cantoJ; j < this.COLUNAS +2; j++) {
         gi[i][j] = "Direita";
       }
     }
@@ -193,6 +193,7 @@ export default class CenaJogo extends Cena {
     let convertido = this.ConversaoComVazio();
 
     let gi = this.cantosGi();
+    console.log(gi)
 
     if (this.markov.newTiles == "sim") {
       for (let k = 0; k < z; k++) {
@@ -206,12 +207,12 @@ export default class CenaJogo extends Cena {
               l,
               c,
               8,
-              gi[l - 1][c - 1],
+              gi[l][c],
               " "
             );
             let proximo = this.markov.proximo(
-              this.markov.getVizinho(newTiles, l, c, ordem),
-              gi[l - 1][c - 1]
+              this.markov.getVizinho(newTiles, l, c, ordem,
+              gi[l][c])
             );
             if (proximo >= 0) {
               newTiles[l][c] = proximo;
@@ -233,13 +234,12 @@ export default class CenaJogo extends Cena {
               l,
               c,
               8,
-              gi[l - 1][c - 1],
+              gi[l][c],
               " "
             );
             let proximo = this.markov.proximo(
-              this.markov.getVizinho(oldTiles, l, c, ordem),
-              gi[l - 1][c - 1]
-            );
+              this.markov.getVizinho(oldTiles, l, c, ordem,
+              gi[l][c]));
             if (proximo >= 0) {
               newTiles[l][c] = proximo;
             }

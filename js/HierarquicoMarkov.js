@@ -271,38 +271,37 @@ export default class HierarquicoMarkov extends Markov {
   }
 
   verificaBacktracking(tile, l, c, ordemInicial, gi, original) {
-    if (ordemInicial == 0) {
+    // Caso base: ordem inicial é zero
+    if (ordemInicial === 0) {
       this.porcentagemDeUso[ordemInicial.toString()]++;
       return 8;
     }
-
-    let anteriores = this.getVizinho(tile, l, c, ordemInicial);
-    let indice = [];
-    for (let i = 0; i < anteriores.length; i++) {
-      indice[i] = this.estados[anteriores[i]];
-    }
-    indice[anteriores.length] = gi;
-    let vizinho = indice.join("");
+  
+    // Obtém vizinhos e calcula os índices
+    const anteriores = this.getVizinho(tile, l, c, ordemInicial, gi);
+    const indice = anteriores.slice(0, -1).map((vizinho) => 
+      this.estados[vizinho] !== undefined ? this.estados[vizinho] : "Vazio"
+    );
+    indice[indice.length] = anteriores[anteriores.length - 1];
+    const vizinho = indice.join("");
+  
+  
+    // Verifica se a probabilidade para o vizinho existe
     if (this.probabilidades[vizinho] === undefined) {
-      let proximaOrdem = 0;
-      if (ordemInicial == 8) {
+      // Define a próxima ordem com base na sequência específica
+      let proximaOrdem;
+      if (ordemInicial === 8) 
+      {
         proximaOrdem = 4;
         return this.verificaBacktracking(tile, l, c, proximaOrdem, gi, indice);
       }
-      if (ordemInicial == 4) {
-        proximaOrdem = 3;
+      else{
+      if (ordemInicial === 4) proximaOrdem = 3;
+      else if (ordemInicial === 3) proximaOrdem = 2;
+      else if (ordemInicial === 2) proximaOrdem = 1;
+      else if (ordemInicial === 1) proximaOrdem = 0;
+      return this.verificaBacktracking(tile, l, c, proximaOrdem, gi, original);
       }
-      if (ordemInicial == 3) {
-        proximaOrdem = 2;
-      }
-      if (ordemInicial == 2) {
-        proximaOrdem = 1;
-      }
-      if (ordemInicial == 1) {
-        proximaOrdem = 0;
-      }
-
-      return this.verificaBacktracking(tile, l, c, proximaOrdem, gi, original); //realiza backtarcking
     } else {
       if (ordemInicial < 8) {
         this.adicionaBacktracking(original, ordemInicial);
@@ -312,12 +311,12 @@ export default class HierarquicoMarkov extends Markov {
     }
   }
 
-  proximo(anteriores, gi) {
+  proximo(anteriores){
     let indice = [];
-    for (let i = 0; i < anteriores.length; i++) {
-      indice[i] = this.estados[anteriores[i]];
-      indice[i + 1] = gi;
+    for (let i = 0; i < anteriores.length-1; i++) {
+      indice[i] = this.estados[anteriores[i]] !== undefined ? this.estados[anteriores[i]] : "Vazio";
     }
+    indice[indice.length] = anteriores[anteriores.length-1];
     let vizinho = indice.join("");
     let x = 0;
     let limite = this.semente();
@@ -442,26 +441,27 @@ export default class HierarquicoMarkov extends Markov {
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
         for (
-          let l = gridI * this.GRID;
-          l < gridI * this.GRID + this.GRID;
+          let l = (gridI * this.GRID) 
+          +1;
+          l < ((gridI * this.GRID) + this.GRID +1);
           l++
         ) {
           for (
-            let c = gridJ * this.GRID;
-            c < gridJ * this.GRID + this.GRID;
+            let c = (gridJ * this.GRID)+1;
+            c < ((gridJ * this.GRID) + this.GRID +1);
             c++
           ) {
             let gri = posicao[gridI][gridJ];
-            let vizinhos = this.getVizinho(tiles, l + 1, c + 1, 8, gri);
-            let atual = tiles[l + 1][c + 1];
+            let vizinhos = this.getVizinho(tiles, l, c , 8, gri);
+            let atual = tiles[l][c];
             this.soma(vizinhos, atual);
-            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 4, gri);
+            vizinhos = this.getVizinho(tiles, l, c, 4, gri);
             this.soma(vizinhos, atual);
-            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 3, gri);
+            vizinhos = this.getVizinho(tiles, l , c , 3, gri);
             this.soma(vizinhos, atual);
-            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 2, gri);
+            vizinhos = this.getVizinho(tiles, l , c , 2, gri);
             this.soma(vizinhos, atual);
-            vizinhos = this.getVizinho(tiles, l + 1, c + 1, 1, gri);
+            vizinhos = this.getVizinho(tiles, l , c , 1, gri);
             this.soma(vizinhos, atual);
             this.totalGlobal++;
             this.probabilidadesGlobal[atual]++;
