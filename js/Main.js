@@ -6,10 +6,10 @@ import Game from "./Game.js";
 import CenaCarregando from "./CenaCarregando.js";
 import CenaJogo from "./CenaJogo.js";
 import CenaFim from "./CenaFim.js";
-import LowMarkov from "./Markov.js";
-import HighMarkov from "./MultiDimensionalMarkov.js";
+import LowMarkov from "./MarkovMultidimensional.js";
+import HighMarkov from "./QuasiHierarquicaMarkov.js";
 import HierarquicoMarkov from "./HierarquicoMarkov.js";
-import Markov from "./CompartilhadoMarkov.js";
+import Markov from "./MarkovBase.js";
 
 const Piso = 0;
 const Pedra = 1;
@@ -29,6 +29,18 @@ assets.adicionaImagem("enemy", "assets/enemy.png");
 
 assets.adicionaAudio("hurt", "assets/hurt.wav");
 let canvas = document.getElementById("canvas");
+
+let panzoom = Panzoom(canvas)
+canvas.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+// Bind to shift+mousewheel
+canvas.parentElement.addEventListener('wheel', function (event) {
+  if (!event.shiftKey) return
+  // Panzoom will automatically use `deltaX` here instead
+  // of `deltaY`. On a mac, the shift modifier usually
+  // translates to horizontal scrolling, but Panzoom assumes
+  // the desired behavior is zooming.
+  panzoom.zoomWithWheel(event)
+})
 
 let canvasMarkov = document.getElementById("canvasMarkov");
 canvasMarkov.setAttribute("hidden", "hidden");
