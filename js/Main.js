@@ -335,13 +335,15 @@ function redimensionarImagem(img, canvas, taxa) {
 
 function contornarImagem(canvas, taxa) {
   const ctx = canvas.getContext("2d");
-  ctx.strokeStyle = "green";
+  ctx.strokeStyle = "green"; // Cor para o contorno inicial
 
+  // Contorno inicial de todas as células
   for (let l = 0; l < tamanhoMapa; l++) {
     for (let c = 0; c < tamanhoMapa; c++) {
       ctx.strokeRect((c * 20) / taxa, (l * 20) / taxa, 20 / taxa, 20 / taxa);
     }
   }
+
   if (metodo == "highComCantos") {
     let gi = cena.markov.treinoGrids();
 
@@ -351,33 +353,36 @@ function contornarImagem(canvas, taxa) {
     tamanhoGrid = Math.floor(tamanhoGrid);
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+        // Atribuindo cores fortes para cada tipo de célula
         if (gi[gridI][gridJ] == "Meio") {
-          ctx.strokeStyle = "red";
+          ctx.strokeStyle = "#FF0000"; // Vermelho forte
         }
         if (gi[gridI][gridJ] == "Superior esquerdo") {
-          ctx.strokeStyle = "blue";
+          ctx.strokeStyle = "#FFFF00"; // Amarelo forte
         }
         if (gi[gridI][gridJ] == "Superior direito") {
-          ctx.strokeStyle = "blue";
+          ctx.strokeStyle = "#00FFFF"; // Ciano forte
         }
         if (gi[gridI][gridJ] == "Inferior esquerdo") {
-          ctx.strokeStyle = "blue";
+          ctx.strokeStyle = "#FF00FF"; // Magenta forte
         }
         if (gi[gridI][gridJ] == "Inferior direito") {
-          ctx.strokeStyle = "blue";
+          ctx.strokeStyle = "#0000FF"; // Azul forte
         }
         if (gi[gridI][gridJ] == "Cima") {
-          ctx.strokeStyle = "orange";
+          ctx.strokeStyle = "#FFA500"; // Laranja forte
         }
         if (gi[gridI][gridJ] == "Direita") {
-          ctx.strokeStyle = "orange";
+          ctx.strokeStyle = "#00FF00"; // Verde limão
         }
         if (gi[gridI][gridJ] == "Baixo") {
-          ctx.strokeStyle = "orange";
+          ctx.strokeStyle = "#FF1493"; // Rosa forte
         }
         if (gi[gridI][gridJ] == "Esquerda") {
-          ctx.strokeStyle = "orange";
+          ctx.strokeStyle = "#8A2BE2"; // Azul Violeta forte
         }
+
+        // Desenhando o contorno
         ctx.strokeRect(
           (gridI * grid * 20) / taxa,
           (gridJ * grid * 20) / taxa,
@@ -387,13 +392,14 @@ function contornarImagem(canvas, taxa) {
       }
     }
   } else {
-    ctx.strokeStyle = "red";
+    ctx.strokeStyle = "#FF0000"; // Cor para o método padrão (vermelho forte)
     ctx.lineWidth = 2; // Largura da linha do contorno
 
     let tamanhoGrid = tamanhoMapa / grid;
     tamanhoGrid = Math.floor(tamanhoGrid);
     for (let gridI = 0; gridI < tamanhoGrid; gridI++) {
       for (let gridJ = 0; gridJ < tamanhoGrid; gridJ++) {
+        // Desenhando o contorno para o método padrão
         ctx.strokeRect(
           (gridI * grid * 20) / taxa,
           (gridJ * grid * 20) / taxa,
@@ -404,6 +410,9 @@ function contornarImagem(canvas, taxa) {
     }
   }
 }
+
+
+
 
 function setSeed() {
   myrng = new Math.seedrandom(document.teste.seed.value);
